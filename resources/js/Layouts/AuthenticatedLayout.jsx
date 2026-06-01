@@ -1,51 +1,46 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import { useTheme } from '@/Components/ThemeProvider';
 import { Link, usePage, useForm } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
-import { 
-    LayoutDashboard, 
-    Boxes, 
-    MapPin, 
-    UserCheck, 
-    Package, 
-    History, 
-    User as UserIcon, 
-    LogOut, 
-    Menu, 
-    X, 
-    ChevronDown, 
-    CheckCircle2, 
-    AlertCircle 
+import {
+    LayoutDashboard,
+    Boxes,
+    MapPin,
+    UserCheck,
+    Package,
+    User as UserIcon,
+    LogOut,
+    Menu,
+    X,
+    ChevronDown,
+    CheckCircle2,
+    AlertCircle,
+    Sun,
+    Moon,
 } from 'lucide-react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const { auth, flash } = usePage().props;
     const user = auth.user;
-    const permissions = auth.can || {};
+    const { theme, toggleTheme } = useTheme();
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-    
+
     // Toast state
     const [toasts, setToasts] = useState([]);
 
     // Watch Inertia flash messages
     useEffect(() => {
-        if (flash?.success) {
-            addToast(flash.success, 'success');
-        }
-        if (flash?.error) {
-            addToast(flash.error, 'error');
-        }
+        if (flash?.success) addToast(flash.success, 'success');
+        if (flash?.error) addToast(flash.error, 'error');
     }, [flash]);
 
     const addToast = (message, type = 'success') => {
         const id = Date.now() + Math.random();
         setToasts((prev) => [...prev, { id, message, type }]);
-        
         if (type === 'success') {
-            setTimeout(() => {
-                removeToast(id);
-            }, 4000);
+            setTimeout(() => removeToast(id), 4000);
         }
     };
 
@@ -68,83 +63,110 @@ export default function AuthenticatedLayout({ header, children }) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased flex flex-col">
-            {/* Top Navigation Header (fixed 64px) */}
-            <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-40 flex items-center justify-between px-4 sm:px-6 shadow-sm">
+        <div className="min-h-screen bg-slate-50 dark:bg-ink-950 font-sans text-slate-900 dark:text-slate-100 antialiased flex flex-col transition-colors duration-200">
+
+            {/* ── Top Header ────────────────────────────────────────────── */}
+            <header className="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-ink-900 border-b border-slate-200 dark:border-ink-750 z-40 flex items-center justify-between px-4 sm:px-6 shadow-sm transition-colors duration-200">
+
+                {/* Left — logo + mobile menu trigger */}
                 <div className="flex items-center gap-3">
-                    <button 
+                    <button
                         onClick={() => setSidebarOpen(true)}
-                        className="p-2 text-slate-500 hover:bg-slate-100 rounded-lg lg:hidden transition-colors"
+                        className="p-2 text-slate-500 dark:text-ink-400 hover:bg-slate-100 dark:hover:bg-ink-800 rounded-lg lg:hidden transition-colors"
                     >
                         <Menu className="h-6 w-6" />
                     </button>
-                    
+
                     <Link href="/dashboard" className="flex items-center gap-2.5">
                         <div className="p-2 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl shadow-md flex items-center justify-center">
                             <ApplicationLogo className="h-6 w-6 fill-current text-white" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-extrabold text-lg tracking-wider text-slate-900 leading-none">INVENIO</span>
-                            <span className="text-[9px] font-bold tracking-[0.18em] text-slate-500 uppercase mt-0.5">Control Center</span>
+                            <span className="font-extrabold text-lg tracking-wider text-slate-900 dark:text-ink-100 leading-none">INVENIO</span>
+                            <span className="text-[9px] font-bold tracking-[0.18em] text-slate-500 dark:text-ink-400 uppercase mt-0.5">Control Center</span>
                         </div>
                     </Link>
                 </div>
 
-                {/* Header breadcrumb (hidden on mobile) */}
-                <div className="hidden md:flex items-center gap-2 text-sm text-slate-500 font-medium">
+                {/* Centre — breadcrumb */}
+                <div className="hidden md:flex items-center gap-2 text-sm text-slate-500 dark:text-ink-400 font-medium">
                     <span>Invenio</span>
-                    <span className="text-slate-300">/</span>
-                    <span className="text-slate-800 capitalize">
+                    <span className="text-slate-300 dark:text-slate-600">/</span>
+                    <span className="text-slate-800 dark:text-ink-200 capitalize">
                         {route().current()?.split('.')[0] || 'Dashboard'}
                     </span>
                 </div>
 
-                {/* User Dropdown */}
-                <div className="relative">
+                {/* Right — theme toggle + user dropdown */}
+                <div className="flex items-center gap-2">
+
+                    {/* Theme toggle */}
                     <button
-                        onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                        className="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-50 rounded-xl transition-colors border border-transparent hover:border-slate-200"
+                        onClick={toggleTheme}
+                        title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                        className="relative p-2 rounded-xl border border-slate-200 dark:border-ink-700 bg-slate-50 dark:bg-ink-800 hover:bg-slate-100 dark:hover:bg-ink-750 text-slate-500 dark:text-ink-400 transition-all duration-200 hover:scale-105 active:scale-95"
                     >
-                        <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#1B4FD8] to-indigo-500 text-white font-bold flex items-center justify-center text-sm shadow-inner uppercase">
-                            {user.name.charAt(0)}
-                        </div>
-                        <div className="hidden sm:flex flex-col text-left">
-                            <span className="text-xs font-semibold text-slate-950 leading-none">{user.name}</span>
-                            <span className="text-[10px] text-slate-500 capitalize font-medium mt-0.5">{user.role}</span>
-                        </div>
-                        <ChevronDown className="h-4 w-4 text-slate-400" />
+                        <span className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${theme === 'dark' ? 'opacity-100 rotate-0' : 'opacity-0 rotate-90'}`}>
+                            <Moon className="h-4 w-4 text-indigo-400" />
+                        </span>
+                        <span className={`flex items-center justify-center transition-all duration-300 ${theme === 'dark' ? 'opacity-0 -rotate-90' : 'opacity-100 rotate-0'}`}>
+                            <Sun className="h-4 w-4 text-amber-500" />
+                        </span>
                     </button>
 
-                    {userDropdownOpen && (
-                        <>
-                            <div className="fixed inset-0 z-40" onClick={() => setUserDropdownOpen(false)} />
-                            <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 p-2 py-1 animate-in fade-in-50 slide-in-from-top-2 duration-150">
-                                <Link 
-                                    href={route('profile.edit')}
-                                    className="flex items-center gap-2.5 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-xl transition-colors"
-                                    onClick={() => setUserDropdownOpen(false)}
-                                >
-                                    <UserIcon className="h-4 w-4 text-slate-400" />
-                                    <span>Profile Settings</span>
-                                </Link>
-                                <hr className="border-slate-100 my-1" />
-                                <button
-                                    onClick={handleLogout}
-                                    className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-xl transition-colors text-left"
-                                >
-                                    <LogOut className="h-4 w-4 text-red-400" />
-                                    <span>Log Out</span>
-                                </button>
+                    {/* User dropdown */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                            className="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-ink-800 rounded-xl transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
+                        >
+                            <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#1B4FD8] to-indigo-500 text-white font-bold flex items-center justify-center text-sm shadow-inner uppercase">
+                                {user.name.charAt(0)}
                             </div>
-                        </>
-                    )}
+                            <div className="hidden sm:flex flex-col text-left">
+                                <span className="text-xs font-semibold text-slate-950 dark:text-ink-100 leading-none">{user.name}</span>
+                                <span className="text-[10px] text-slate-500 dark:text-ink-400 capitalize font-medium mt-0.5">{user.role}</span>
+                            </div>
+                            <ChevronDown className="h-4 w-4 text-slate-400 dark:text-ink-400" />
+                        </button>
+
+                        {userDropdownOpen && (
+                            <>
+                                <div className="fixed inset-0 z-40" onClick={() => setUserDropdownOpen(false)} />
+                                <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 rounded-2xl shadow-xl dark:shadow-ink-950/60 z-50 p-2 py-1 animate-in fade-in-50 slide-in-from-top-2 duration-150">
+                                    {/* User info header */}
+                                    <div className="px-3 py-2.5 border-b border-slate-100 dark:border-ink-700 mb-1">
+                                        <p className="text-xs font-semibold text-slate-900 dark:text-ink-100 truncate">{user.name}</p>
+                                        <p className="text-[10px] text-slate-500 dark:text-ink-400 capitalize mt-0.5">{user.role}</p>
+                                    </div>
+                                    <Link
+                                        href={route('profile.edit')}
+                                        className="flex items-center gap-2.5 px-3 py-2 text-sm text-slate-700 dark:text-ink-200 hover:bg-slate-50 dark:hover:bg-ink-750/60 rounded-xl transition-colors"
+                                        onClick={() => setUserDropdownOpen(false)}
+                                    >
+                                        <UserIcon className="h-4 w-4 text-slate-400 dark:text-ink-400" />
+                                        <span>Profile Settings</span>
+                                    </Link>
+                                    <hr className="border-slate-100 dark:border-ink-700 my-1" />
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-colors text-left"
+                                    >
+                                        <LogOut className="h-4 w-4 text-red-400 dark:text-red-500" />
+                                        <span>Log Out</span>
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
             </header>
 
-            {/* Sidebar Navigation Shell */}
+            {/* ── Sidebar + Main ────────────────────────────────────────── */}
             <div className="flex flex-1 pt-16 relative">
-                {/* Desktop Sidebar (240px wide, collapses to 64px on tablet/md) */}
-                <aside className="hidden lg:flex flex-col w-60 border-r border-slate-200 bg-white fixed top-16 bottom-0 left-0 z-30 transition-all duration-300">
+
+                {/* Desktop Sidebar (240px) */}
+                <aside className="hidden lg:flex flex-col w-60 border-r border-slate-200 dark:border-ink-750 bg-white dark:bg-ink-900 fixed top-16 bottom-0 left-0 z-30 transition-colors duration-200">
                     <nav className="flex-1 p-4 space-y-1">
                         {navigation.map((item) => {
                             const Icon = item.icon;
@@ -153,12 +175,12 @@ export default function AuthenticatedLayout({ header, children }) {
                                     key={item.name}
                                     href={item.href}
                                     className={`group flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-2xl transition-all duration-200 ${
-                                        item.active 
-                                            ? 'bg-blue-50/70 text-[#1B4FD8] shadow-sm border-l-4 border-[#1B4FD8]' 
-                                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-l-4 border-transparent'
+                                        item.active
+                                            ? 'bg-blue-50 dark:bg-blue-500/10 text-[#1B4FD8] dark:text-blue-400 shadow-sm border-l-4 border-[#1B4FD8] dark:border-blue-400'
+                                            : 'text-slate-600 dark:text-ink-400 hover:bg-slate-50 dark:hover:bg-ink-800 hover:text-slate-900 dark:hover:text-ink-100 border-l-4 border-transparent'
                                     }`}
                                 >
-                                    <Icon className={`h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:scale-105 ${item.active ? 'text-[#1B4FD8]' : 'text-slate-400'}`} />
+                                    <Icon className={`h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:scale-105 ${item.active ? 'text-[#1B4FD8] dark:text-blue-400' : 'text-slate-400 dark:text-ink-400'}`} />
                                     <span>{item.name}</span>
                                 </Link>
                             );
@@ -166,8 +188,8 @@ export default function AuthenticatedLayout({ header, children }) {
                     </nav>
                 </aside>
 
-                {/* Tablet Sidebar (64px wide) */}
-                <aside className="hidden md:flex lg:hidden flex-col w-16 border-r border-slate-200 bg-white fixed top-16 bottom-0 left-0 z-30 items-center py-4 space-y-4">
+                {/* Tablet Sidebar (64px icon-only) */}
+                <aside className="hidden md:flex lg:hidden flex-col w-16 border-r border-slate-200 dark:border-ink-750 bg-white dark:bg-ink-900 fixed top-16 bottom-0 left-0 z-30 items-center py-4 space-y-4 transition-colors duration-200">
                     {navigation.map((item) => {
                         const Icon = item.icon;
                         return (
@@ -176,30 +198,30 @@ export default function AuthenticatedLayout({ header, children }) {
                                 href={item.href}
                                 title={item.name}
                                 className={`group p-3 rounded-2xl transition-all duration-200 flex items-center justify-center hover:scale-105 ${
-                                    item.active 
-                                        ? 'bg-blue-50 text-[#1B4FD8] border border-blue-100 shadow-sm' 
-                                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
+                                    item.active
+                                        ? 'bg-blue-50 dark:bg-blue-500/10 text-[#1B4FD8] dark:text-blue-400 border border-blue-100 dark:border-blue-500/20 shadow-sm'
+                                        : 'text-slate-500 dark:text-ink-400 hover:bg-slate-50 dark:hover:bg-ink-800 hover:text-slate-900 dark:hover:text-ink-100 border border-transparent'
                                 }`}
                             >
-                                <Icon className={`h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${item.active ? 'text-[#1B4FD8]' : 'text-slate-400'}`} />
+                                <Icon className={`h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${item.active ? 'text-[#1B4FD8] dark:text-blue-400' : 'text-slate-400 dark:text-ink-400'}`} />
                             </Link>
                         );
                     })}
                 </aside>
 
-                {/* Mobile Drawer Sidebar Overlay */}
+                {/* Mobile Drawer */}
                 {sidebarOpen && (
                     <>
-                        <div 
+                        <div
                             className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 lg:hidden"
                             onClick={() => setSidebarOpen(false)}
                         />
-                        <aside className="fixed inset-y-0 left-0 w-64 bg-white z-50 shadow-2xl flex flex-col p-5 animate-in slide-in-from-left duration-200 lg:hidden">
+                        <aside className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-ink-900 z-50 shadow-2xl flex flex-col p-5 animate-in slide-in-from-left duration-200 lg:hidden border-r border-slate-200 dark:border-ink-750 transition-colors duration-200">
                             <div className="flex items-center justify-between mb-8">
-                                <span className="font-extrabold text-lg tracking-wider text-slate-950">INVENIO</span>
-                                <button 
+                                <span className="font-extrabold text-lg tracking-wider text-slate-950 dark:text-ink-100">INVENIO</span>
+                                <button
                                     onClick={() => setSidebarOpen(false)}
-                                    className="p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+                                    className="p-2 text-slate-500 dark:text-ink-400 hover:bg-slate-100 dark:hover:bg-ink-800 rounded-lg transition-colors"
                                 >
                                     <X className="h-5 w-5" />
                                 </button>
@@ -213,12 +235,12 @@ export default function AuthenticatedLayout({ header, children }) {
                                             href={item.href}
                                             onClick={() => setSidebarOpen(false)}
                                             className={`group flex items-center gap-3 px-4 py-3.5 text-sm font-semibold rounded-2xl transition-all duration-200 ${
-                                                item.active 
-                                                    ? 'bg-blue-50/70 text-[#1B4FD8] shadow-sm border-l-4 border-[#1B4FD8]' 
-                                                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-l-4 border-transparent'
+                                                item.active
+                                                    ? 'bg-blue-50 dark:bg-blue-500/10 text-[#1B4FD8] dark:text-blue-400 shadow-sm border-l-4 border-[#1B4FD8] dark:border-blue-400'
+                                                    : 'text-slate-600 dark:text-ink-400 hover:bg-slate-50 dark:hover:bg-ink-800 hover:text-slate-900 dark:hover:text-ink-100 border-l-4 border-transparent'
                                             }`}
                                         >
-                                            <Icon className={`h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5 ${item.active ? 'text-[#1B4FD8]' : 'text-slate-400'}`} />
+                                            <Icon className={`h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5 ${item.active ? 'text-[#1B4FD8] dark:text-blue-400' : 'text-slate-400 dark:text-ink-400'}`} />
                                             <span>{item.name}</span>
                                         </Link>
                                     );
@@ -228,8 +250,8 @@ export default function AuthenticatedLayout({ header, children }) {
                     </>
                 )}
 
-                {/* Main Content Layout Wrapper */}
-                <main className="flex-1 md:pl-16 lg:pl-60 min-h-[calc(100vh-4rem)] flex flex-col bg-slate-50 pb-20 md:pb-6">
+                {/* Main Content */}
+                <main className="flex-1 md:pl-16 lg:pl-60 min-h-[calc(100vh-4rem)] flex flex-col bg-slate-50 dark:bg-ink-950 pb-20 md:pb-6 transition-colors duration-200">
                     <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 flex flex-col">
                         {header && (
                             <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -242,8 +264,8 @@ export default function AuthenticatedLayout({ header, children }) {
                     </div>
                 </main>
 
-                {/* Mobile Bottom Tab Bar (hidden on desktop/tablet) */}
-                <nav className="fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-slate-200 md:hidden flex items-center justify-around z-40 px-2 shadow-[0_-4px_10px_rgba(0,0,0,0.03)]">
+                {/* Mobile Bottom Tab Bar */}
+                <nav className="fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-ink-900 border-t border-slate-200 dark:border-ink-750 md:hidden flex items-center justify-around z-40 px-2 shadow-[0_-4px_10px_rgba(0,0,0,0.03)] dark:shadow-[0_-4px_10px_rgba(0,0,0,0.3)] transition-colors duration-200">
                     {navigation.slice(0, 4).map((item) => {
                         const Icon = item.icon;
                         return (
@@ -251,33 +273,33 @@ export default function AuthenticatedLayout({ header, children }) {
                                 key={item.name}
                                 href={item.href}
                                 className={`flex flex-col items-center justify-center flex-1 py-1 transition-all ${
-                                    item.active ? 'text-[#1B4FD8]' : 'text-slate-400'
+                                    item.active ? 'text-[#1B4FD8] dark:text-blue-400' : 'text-slate-400 dark:text-ink-400'
                                 }`}
                             >
-                                <Icon className="h-5.5 w-5.5" />
+                                <Icon className="h-5 w-5" />
                                 <span className="text-[10px] font-bold mt-1 tracking-tight">{item.name}</span>
                             </Link>
                         );
                     })}
                     <button
                         onClick={handleLogout}
-                        className="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-red-500"
+                        className="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"
                     >
-                        <LogOut className="h-5.5 w-5.5" />
+                        <LogOut className="h-5 w-5" />
                         <span className="text-[10px] font-bold mt-1 tracking-tight">Logout</span>
                     </button>
                 </nav>
             </div>
 
-            {/* Custom Self-Contained Floating Toasts */}
+            {/* ── Toasts ────────────────────────────────────────────────── */}
             <div className="fixed top-6 right-6 z-50 flex flex-col gap-3 w-full max-w-sm pointer-events-none">
                 {toasts.map((toast) => (
                     <div
                         key={toast.id}
-                        className={`flex items-start gap-3 p-4 bg-white border-l-4 rounded-2xl shadow-xl pointer-events-auto transition-all animate-in slide-in-from-right-5 duration-300 ${
-                            toast.type === 'success' 
-                                ? 'border-emerald-500 text-emerald-950' 
-                                : 'border-rose-500 text-rose-950'
+                        className={`flex items-start gap-3 p-4 bg-white dark:bg-ink-800 border-l-4 rounded-2xl shadow-xl dark:shadow-ink-950/60 pointer-events-auto transition-all animate-in slide-in-from-right-5 duration-300 ${
+                            toast.type === 'success'
+                                ? 'border-emerald-500'
+                                : 'border-rose-500'
                         }`}
                     >
                         {toast.type === 'success' ? (
@@ -286,16 +308,16 @@ export default function AuthenticatedLayout({ header, children }) {
                             <AlertCircle className="h-5 w-5 text-rose-500 shrink-0 mt-0.5" />
                         )}
                         <div className="flex-1">
-                            <p className="text-sm font-semibold leading-tight">
+                            <p className={`text-sm font-semibold leading-tight ${toast.type === 'success' ? 'text-emerald-900 dark:text-emerald-300' : 'text-rose-900 dark:text-rose-300'}`}>
                                 {toast.type === 'success' ? 'Success' : 'Error'}
                             </p>
-                            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                            <p className="text-xs text-slate-500 dark:text-ink-400 mt-1 leading-relaxed">
                                 {toast.message}
                             </p>
                         </div>
-                        <button 
+                        <button
                             onClick={() => removeToast(toast.id)}
-                            className="p-1 hover:bg-slate-100 rounded-lg transition-colors text-slate-400 hover:text-slate-600"
+                            className="p-1 hover:bg-slate-100 dark:hover:bg-ink-750 rounded-lg transition-colors text-slate-400 hover:text-slate-600 dark:text-ink-400 dark:hover:text-ink-100"
                         >
                             <X className="h-3.5 w-3.5" />
                         </button>

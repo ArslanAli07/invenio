@@ -108,8 +108,8 @@ export default function Index({ suppliers, filters, can }) {
 
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-slate-900">Suppliers</h1>
-                    <p className="text-sm text-slate-500 mt-1">Manage vendor relations, contact info, and active supply partners.</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-ink-100">Suppliers</h1>
+                    <p className="text-sm text-slate-500 dark:text-ink-400 mt-1">Manage vendor relations, contact info, and active supply partners.</p>
                 </div>
                 {can.create && (
                     <Button 
@@ -123,7 +123,7 @@ export default function Index({ suppliers, filters, can }) {
             </div>
 
             {/* Filter controls */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6 shadow-sm">
+            <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 mb-6 shadow-sm dark:shadow-ink-950/20">
                 <form onSubmit={handleSearchSubmit} className="flex flex-col md:flex-row gap-4 items-center justify-between">
                     <div className="relative w-full md:max-w-md">
                         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -135,7 +135,7 @@ export default function Index({ suppliers, filters, can }) {
                                 handleFilterChange(e.target.value, status);
                             }}
                             placeholder="Search suppliers by name, email, or phone..."
-                            className="w-full pl-10 pr-4 py-2.5 bg-slate-50/50 border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 rounded-xl"
+                            className="w-full pl-10 pr-4 py-2.5 bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-sm focus:border-blue-500 focus:ring-blue-500 rounded-xl"
                         />
                     </div>
 
@@ -146,7 +146,7 @@ export default function Index({ suppliers, filters, can }) {
                                 setStatus(e.target.value);
                                 handleFilterChange(search, e.target.value);
                             }}
-                            className="w-full md:w-44 px-3 py-2.5 bg-white border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 rounded-xl"
+                            className="w-full md:w-44 px-3 py-2.5 bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 dark:text-ink-200 text-sm focus:border-blue-500 focus:ring-blue-500 rounded-xl"
                         >
                             <option value="all">All Statuses</option>
                             <option value="active">Active Only</option>
@@ -157,11 +157,11 @@ export default function Index({ suppliers, filters, can }) {
             </div>
 
             {/* Suppliers Table Card */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex-1 flex flex-col">
+            <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm dark:shadow-ink-950/20 overflow-hidden flex-1 flex flex-col">
                 <div className="overflow-x-auto flex-1">
                     <table className="w-full text-left border-collapse min-w-[800px]">
                         <thead>
-                            <tr className="bg-slate-50/75 border-b border-slate-200 text-xs font-semibold uppercase tracking-wider text-slate-500 sticky top-0 z-10">
+                            <tr className="bg-slate-50/75 dark:bg-ink-800/50 border-b border-slate-200 dark:border-ink-700 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-ink-400 sticky top-0 z-10">
                                 <th className="px-6 py-4">Name</th>
                                 <th className="px-6 py-4">Contact info</th>
                                 <th className="px-6 py-4">Address</th>
@@ -169,34 +169,34 @@ export default function Index({ suppliers, filters, can }) {
                                 <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-slate-100 dark:divide-ink-750">
                             {suppliers.data.length > 0 ? (
                                 suppliers.data.map((supplier) => (
-                                    <tr key={supplier.id} className="hover:bg-slate-50/50 transition-colors">
+                                    <tr key={supplier.id} className="hover:bg-slate-50/50 dark:hover:bg-ink-800/50 transition-colors">
                                         <td className="px-6 py-4">
-                                            <span className="font-semibold text-slate-900 text-sm">{supplier.name}</span>
+                                            <span className="font-semibold text-slate-900 dark:text-ink-100 text-sm">{supplier.name}</span>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex flex-col gap-1 text-xs">
                                                 {supplier.email && (
-                                                    <span className="flex items-center gap-1.5 text-slate-600">
-                                                        <Mail className="h-3.5 w-3.5 text-slate-400" />
+                                                    <span className="flex items-center gap-1.5 text-slate-600 dark:text-ink-400">
+                                                        <Mail className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                                                         {supplier.email}
                                                     </span>
                                                 )}
                                                 {supplier.phone && (
-                                                    <span className="flex items-center gap-1.5 text-slate-600">
-                                                        <Phone className="h-3.5 w-3.5 text-slate-400" />
+                                                    <span className="flex items-center gap-1.5 text-slate-600 dark:text-ink-400">
+                                                        <Phone className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                                                         {supplier.phone}
                                                     </span>
                                                 )}
                                                 {!supplier.email && !supplier.phone && (
-                                                    <span className="text-slate-400 italic">No contact details</span>
+                                                    <span className="text-slate-400 dark:text-slate-500 italic">No contact details</span>
                                                 )}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-xs text-slate-500 line-clamp-1 max-w-[200px]" title={supplier.address}>
+                                            <span className="text-xs text-slate-500 dark:text-ink-400 line-clamp-1 max-w-[200px]" title={supplier.address}>
                                                 {supplier.address || '—'}
                                             </span>
                                         </td>
@@ -207,7 +207,7 @@ export default function Index({ suppliers, filters, can }) {
                                                     Active
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 text-slate-500 border border-slate-200">
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 dark:bg-ink-800 text-slate-500 border border-slate-200 dark:border-ink-700">
                                                     <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
                                                     Inactive
                                                 </span>
@@ -220,7 +220,7 @@ export default function Index({ suppliers, filters, can }) {
                                                         variant="ghost"
                                                         size="icon"
                                                         onClick={() => openEditSheet(supplier)}
-                                                        className="hover:bg-slate-100 text-slate-600 rounded-xl"
+                                                        className="hover:bg-slate-100 dark:hover:bg-ink-750 text-slate-600 dark:text-ink-400 rounded-xl"
                                                     >
                                                         <Edit2 className="h-4 w-4" />
                                                     </Button>
@@ -230,7 +230,7 @@ export default function Index({ suppliers, filters, can }) {
                                                         variant="ghost"
                                                         size="icon"
                                                         onClick={() => handleDelete(supplier)}
-                                                        className="hover:bg-red-50 text-red-600 rounded-xl"
+                                                        className="hover:bg-red-50 dark:hover:bg-red-500/10 text-red-600 rounded-xl"
                                                         title="Delete supplier"
                                                     >
                                                         <Trash2 className="h-4 w-4" />
@@ -244,11 +244,11 @@ export default function Index({ suppliers, filters, can }) {
                                 <tr>
                                     <td colSpan="5" className="px-6 py-16 text-center">
                                         <div className="flex flex-col items-center justify-center max-w-sm mx-auto">
-                                            <div className="p-4 bg-slate-100 rounded-full text-slate-400 mb-4">
+                                            <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-slate-500 mb-4">
                                                 <UserCheck className="h-8 w-8" />
                                             </div>
-                                            <h3 className="text-base font-bold text-slate-900">No suppliers found</h3>
-                                            <p className="text-xs text-slate-500 mt-1 text-center leading-relaxed">
+                                            <h3 className="text-base font-bold text-slate-900 dark:text-ink-100">No suppliers found</h3>
+                                            <p className="text-xs text-slate-500 dark:text-ink-400 mt-1 text-center leading-relaxed">
                                                 Try adjusting your search criteria, clearing filters, or adding a new supplier.
                                             </p>
                                         </div>
@@ -261,11 +261,11 @@ export default function Index({ suppliers, filters, can }) {
 
                 {/* Table Pagination */}
                 {suppliers.links && suppliers.data.length > 0 && (
-                    <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between bg-slate-50/50">
-                        <span className="text-xs text-slate-500">
-                            Showing <span className="font-semibold text-slate-800">{suppliers.from}</span> to{' '}
-                            <span className="font-semibold text-slate-800">{suppliers.to}</span> of{' '}
-                            <span className="font-semibold text-slate-800">{suppliers.total}</span> entries
+                    <div className="px-6 py-4 border-t border-slate-200 dark:border-ink-700 flex items-center justify-between bg-slate-50/50 dark:bg-ink-800/30">
+                        <span className="text-xs text-slate-500 dark:text-ink-400">
+                            Showing <span className="font-semibold text-slate-800 dark:text-ink-200">{suppliers.from}</span> to{' '}
+                            <span className="font-semibold text-slate-800 dark:text-ink-200">{suppliers.to}</span> of{' '}
+                            <span className="font-semibold text-slate-800 dark:text-ink-200">{suppliers.total}</span> entries
                         </span>
                         <div className="flex gap-1.5">
                             {suppliers.links.map((link, idx) => {
@@ -278,7 +278,7 @@ export default function Index({ suppliers, filters, can }) {
                                             key={idx}
                                             variant="outline"
                                             size="sm"
-                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100"
+                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650"
                                             onClick={() => router.get(link.url, {}, { preserveState: true })}
                                         >
                                             <ChevronLeft className="h-4 w-4" />
@@ -292,7 +292,7 @@ export default function Index({ suppliers, filters, can }) {
                                             key={idx}
                                             variant="outline"
                                             size="sm"
-                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100"
+                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650"
                                             onClick={() => router.get(link.url, {}, { preserveState: true })}
                                         >
                                             <span>Next</span>
@@ -307,7 +307,7 @@ export default function Index({ suppliers, filters, can }) {
                                         variant={link.active ? 'default' : 'outline'}
                                         size="sm"
                                         className={`rounded-xl h-9 w-9 p-0 ${
-                                            link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100'
+                                            link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650'
                                         }`}
                                         onClick={() => router.get(link.url, {}, { preserveState: true })}
                                     >
@@ -322,9 +322,9 @@ export default function Index({ suppliers, filters, can }) {
 
             {/* Slide-over Create / Edit Panel */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                <SheetContent side="right" className="w-full sm:max-w-md bg-white p-6 border-l border-slate-200 shadow-2xl flex flex-col h-full z-50">
+                <SheetContent side="right" className="w-full sm:max-w-md bg-white dark:bg-ink-900 p-6 border-l border-slate-200 dark:border-ink-700 shadow-2xl flex flex-col h-full overflow-hidden z-50">
                     <SheetHeader className="mb-6">
-                        <SheetTitle className="text-lg font-bold text-slate-900">
+                        <SheetTitle className="text-lg font-bold text-slate-900 dark:text-ink-100">
                             {editingSupplier ? 'Edit Supplier' : 'Add Supplier'}
                         </SheetTitle>
                         <SheetDescription className="text-xs text-slate-500">
@@ -332,16 +332,16 @@ export default function Index({ suppliers, filters, can }) {
                         </SheetDescription>
                     </SheetHeader>
 
-                    <form onSubmit={handleFormSubmit} className="flex-1 flex flex-col justify-between">
-                        <div className="space-y-4 overflow-y-auto pr-1 flex-1 mb-4">
+                    <form onSubmit={handleFormSubmit} className="flex-1 flex flex-col min-h-0">
+                        <div className="space-y-4 overflow-y-auto pr-1 flex-1 mb-4 min-h-0">
                             <div>
-                                <InputLabel htmlFor="name" value="Supplier / Company Name" className="text-slate-700 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="name" value="Supplier / Company Name" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                 <TextInput
                                     id="name"
                                     type="text"
                                     name="name"
                                     value={data.name}
-                                    className="block w-full bg-slate-50/50 border-slate-200 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
+                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
                                     onChange={(e) => setData('name', e.target.value)}
                                     placeholder="e.g. Globex Global Logistics"
                                     isFocused={true}
@@ -350,13 +350,13 @@ export default function Index({ suppliers, filters, can }) {
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="email" value="Email Address" className="text-slate-700 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="email" value="Email Address" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                 <TextInput
                                     id="email"
                                     type="email"
                                     name="email"
                                     value={data.email}
-                                    className="block w-full bg-slate-50/50 border-slate-200 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
+                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
                                     onChange={(e) => setData('email', e.target.value)}
                                     placeholder="e.g. sales@globex.com"
                                 />
@@ -364,13 +364,13 @@ export default function Index({ suppliers, filters, can }) {
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="phone" value="Phone Number" className="text-slate-700 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="phone" value="Phone Number" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                 <TextInput
                                     id="phone"
                                     type="text"
                                     name="phone"
                                     value={data.phone}
-                                    className="block w-full bg-slate-50/50 border-slate-200 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
+                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
                                     onChange={(e) => setData('phone', e.target.value)}
                                     placeholder="e.g. +1 (555) 019-2834"
                                 />
@@ -378,13 +378,13 @@ export default function Index({ suppliers, filters, can }) {
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="address" value="Company Address" className="text-slate-700 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="address" value="Company Address" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                 <textarea
                                     id="address"
                                     name="address"
                                     value={data.address}
                                     rows="2"
-                                    className="block w-full bg-slate-50/50 border border-slate-200 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
+                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
                                     onChange={(e) => setData('address', e.target.value)}
                                     placeholder="e.g. Suite 400, Industrial Trade Plaza"
                                 />
@@ -392,20 +392,20 @@ export default function Index({ suppliers, filters, can }) {
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="notes" value="Internal Procurement Notes" className="text-slate-700 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="notes" value="Internal Procurement Notes" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                 <textarea
                                     id="notes"
                                     name="notes"
                                     value={data.notes}
                                     rows="2"
-                                    className="block w-full bg-slate-50/50 border border-slate-200 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
+                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
                                     onChange={(e) => setData('notes', e.target.value)}
                                     placeholder="Provide details on typical lead times or specific dispatch parameters..."
                                 />
                                 <InputError message={errors.notes} className="mt-1.5 text-xs text-rose-500" />
                             </div>
 
-                            <div className="bg-slate-50/50 rounded-xl p-4 border border-slate-150">
+                            <div className="bg-slate-50/50 dark:bg-ink-800/30 rounded-xl p-4 border border-slate-150 dark:border-ink-700">
                                 <label className="flex items-center cursor-pointer select-none">
                                     <Checkbox
                                         name="is_active"
@@ -414,7 +414,7 @@ export default function Index({ suppliers, filters, can }) {
                                         onChange={(e) => setData('is_active', e.target.checked)}
                                     />
                                     <div className="ms-3">
-                                        <span className="text-sm font-semibold text-slate-900 block">Active Status</span>
+                                        <span className="text-sm font-semibold text-slate-900 dark:text-ink-100 block">Active Status</span>
                                         <span className="text-[11px] text-slate-500 mt-0.5 block leading-tight">
                                             Deactivated suppliers won't appear as options for drafting new purchase orders.
                                         </span>
@@ -423,12 +423,12 @@ export default function Index({ suppliers, filters, can }) {
                             </div>
                         </div>
 
-                        <div className="border-t border-slate-100 pt-4 flex gap-3">
+                        <div className="border-t border-slate-100 dark:border-ink-700/50 pt-4 flex gap-3">
                             <Button 
                                 type="button" 
                                 variant="outline"
                                 onClick={() => setIsOpen(false)}
-                                className="flex-1 rounded-xl py-5 hover:bg-slate-50 font-semibold text-sm"
+                                className="flex-1 rounded-xl py-5 hover:bg-slate-50 dark:hover:bg-ink-800 dark:border-ink-700 dark:text-ink-200 font-semibold text-sm"
                             >
                                 Cancel
                             </Button>

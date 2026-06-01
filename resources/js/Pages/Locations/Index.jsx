@@ -102,8 +102,8 @@ export default function Index({ locations, filters, can }) {
 
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-slate-900">Locations</h1>
-                    <p className="text-sm text-slate-500 mt-1">Manage physical storage facilities, warehouses, and store outlets.</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-ink-100">Locations</h1>
+                    <p className="text-sm text-slate-500 dark:text-ink-400 mt-1">Manage physical storage facilities, warehouses, and store outlets.</p>
                 </div>
                 {can.create && (
                     <Button 
@@ -117,10 +117,10 @@ export default function Index({ locations, filters, can }) {
             </div>
 
             {/* Filter controls */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6 shadow-sm">
+            <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 mb-6 shadow-sm dark:shadow-ink-950/20">
                 <form onSubmit={handleSearchSubmit} className="flex flex-col md:flex-row gap-4 items-center justify-between">
                     <div className="relative w-full md:max-w-md">
-                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                         <TextInput
                             type="text"
                             value={search}
@@ -129,7 +129,7 @@ export default function Index({ locations, filters, can }) {
                                 handleFilterChange(e.target.value, status);
                             }}
                             placeholder="Search locations by code or name..."
-                            className="w-full pl-10 pr-4 py-2.5 bg-slate-50/50 border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 rounded-xl"
+                            className="w-full pl-10 pr-4 py-2.5 bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-sm focus:border-blue-500 focus:ring-blue-500 rounded-xl"
                         />
                     </div>
 
@@ -140,7 +140,7 @@ export default function Index({ locations, filters, can }) {
                                 setStatus(e.target.value);
                                 handleFilterChange(search, e.target.value);
                             }}
-                            className="w-full md:w-44 px-3 py-2.5 bg-white border border-slate-200 text-sm focus:border-blue-500 focus:ring-blue-500 rounded-xl"
+                            className="w-full md:w-44 px-3 py-2.5 bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 dark:text-ink-200 text-sm focus:border-blue-500 focus:ring-blue-500 rounded-xl"
                         >
                             <option value="all">All Statuses</option>
                             <option value="active">Active Only</option>
@@ -151,11 +151,11 @@ export default function Index({ locations, filters, can }) {
             </div>
 
             {/* Locations Table Card */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex-1 flex flex-col">
+            <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm dark:shadow-ink-950/20 overflow-hidden flex-1 flex flex-col">
                 <div className="overflow-x-auto flex-1">
                     <table className="w-full text-left border-collapse min-w-[700px]">
                         <thead>
-                            <tr className="bg-slate-50/75 border-b border-slate-200 text-xs font-semibold uppercase tracking-wider text-slate-500 sticky top-0 z-10">
+                            <tr className="bg-slate-50/75 dark:bg-ink-800/50 border-b border-slate-200 dark:border-ink-700 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-ink-400 sticky top-0 z-10">
                                 <th className="px-6 py-4">Code</th>
                                 <th className="px-6 py-4">Name</th>
                                 <th className="px-6 py-4">Address</th>
@@ -163,20 +163,20 @@ export default function Index({ locations, filters, can }) {
                                 <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-slate-100 dark:divide-ink-750">
                             {locations.data.length > 0 ? (
                                 locations.data.map((location) => (
-                                    <tr key={location.id} className="hover:bg-slate-50/50 transition-colors">
+                                    <tr key={location.id} className="hover:bg-slate-50/50 dark:hover:bg-ink-800/50 transition-colors">
                                         <td className="px-6 py-4">
-                                            <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100/50">
+                                            <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
                                                 {location.code}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="font-semibold text-slate-900 text-sm">{location.name}</span>
+                                            <span className="font-semibold text-slate-900 dark:text-ink-100 text-sm">{location.name}</span>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-xs text-slate-500 line-clamp-1 max-w-[260px]" title={location.address}>
+                                            <span className="text-xs text-slate-500 dark:text-ink-400 line-clamp-1 max-w-[260px]" title={location.address}>
                                                 {location.address || '—'}
                                             </span>
                                         </td>
@@ -187,8 +187,8 @@ export default function Index({ locations, filters, can }) {
                                                     Active
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 text-slate-500 border border-slate-200">
-                                                    <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 dark:bg-ink-800 text-slate-500 border border-slate-200 dark:border-ink-700">
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-slate-400 dark:bg-slate-500" />
                                                     Inactive
                                                 </span>
                                             )}
@@ -200,7 +200,7 @@ export default function Index({ locations, filters, can }) {
                                                         variant="ghost"
                                                         size="icon"
                                                         onClick={() => openEditSheet(location)}
-                                                        className="hover:bg-slate-100 text-slate-600 rounded-xl"
+                                                        className="hover:bg-slate-100 dark:hover:bg-ink-750 text-slate-600 dark:text-ink-400 rounded-xl"
                                                     >
                                                         <Edit2 className="h-4 w-4" />
                                                     </Button>
@@ -210,7 +210,7 @@ export default function Index({ locations, filters, can }) {
                                                         variant="ghost"
                                                         size="icon"
                                                         onClick={() => handleDelete(location)}
-                                                        className="hover:bg-red-50 text-red-600 rounded-xl"
+                                                        className="hover:bg-red-50 dark:hover:bg-red-500/10 text-red-600 rounded-xl"
                                                         title="Delete location"
                                                     >
                                                         <Trash2 className="h-4 w-4" />
@@ -224,11 +224,11 @@ export default function Index({ locations, filters, can }) {
                                 <tr>
                                     <td colSpan="5" className="px-6 py-16 text-center">
                                         <div className="flex flex-col items-center justify-center max-w-sm mx-auto">
-                                            <div className="p-4 bg-slate-100 rounded-full text-slate-400 mb-4">
+                                            <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-slate-500 mb-4">
                                                 <MapPin className="h-8 w-8" />
                                             </div>
-                                            <h3 className="text-base font-bold text-slate-900">No locations found</h3>
-                                            <p className="text-xs text-slate-500 mt-1 text-center leading-relaxed">
+                                            <h3 className="text-base font-bold text-slate-900 dark:text-ink-100">No locations found</h3>
+                                            <p className="text-xs text-slate-500 dark:text-ink-400 mt-1 text-center leading-relaxed">
                                                 Try adjusting your search criteria, clearing filters, or adding a new location.
                                             </p>
                                         </div>
@@ -241,11 +241,11 @@ export default function Index({ locations, filters, can }) {
 
                 {/* Table Pagination */}
                 {locations.links && locations.data.length > 0 && (
-                    <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between bg-slate-50/50">
-                        <span className="text-xs text-slate-500">
-                            Showing <span className="font-semibold text-slate-800">{locations.from}</span> to{' '}
-                            <span className="font-semibold text-slate-800">{locations.to}</span> of{' '}
-                            <span className="font-semibold text-slate-800">{locations.total}</span> entries
+                    <div className="px-6 py-4 border-t border-slate-200 dark:border-ink-700 flex items-center justify-between bg-slate-50/50 dark:bg-ink-800/30">
+                        <span className="text-xs text-slate-500 dark:text-ink-400">
+                            Showing <span className="font-semibold text-slate-800 dark:text-ink-200">{locations.from}</span> to{' '}
+                            <span className="font-semibold text-slate-800 dark:text-ink-200">{locations.to}</span> of{' '}
+                            <span className="font-semibold text-slate-800 dark:text-ink-200">{locations.total}</span> entries
                         </span>
                         <div className="flex gap-1.5">
                             {locations.links.map((link, idx) => {
@@ -258,7 +258,7 @@ export default function Index({ locations, filters, can }) {
                                             key={idx}
                                             variant="outline"
                                             size="sm"
-                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100"
+                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200"
                                             onClick={() => router.get(link.url, {}, { preserveState: true })}
                                         >
                                             <ChevronLeft className="h-4 w-4" />
@@ -272,7 +272,7 @@ export default function Index({ locations, filters, can }) {
                                             key={idx}
                                             variant="outline"
                                             size="sm"
-                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100"
+                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200"
                                             onClick={() => router.get(link.url, {}, { preserveState: true })}
                                         >
                                             <span>Next</span>
@@ -287,7 +287,7 @@ export default function Index({ locations, filters, can }) {
                                         variant={link.active ? 'default' : 'outline'}
                                         size="sm"
                                         className={`rounded-xl h-9 w-9 p-0 ${
-                                            link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100'
+                                            link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200'
                                         }`}
                                         onClick={() => router.get(link.url, {}, { preserveState: true })}
                                     >
@@ -302,9 +302,9 @@ export default function Index({ locations, filters, can }) {
 
             {/* Slide-over Create / Edit Panel */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                <SheetContent side="right" className="w-full sm:max-w-md bg-white p-6 border-l border-slate-200 shadow-2xl flex flex-col h-full z-50">
+                <SheetContent side="right" className="w-full sm:max-w-md bg-white dark:bg-ink-900 p-6 border-l border-slate-200 dark:border-ink-700 shadow-2xl flex flex-col h-full overflow-hidden z-50">
                     <SheetHeader className="mb-6">
-                        <SheetTitle className="text-lg font-bold text-slate-900">
+                        <SheetTitle className="text-lg font-bold text-slate-900 dark:text-ink-100">
                             {editingLocation ? 'Edit Location' : 'Add Location'}
                         </SheetTitle>
                         <SheetDescription className="text-xs text-slate-500">
@@ -312,16 +312,16 @@ export default function Index({ locations, filters, can }) {
                         </SheetDescription>
                     </SheetHeader>
 
-                    <form onSubmit={handleFormSubmit} className="flex-1 flex flex-col justify-between">
-                        <div className="space-y-5">
+                    <form onSubmit={handleFormSubmit} className="flex-1 flex flex-col min-h-0">
+                        <div className="space-y-5 overflow-y-auto min-h-0">
                             <div>
-                                <InputLabel htmlFor="code" value="Location Code" className="text-slate-700 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="code" value="Location Code" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                 <TextInput
                                     id="code"
                                     type="text"
                                     name="code"
                                     value={data.code}
-                                    className="block w-full bg-slate-50/50 border-slate-200 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm font-mono"
+                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm font-mono"
                                     onChange={(e) => setData('code', e.target.value.toUpperCase())}
                                     placeholder="e.g. WH-01"
                                     isFocused={!editingLocation}
@@ -331,13 +331,13 @@ export default function Index({ locations, filters, can }) {
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="name" value="Location Name" className="text-slate-700 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="name" value="Location Name" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                 <TextInput
                                     id="name"
                                     type="text"
                                     name="name"
                                     value={data.name}
-                                    className="block w-full bg-slate-50/50 border-slate-200 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
+                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
                                     onChange={(e) => setData('name', e.target.value)}
                                     placeholder="e.g. Main Warehouse Outlet"
                                     isFocused={!!editingLocation}
@@ -346,20 +346,20 @@ export default function Index({ locations, filters, can }) {
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="address" value="Street Address" className="text-slate-700 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="address" value="Street Address" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                 <textarea
                                     id="address"
                                     name="address"
                                     value={data.address}
                                     rows="3"
-                                    className="block w-full bg-slate-50/50 border border-slate-200 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
+                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
                                     onChange={(e) => setData('address', e.target.value)}
                                     placeholder="e.g. 102 Logistics Boulevard, Section 4"
                                 />
                                 <InputError message={errors.address} className="mt-1.5 text-xs text-rose-500" />
                             </div>
 
-                            <div className="bg-slate-50/50 rounded-xl p-4 border border-slate-150">
+                            <div className="bg-slate-50/50 dark:bg-ink-800/30 rounded-xl p-4 border border-slate-150 dark:border-ink-700">
                                 <label className="flex items-center cursor-pointer select-none">
                                     <Checkbox
                                         name="is_active"
@@ -368,7 +368,7 @@ export default function Index({ locations, filters, can }) {
                                         onChange={(e) => setData('is_active', e.target.checked)}
                                     />
                                     <div className="ms-3">
-                                        <span className="text-sm font-semibold text-slate-900 block">Active Status</span>
+                                        <span className="text-sm font-semibold text-slate-900 dark:text-ink-100 block">Active Status</span>
                                         <span className="text-[11px] text-slate-500 mt-0.5 block leading-tight">
                                             Deactivated locations won't display in standard stock routing selections.
                                         </span>
@@ -377,12 +377,12 @@ export default function Index({ locations, filters, can }) {
                             </div>
                         </div>
 
-                        <div className="border-t border-slate-100 pt-4 flex gap-3">
+                        <div className="border-t border-slate-100 dark:border-ink-700/50 pt-4 flex gap-3">
                             <Button 
                                 type="button" 
                                 variant="outline"
                                 onClick={() => setIsOpen(false)}
-                                className="flex-1 rounded-xl py-5 hover:bg-slate-50 font-semibold text-sm"
+                                className="flex-1 rounded-xl py-5 hover:bg-slate-50 dark:hover:bg-ink-800 dark:border-ink-700 dark:text-ink-200 font-semibold text-sm"
                             >
                                 Cancel
                             </Button>

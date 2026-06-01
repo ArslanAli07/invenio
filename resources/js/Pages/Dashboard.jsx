@@ -5,21 +5,18 @@ export default function Dashboard() {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Dashboard
-                </h2>
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-ink-100">Dashboard</h1>
+                    <p className="text-sm text-slate-500 dark:text-ink-400 mt-1">Welcome back. Here's what's happening.</p>
+                </div>
             }
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
-                            You're logged in!
-                        </div>
-                    </div>
-                </div>
+            <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-750 shadow-sm p-6 dark:shadow-ink-950/20">
+                <p className="text-slate-600 dark:text-ink-400 text-sm">
+                    Dashboard content will be built in Phase 6. For now, navigate using the sidebar.
+                </p>
             </div>
         </AuthenticatedLayout>
     );

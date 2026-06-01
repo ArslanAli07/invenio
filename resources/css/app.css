@@ -35,34 +35,38 @@
     --radius: 0.5rem;
   }
 
+  /* Dark mode — matches the custom ink palette in tailwind.config.js */
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    color-scheme: dark;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    /* Expressed in HSL so shadcn components pick them up correctly */
+    --background: 228 16% 9%;        /* #10131D — ink-900 body */
+    --foreground: 214 34% 85%;       /* #C2CEDF — ink-200 */
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --card: 228 16% 9%;
+    --card-foreground: 214 34% 85%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --popover: 230 22% 14%;          /* #171C2A — ink-800, elevated panels */
+    --popover-foreground: 214 34% 85%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --primary: 214 34% 88%;
+    --primary-foreground: 228 20% 10%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --secondary: 228 20% 14%;        /* #1D2438 — ink-750 */
+    --secondary-foreground: 214 30% 80%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --muted: 228 20% 14%;
+    --muted-foreground: 218 22% 55%; /* #8A9BB8 — ink-400 */
+
+    --accent: 228 20% 17%;
+    --accent-foreground: 214 34% 85%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 228 26% 22%;           /* #252E48 — ink-700 */
+    --input: 228 26% 22%;
+    --ring: 214 34% 70%;
   }
 }
 
@@ -75,7 +79,29 @@
   }
 }
 
-/* Custom WebKit Autofill Overrides to maintain premium dark input theme */
+/* ─── Dark mode scrollbars ───────────────────────────────────────────── */
+.dark ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #10131D;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #252E48;
+  border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #2E3A57;
+}
+
+/* ─── Dark mode <select> options (overrides OS chrome default) ───────── */
+.dark select option {
+  background-color: #171C2A;
+  color: #C2CEDF;
+}
+
+/* ─── Autofill override — matches ink-800 input surface ─────────────── */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -85,7 +111,7 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  -webkit-text-fill-color: #f8fafc !important;
-  -webkit-box-shadow: 0 0 0px 1000px #020617 inset !important;
+  -webkit-text-fill-color: #D8E4F2 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #171C2A inset !important;
   transition: background-color 5000s ease-in-out 0s;
 }

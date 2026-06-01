@@ -67,8 +67,10 @@ app/
 
 resources/js/
   Layouts/
-    AuthenticatedLayout.jsx   # Sidebar, top bar, flash toasts
+    AuthenticatedLayout.jsx   # Sidebar, top bar, flash toasts, theme toggle
     GuestLayout.jsx           # Login/reset wrapper
+  Components/
+    ThemeProvider.jsx         # Dark/light mode context, localStorage + OS preference
   Pages/
     Categories/Index.jsx
     Locations/Index.jsx

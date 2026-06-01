@@ -58,7 +58,21 @@ export default {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))',
                 },
+                // Custom dark-mode palette — blue-black tinted surface hierarchy
+                ink: {
+                    950: '#0C0E14',  // Body background
+                    900: '#10131D',  // Sidebar, header, panels
+                    800: '#171C2A',  // Cards, sheet backgrounds
+                    750: '#1D2438',  // Table headers, elevated sections
+                    700: '#252E48',  // Borders
+                    650: '#2E3A57',  // Strong borders / active dividers
+                    600: '#4A5A78',  // Dimmed icons / placeholder text
+                    400: '#8A9BB8',  // Secondary text
+                    200: '#C2CEDF',  // Primary body text
+                    100: '#D8E4F2',  // Headings / high-emphasis text
+                },
             },
+
             borderRadius: {
                 lg: 'var(--radius)',
                 md: 'calc(var(--radius) - 2px)',
