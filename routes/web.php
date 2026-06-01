@@ -46,6 +46,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/products/{product}', [\App\Http\Controllers\ProductController::class, 'update'])->middleware('role:admin,manager')->name('products.update');
     Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy'])->middleware('role:admin,manager')->name('products.destroy');
     Route::post('/products/check-sku', [\App\Http\Controllers\ProductController::class, 'checkSku'])->middleware('role:admin,manager')->name('products.check-sku');
+
+    // Stock Movement Routes
+    Route::post('/products/{product}/movements', [\App\Http\Controllers\StockMovementController::class, 'store'])
+        ->middleware('role:admin,manager')
+        ->name('movements.store');
 });
 
 require __DIR__.'/auth.php';

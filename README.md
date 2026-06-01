@@ -58,8 +58,8 @@ If you're using Laravel Herd, the site is at `http://invenio.test` after setup.
 ```
 app/
   Http/
-    Controllers/      # CategoryController, LocationController, SupplierController, ProductController
-    Requests/         # One Store + Update FormRequest per resource
+    Controllers/      # CategoryController, LocationController, SupplierController, ProductController, StockMovementController
+    Requests/         # One Store + Update FormRequest per resource, plus StoreMovementRequest
     Middleware/       # EnsureRole — gates routes by role string
     Policies/         # Eloquent policies for all resources
   Models/
@@ -101,7 +101,7 @@ php artisan test
 
 - [x] Phase 1 — Foundation & Auth
 - [x] Phase 2 — Master data CRUD (Categories, Locations, Suppliers, Products)
-- [ ] Phase 3 — Stock ledger (movements, aggregation, negative-stock guard)
+- [x] Phase 3 — Stock ledger (movements, aggregation, negative-stock guard)
 - [ ] Phase 4 — Purchase orders (create, send, partial receive)
 - [ ] Phase 5 — Emails & queues (low-stock alerts, weekly digest)
 - [ ] Phase 6 — Dashboard & UX polish

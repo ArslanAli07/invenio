@@ -129,24 +129,35 @@ class ProductController extends Controller
         $stockLevels = $locations->map(function ($loc) use ($product) {
             $currentStock = StockLedger::computeStock($product->id, $loc->id);
             return [
-                'location_id' => $loc->id,
+                'location_id'   => $loc->id,
                 'location_code' => $loc->code,
                 'location_name' => $loc->name,
                 'current_stock' => $currentStock,
-                'is_low' => $currentStock < $product->reorder_level,
+                'is_low'        => $currentStock < $product->reorder_level,
             ];
         });
 
-        // Paginated movement history for the specific product
+        // Filtered, paginated movement history
         $movements = StockLedger::where('product_id', $product->id)
+            ->when($request->filled('filter_location'), fn ($q) =>
+                $q->where('location_id', $request->filter_location)
+            )
+            ->when($request->filled('filter_type'), fn ($q) =>
+                $q->where('type', $request->filter_type)
+            )
             ->with(['location', 'user'])
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return Inertia::render('Products/Show', [
-            'product' => $product,
-            'stockLevels' => $stockLevels,
-            'movements' => $movements,
+            'product'         => $product,
+            'stockLevels'     => $stockLevels,
+            'movements'       => $movements,
+            'movementFilters' => $request->only(['filter_location', 'filter_type']),
+            'can'             => [
+                'recordMovement' => $request->user()->can('update', $product),
+            ],
         ]);
     }
 
