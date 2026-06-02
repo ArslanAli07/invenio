@@ -8,6 +8,7 @@ import {
     MapPin,
     UserCheck,
     Package,
+    ClipboardList,
     User as UserIcon,
     LogOut,
     Menu,
@@ -49,11 +50,12 @@ export default function AuthenticatedLayout({ header, children }) {
     };
 
     const navigation = [
-        { name: 'Dashboard', href: route('dashboard'), icon: LayoutDashboard, active: route().current('dashboard') },
-        { name: 'Products', href: route('products.index'), icon: Package, active: route().current('products.*') },
-        { name: 'Categories', href: route('categories.index'), icon: Boxes, active: route().current('categories.*') },
-        { name: 'Locations', href: route('locations.index'), icon: MapPin, active: route().current('locations.*') },
-        { name: 'Suppliers', href: route('suppliers.index'), icon: UserCheck, active: route().current('suppliers.*') },
+        { name: 'Dashboard',       href: route('dashboard'),       icon: LayoutDashboard, active: route().current('dashboard') },
+        { name: 'Products',        href: route('products.index'),  icon: Package,         active: route().current('products.*') },
+        { name: 'Categories',      href: route('categories.index'),icon: Boxes,           active: route().current('categories.*') },
+        { name: 'Locations',       href: route('locations.index'), icon: MapPin,          active: route().current('locations.*') },
+        { name: 'Suppliers',       href: route('suppliers.index'), icon: UserCheck,       active: route().current('suppliers.*') },
+        { name: 'Purchase Orders', href: route('po.index'),        icon: ClipboardList,   active: route().current('po.*') },
     ];
 
     const { post } = useForm();

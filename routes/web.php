@@ -51,6 +51,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/{product}/movements', [\App\Http\Controllers\StockMovementController::class, 'store'])
         ->middleware('role:admin,manager')
         ->name('movements.store');
+
+    // Purchase Order Routes
+    // NOTE: specific routes (create, index) come before the {purchaseOrder} wildcard to avoid conflicts
+    Route::get('/purchase-orders',             [\App\Http\Controllers\PurchaseOrderController::class, 'index'])->name('po.index');
+    Route::get('/purchase-orders/create',      [\App\Http\Controllers\PurchaseOrderController::class, 'create'])->name('po.create');
+    Route::post('/purchase-orders',            [\App\Http\Controllers\PurchaseOrderController::class, 'store'])->middleware('role:admin,manager,staff')->name('po.store');
+    Route::get('/purchase-orders/{purchaseOrder}',       [\App\Http\Controllers\PurchaseOrderController::class, 'show'])->name('po.show');
+    Route::get('/purchase-orders/{purchaseOrder}/edit',  [\App\Http\Controllers\PurchaseOrderController::class, 'edit'])->name('po.edit');
+    Route::put('/purchase-orders/{purchaseOrder}',       [\App\Http\Controllers\PurchaseOrderController::class, 'update'])->middleware('role:admin,manager,staff')->name('po.update');
+    Route::post('/purchase-orders/{purchaseOrder}/send',    [\App\Http\Controllers\PurchaseOrderController::class, 'send'])->middleware('role:admin,manager')->name('po.send');
+    Route::post('/purchase-orders/{purchaseOrder}/receive', [\App\Http\Controllers\PurchaseOrderController::class, 'receive'])->middleware('role:admin,manager,staff')->name('po.receive');
+    Route::post('/purchase-orders/{purchaseOrder}/cancel',  [\App\Http\Controllers\PurchaseOrderController::class, 'cancel'])->middleware('role:admin,manager')->name('po.cancel');
+    Route::delete('/purchase-orders/{purchaseOrder}',    [\App\Http\Controllers\PurchaseOrderController::class, 'destroy'])->middleware('role:admin')->name('po.destroy');
 });
 
 require __DIR__.'/auth.php';
