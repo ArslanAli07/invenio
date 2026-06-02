@@ -58,12 +58,17 @@ If you're using Laravel Herd, the site is at `http://invenio.test` after setup.
 ```
 app/
   Http/
-    Controllers/      # CategoryController, LocationController, SupplierController, ProductController, StockMovementController
-    Requests/         # One Store + Update FormRequest per resource, plus StoreMovementRequest
+    Controllers/      # CategoryController, LocationController, SupplierController,
+                      # ProductController, StockMovementController, PurchaseOrderController
+    Requests/         # One Store + Update FormRequest per resource, plus StoreMovementRequest,
+                      # StorePurchaseOrderRequest, UpdatePurchaseOrderRequest, ReceiveItemsRequest
     Middleware/       # EnsureRole — gates routes by role string
     Policies/         # Eloquent policies for all resources
+    Mail/             # PurchaseOrderSentMail (queued, ShouldQueue)
   Models/
     StockLedger.php   # computeStock() aggregates ledger rows per product/location
+    PurchaseOrder.php # generatePoNumber(), isDraft() helpers
+    PurchaseOrderItem.php  # qty_outstanding, line_total accessors
 
 resources/js/
   Layouts/
@@ -78,7 +83,17 @@ resources/js/
     Products/
       Index.jsx   # List with low-stock indicator and SKU uniqueness check
       Show.jsx    # Per-location stock breakdown + movement history
+    PurchaseOrders/
+      Index.jsx   # List with status badges and filters
+      Create.jsx  # Two-section form with dynamic line items and live totals
+      Edit.jsx    # Same as Create, pre-filled from existing draft
+      Show.jsx    # Detail page with meta cards, items table, progress bars,
+                  # context-sensitive actions, Receive Items modal
     Auth/         # Login, ForgotPassword, ResetPassword
+
+resources/views/
+  mail/
+    purchase-order-sent.blade.php   # HTML email sent to supplier on PO send
 
 database/
   migrations/   # Schema for all 10 tables
@@ -93,7 +108,7 @@ database/
 php artisan test
 ```
 
-33 feature tests covering auth, CRUD policies, and validation rules.
+58 feature tests covering auth, CRUD policies, stock ledger rules, and PO lifecycle.
 
 ---
 
@@ -102,7 +117,7 @@ php artisan test
 - [x] Phase 1 — Foundation & Auth
 - [x] Phase 2 — Master data CRUD (Categories, Locations, Suppliers, Products)
 - [x] Phase 3 — Stock ledger (movements, aggregation, negative-stock guard)
-- [ ] Phase 4 — Purchase orders (create, send, partial receive)
+- [x] Phase 4 — Purchase orders (draft → sent → receive → stock auto-updated)
 - [ ] Phase 5 — Emails & queues (low-stock alerts, weekly digest)
 - [ ] Phase 6 — Dashboard & UX polish
 - [ ] Phase 7 — Stretch (activity log, CSV export, webhooks)
@@ -114,3 +129,13 @@ php artisan test
 `vendor/` and `node_modules/` are gitignored. `public/build/` is excluded — run `npm run build` locally or hook it into your deploy pipeline.
 
 The `.env.example` has sensible defaults. Only `DB_*` values need changing for a fresh install.
+
+### Purchase order emails
+
+The "Send to Supplier" action queues an email rather than sending it synchronously. For this to work during development, run a queue worker alongside `npm run dev`:
+
+```bash
+php artisan queue:work
+```
+
+Emails are delivered to Mailpit at `http://localhost:8025` when using Herd.
