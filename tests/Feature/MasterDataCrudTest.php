@@ -132,4 +132,68 @@ class MasterDataCrudTest extends TestCase
         ]);
         $response->assertJson(['available' => true]);
     }
+
+    public function test_product_low_stock_status_based_on_global_stock(): void
+    {
+        $category = Category::create(['name' => 'Electronics', 'is_active' => true]);
+        $loc1 = Location::create(['code' => 'LOC-A', 'name' => 'Warehouse A', 'is_active' => true]);
+        $loc2 = Location::create(['code' => 'LOC-B', 'name' => 'Warehouse B', 'is_active' => true]);
+
+        $product = Product::create([
+            'sku' => 'TEST-LOW-01',
+            'name' => 'Low Stock Test Product',
+            'unit' => 'pcs',
+            'category_id' => $category->id,
+            'reorder_level' => 10,
+            'is_active' => true,
+        ]);
+
+        // Scenario 1: Total stock is 50, but LOC-B has 0 stock (less than reorder_level 10).
+        // Since global stock (50) >= reorder_level (10), it should NOT be low stock.
+        \App\Models\StockLedger::create([
+            'product_id' => $product->id,
+            'location_id' => $loc1->id,
+            'type' => 'in',
+            'quantity' => 50.0,
+            'created_by' => $this->admin->id,
+        ]);
+
+        $response = $this->actingAs($this->admin)->get('/products');
+        $response->assertStatus(200);
+
+        $productsData = $response->inertiaPage()['props']['products']['data'];
+        $found = false;
+        foreach ($productsData as $item) {
+            if ($item['id'] === $product->id) {
+                $found = true;
+                $this->assertFalse($item['is_low_stock'], "Product should not be marked low stock when global stock is above reorder level");
+                $this->assertEquals(50.0, $item['global_stock']);
+            }
+        }
+        $this->assertTrue($found, "Test product not found in products list");
+
+        // Scenario 2: Total stock is 5 (less than reorder_level 10).
+        // It should be low stock.
+        \App\Models\StockLedger::create([
+            'product_id' => $product->id,
+            'location_id' => $loc1->id,
+            'type' => 'out',
+            'quantity' => 45.0,
+            'created_by' => $this->admin->id,
+        ]);
+
+        $response2 = $this->actingAs($this->admin)->get('/products');
+        $response2->assertStatus(200);
+
+        $productsData2 = $response2->inertiaPage()['props']['products']['data'];
+        $found2 = false;
+        foreach ($productsData2 as $item) {
+            if ($item['id'] === $product->id) {
+                $found2 = true;
+                $this->assertTrue($item['is_low_stock'], "Product should be marked low stock when global stock is below reorder level");
+                $this->assertEquals(5.0, $item['global_stock']);
+            }
+        }
+        $this->assertTrue($found2, "Test product not found in products list");
+    }
 }

@@ -68,20 +68,15 @@ class ProductController extends Controller
 
         // Map calculated stocks and low-stock statuses onto the paginated collection
         $products->getCollection()->transform(function ($product) use ($stockMap, $locations) {
-            $isLowStock = false;
             $globalStock = 0.0;
 
             foreach ($locations as $loc) {
                 $stock = $stockMap[$product->id][$loc->id] ?? 0.0;
                 $globalStock += $stock;
-
-                if ($stock < $product->reorder_level) {
-                    $isLowStock = true;
-                }
             }
 
             $product->global_stock = $globalStock;
-            $product->is_low_stock = $isLowStock;
+            $product->is_low_stock = $globalStock < $product->reorder_level;
 
             return $product;
         });
