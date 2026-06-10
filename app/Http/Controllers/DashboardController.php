@@ -94,6 +94,73 @@ class DashboardController extends Controller
                 'created_at'   => $m->created_at->toDateTimeString(),
             ]);
 
+        // ── Visual Charts Data Aggregations ───────────────────────────────
+
+        // 1. Stock levels by active Location
+        $locationStock = DB::table('stock_ledger')
+            ->join('locations', 'stock_ledger.location_id', '=', 'locations.id')
+            ->where('locations.is_active', true)
+            ->select('locations.name as location_name', 'locations.code as location_code')
+            ->selectRaw("SUM(CASE stock_ledger.type
+                WHEN 'in'     THEN  stock_ledger.quantity
+                WHEN 'out'    THEN -stock_ledger.quantity
+                WHEN 'adjust' THEN  stock_ledger.quantity
+            END) as total_stock")
+            ->groupBy('locations.id', 'locations.name', 'locations.code')
+            ->get()
+            ->map(fn($row) => [
+                'name'  => $row->location_name . ' (' . $row->location_code . ')',
+                'value' => max(0, (float)$row->total_stock)
+            ])
+            ->toArray();
+
+        // 2. Stock levels by Category
+        $categoryStock = DB::table('stock_ledger')
+            ->join('products', 'stock_ledger.product_id', '=', 'products.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->select('categories.name as category_name')
+            ->selectRaw("SUM(CASE stock_ledger.type
+                WHEN 'in'     THEN  stock_ledger.quantity
+                WHEN 'out'    THEN -stock_ledger.quantity
+                WHEN 'adjust' THEN  stock_ledger.quantity
+            END) as total_stock")
+            ->groupBy('categories.id', 'categories.name')
+            ->get()
+            ->map(fn($row) => [
+                'name'  => $row->category_name,
+                'value' => max(0, (float)$row->total_stock)
+            ])
+            ->filter(fn($item) => $item['value'] > 0)
+            ->values()
+            ->toArray();
+
+        // 3. Movements trend for the last 15 days (In vs Out volume per day)
+        $trendData = [];
+        for ($i = 14; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('m-d');
+            $trendData[$date] = [
+                'date' => $date,
+                'in'   => 0.0,
+                'out'  => 0.0,
+            ];
+        }
+
+        $dbTrend = DB::table('stock_ledger')
+            ->where('created_at', '>=', now()->subDays(15)->startOfDay())
+            ->selectRaw("strftime('%m-%d', created_at) as date_label")
+            ->selectRaw("SUM(CASE WHEN type = 'in' THEN quantity ELSE 0 END) as qty_in")
+            ->selectRaw("SUM(CASE WHEN type = 'out' THEN quantity ELSE 0 END) as qty_out")
+            ->groupBy('date_label')
+            ->get();
+
+        foreach ($dbTrend as $row) {
+            if (isset($trendData[$row->date_label])) {
+                $trendData[$row->date_label]['in']  = (float)$row->qty_in;
+                $trendData[$row->date_label]['out'] = (float)$row->qty_out;
+            }
+        }
+        $movementsTrend = array_values($trendData);
+
         return Inertia::render('Dashboard', [
             'stats' => [
                 'total_products'  => $totalProducts,
@@ -104,6 +171,9 @@ class DashboardController extends Controller
             'lowStockProducts' => $lowStockProducts,
             'recentPos'        => $recentPos,
             'recentMovements'  => $recentMovements,
+            'locationStock'    => $locationStock,
+            'categoryStock'    => $categoryStock,
+            'movementsTrend'   => $movementsTrend,
         ]);
     }
 }

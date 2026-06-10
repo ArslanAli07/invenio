@@ -1,5 +1,21 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
+import { useState } from 'react';
+import {
+    ResponsiveContainer,
+    AreaChart,
+    Area,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip as ChartTooltip,
+    BarChart,
+    Bar,
+    PieChart,
+    Pie,
+    Cell
+} from 'recharts';
+
 import {
     Package,
     MapPin,
@@ -99,8 +115,60 @@ function StatCard({ icon: Icon, label, value, sub, accent, href }) {
     return href ? <Link href={href}>{card}</Link> : card;
 }
 
+// ── Custom Tooltips ─────────────────────────────────────────────────────────
+const CustomMovementsTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-white dark:bg-ink-900 border border-slate-200 dark:border-ink-700 p-3.5 rounded-xl shadow-xl">
+                <p className="text-xs font-bold text-slate-500 dark:text-ink-400 mb-1.5">{label}</p>
+                <div className="space-y-1">
+                    <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                        Stock In: <span className="font-bold tabular-nums">{payload[0].value.toLocaleString()}</span>
+                    </p>
+                    <p className="text-xs font-semibold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                        Stock Out: <span className="font-bold tabular-nums">{payload[1].value.toLocaleString()}</span>
+                    </p>
+                </div>
+            </div>
+        );
+    }
+    return null;
+};
+
+const CustomAllocationTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+        const item = payload[0];
+        return (
+            <div className="bg-white dark:bg-ink-900 border border-slate-200 dark:border-ink-700 p-3.5 rounded-xl shadow-xl">
+                <p className="text-xs font-bold text-slate-800 dark:text-ink-100 mb-1 leading-none">{item.name}</p>
+                <p className="text-sm font-extrabold text-[#1B4FD8] dark:text-blue-400 tabular-nums">
+                    {item.value.toLocaleString()} <span className="text-[10px] font-normal text-slate-400 dark:text-ink-500 uppercase">units</span>
+                </p>
+            </div>
+        );
+    }
+    return null;
+};
+
+const CHART_COLORS = ['#1B4FD8', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#3B82F6', '#14B8A6'];
+
 // ── Main page ────────────────────────────────────────────────────────────────
-export default function Dashboard({ stats, lowStockProducts, recentPos, recentMovements }) {
+export default function Dashboard({ 
+    stats, 
+    lowStockProducts, 
+    recentPos, 
+    recentMovements,
+    locationStock = [],
+    categoryStock = [],
+    movementsTrend = []
+}) {
+    const [allocationType, setAllocationType] = useState('category');
+
+    const hasCategoryData = categoryStock.length > 0 && categoryStock.some(c => c.value > 0);
+    const hasLocationData = locationStock.length > 0 && locationStock.some(l => l.value > 0);
+
     return (
         <AuthenticatedLayout>
             <Head title="Dashboard" />
@@ -145,6 +213,172 @@ export default function Dashboard({ stats, lowStockProducts, recentPos, recentMo
                     accent={stats.open_po_count > 0 ? 'blue' : undefined}
                     href={route('po.index')}
                 />
+            </div>
+
+            {/* ── Visual Charts Section ──────────────────────────────────── */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                
+                {/* 15-Day Stock Movement velocity trend (2/3 width) */}
+                <div className="lg:col-span-2 bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col">
+                    <div className="px-5 py-4 border-b border-slate-100 dark:border-ink-750 bg-slate-50/50 dark:bg-ink-800/30 flex items-center justify-between">
+                        <h2 className="text-sm font-bold text-slate-900 dark:text-ink-100 flex items-center gap-2">
+                            Stock Movements Velocity
+                            <span className="text-[10px] font-normal text-slate-400 dark:text-ink-500 uppercase">(Last 15 Days)</span>
+                        </h2>
+                    </div>
+                    <div className="p-5 flex-1 min-h-[300px]">
+                        <ResponsiveContainer width="100%" height={300}>
+                            <AreaChart data={movementsTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <defs>
+                                    <linearGradient id="colorIn" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.2}/>
+                                        <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                                    </linearGradient>
+                                    <linearGradient id="colorOut" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#F43F5E" stopOpacity={0.2}/>
+                                        <stop offset="95%" stopColor="#F43F5E" stopOpacity={0}/>
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" className="dark:stroke-ink-800" />
+                                <XAxis 
+                                    dataKey="date" 
+                                    tickLine={false} 
+                                    axisLine={false} 
+                                    tick={{ fill: '#64748B', fontSize: 10, fontWeight: 500 }} 
+                                />
+                                <YAxis 
+                                    tickLine={false} 
+                                    axisLine={false} 
+                                    tick={{ fill: '#64748B', fontSize: 10, fontWeight: 500 }} 
+                                />
+                                <ChartTooltip content={<CustomMovementsTooltip />} />
+                                <Area 
+                                    type="monotone" 
+                                    dataKey="in" 
+                                    name="Stock In" 
+                                    stroke="#10B981" 
+                                    strokeWidth={2} 
+                                    fillOpacity={1} 
+                                    fill="url(#colorIn)" 
+                                />
+                                <Area 
+                                    type="monotone" 
+                                    dataKey="out" 
+                                    name="Stock Out" 
+                                    stroke="#F43F5E" 
+                                    strokeWidth={2} 
+                                    fillOpacity={1} 
+                                    fill="url(#colorOut)" 
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* Stock Allocation Card (1/3 width) */}
+                <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col">
+                    <div className="px-5 py-4 border-b border-slate-100 dark:border-ink-750 bg-slate-50/50 dark:bg-ink-800/30 flex items-center justify-between">
+                        <h2 className="text-sm font-bold text-slate-900 dark:text-ink-100">
+                            Stock Allocation
+                        </h2>
+                        <div className="flex bg-slate-100 dark:bg-ink-800 p-0.5 rounded-lg border border-slate-200/50 dark:border-ink-700">
+                            <button
+                                onClick={() => setAllocationType('category')}
+                                className={`px-2.5 py-1.2 text-[11px] font-semibold rounded-md transition-all ${
+                                    allocationType === 'category'
+                                        ? 'bg-white dark:bg-ink-900 text-slate-900 dark:text-ink-100 shadow-sm'
+                                        : 'text-slate-500 dark:text-ink-400 hover:text-slate-800'
+                                }`}
+                            >
+                                Category
+                            </button>
+                            <button
+                                onClick={() => setAllocationType('location')}
+                                className={`px-2.5 py-1.2 text-[11px] font-semibold rounded-md transition-all ${
+                                    allocationType === 'location'
+                                        ? 'bg-white dark:bg-ink-900 text-slate-900 dark:text-ink-100 shadow-sm'
+                                        : 'text-slate-500 dark:text-ink-400 hover:text-slate-800'
+                                }`}
+                            >
+                                Location
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="p-5 flex-1 flex flex-col justify-center min-h-[300px]">
+                        {allocationType === 'category' ? (
+                            !hasCategoryData ? (
+                                <div className="flex flex-col items-center justify-center text-center py-12">
+                                    <Package className="h-8 w-8 text-slate-300 dark:text-ink-700 mb-2" />
+                                    <p className="text-xs font-semibold text-slate-500 dark:text-ink-400">No stock in any category</p>
+                                </div>
+                            ) : (
+                                <div className="flex-1 flex flex-col justify-between">
+                                    <div className="h-[180px]">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                                <Pie
+                                                    data={categoryStock}
+                                                    cx="50%"
+                                                    cy="50%"
+                                                    innerRadius={55}
+                                                    outerRadius={75}
+                                                    paddingAngle={3}
+                                                    dataKey="value"
+                                                >
+                                                    {categoryStock.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                                                    ))}
+                                                </Pie>
+                                                <ChartTooltip content={<CustomAllocationTooltip />} />
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    
+                                    {/* Category Legend list */}
+                                    <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-4 overflow-y-auto max-h-[80px]">
+                                        {categoryStock.map((entry, index) => (
+                                            <div key={entry.name} className="flex items-center gap-1.5 text-[11px] text-slate-600 dark:text-ink-400 font-semibold">
+                                                <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
+                                                <span className="truncate max-w-[85px]" title={entry.name}>{entry.name}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )
+                        ) : (
+                            !hasLocationData ? (
+                                <div className="flex flex-col items-center justify-center text-center py-12">
+                                    <MapPin className="h-8 w-8 text-slate-300 dark:text-ink-700 mb-2" />
+                                    <p className="text-xs font-semibold text-slate-500 dark:text-ink-400">No stock in any location</p>
+                                </div>
+                            ) : (
+                                <div className="h-[240px] w-full">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={locationStock} layout="vertical" margin={{ left: -10, right: 10, top: 0, bottom: 0 }}>
+                                            <XAxis type="number" hide />
+                                            <YAxis 
+                                                dataKey="name" 
+                                                type="category" 
+                                                tickLine={false} 
+                                                axisLine={false} 
+                                                width={90} 
+                                                tick={{ fill: '#64748B', fontSize: 10, fontWeight: 500 }} 
+                                            />
+                                            <ChartTooltip content={<CustomAllocationTooltip />} />
+                                            <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={16}>
+                                                {locationStock.map((entry, index) => (
+                                                    <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            )
+                        )}
+                    </div>
+                </div>
+
             </div>
 
             {/* ── Middle row: Low stock + Recent POs ─────────────────────── */}
