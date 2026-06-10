@@ -530,19 +530,27 @@ export default function Show({ purchaseOrder, can }) {
                                     <tr key={item.id} className="hover:bg-slate-50/30 dark:hover:bg-ink-800/30 transition-colors">
                                         {/* SKU */}
                                         <td className="px-6 py-4">
-                                            <span className="font-mono text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
+                                            <Link
+                                                href={route('products.show', item.product?.id)}
+                                                className="font-mono text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
+                                            >
                                                 {item.product?.sku}
-                                            </span>
+                                            </Link>
                                         </td>
 
                                         {/* Product name */}
                                         <td className="px-6 py-4">
-                                            <span className="text-sm font-semibold text-slate-800 dark:text-ink-100">
-                                                {item.product?.name}
-                                            </span>
-                                            <span className="block text-[10px] text-slate-400 dark:text-ink-500 mt-0.5 uppercase font-semibold">
-                                                {item.product?.unit}
-                                            </span>
+                                            <Link
+                                                href={route('products.show', item.product?.id)}
+                                                className="group"
+                                            >
+                                                <span className="text-sm font-semibold text-slate-800 dark:text-ink-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                                    {item.product?.name}
+                                                </span>
+                                                <span className="block text-[10px] text-slate-400 dark:text-ink-500 mt-0.5 uppercase font-semibold">
+                                                    {item.product?.unit}
+                                                </span>
+                                            </Link>
                                         </td>
 
                                         {/* Qty ordered */}

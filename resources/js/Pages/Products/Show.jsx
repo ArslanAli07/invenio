@@ -259,7 +259,31 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                 <option value="out">Stock Out</option>
                                 <option value="adjust">Adjustment</option>
                             </select>
-                            {(movementFilters.filter_location || movementFilters.filter_type) && (
+                            {/* Date from */}
+                            <input
+                                type="date"
+                                value={movementFilters.filter_from || ''}
+                                onChange={(e) => router.get(
+                                    route('products.show', product.id),
+                                    { ...movementFilters, filter_from: e.target.value || undefined },
+                                    { preserveState: true, preserveScroll: true, replace: true }
+                                )}
+                                className="text-xs bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 text-slate-700 dark:text-ink-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30 cursor-pointer"
+                                title="From date"
+                            />
+                            {/* Date to */}
+                            <input
+                                type="date"
+                                value={movementFilters.filter_to || ''}
+                                onChange={(e) => router.get(
+                                    route('products.show', product.id),
+                                    { ...movementFilters, filter_to: e.target.value || undefined },
+                                    { preserveState: true, preserveScroll: true, replace: true }
+                                )}
+                                className="text-xs bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 text-slate-700 dark:text-ink-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30 cursor-pointer"
+                                title="To date"
+                            />
+                            {(movementFilters.filter_location || movementFilters.filter_type || movementFilters.filter_from || movementFilters.filter_to) && (
                                 <button
                                     onClick={() => router.get(
                                         route('products.show', product.id),
@@ -338,16 +362,29 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-xs">
-                                            {movement.reference_type ? (
-                                                <span className="flex items-center gap-1.5 text-slate-600 dark:text-ink-400 font-mono text-[10px] bg-slate-100 dark:bg-ink-800 px-2 py-0.5 rounded border border-slate-200 dark:border-ink-700">
-                                                    <FileText className="h-3.5 w-3.5 text-slate-400 flex-shrink-0" />
-                                                    {/* Polymorphic ref: has backslash → show class name + ID */}
-                                                    {/* Manual ref: no backslash → show as-is */}
-                                                    {movement.reference_type.includes('\\')
-                                                        ? `${movement.reference_type.split('\\').pop()} #${movement.reference_id}`
-                                                        : movement.reference_type}
-                                                </span>
-                                            ) : (
+                                            {movement.reference_type ? (() => {
+                                                const isPo = movement.reference_type.includes('PurchaseOrder');
+                                                const refLabel = movement.reference_type.includes('\\')
+                                                    ? `${movement.reference_type.split('\\').pop()} #${movement.reference_id}`
+                                                    : movement.reference_type;
+                                                if (isPo && movement.reference_id) {
+                                                    return (
+                                                        <Link
+                                                            href={route('po.show', movement.reference_id)}
+                                                            className="inline-flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-mono text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
+                                                        >
+                                                            <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                                                            {refLabel}
+                                                        </Link>
+                                                    );
+                                                }
+                                                return (
+                                                    <span className="flex items-center gap-1.5 text-slate-600 dark:text-ink-400 font-mono text-[10px] bg-slate-100 dark:bg-ink-800 px-2 py-0.5 rounded border border-slate-200 dark:border-ink-700">
+                                                        <FileText className="h-3.5 w-3.5 text-slate-400 flex-shrink-0" />
+                                                        {refLabel}
+                                                    </span>
+                                                );
+                                            })() : (
                                                 <span className="text-slate-400 dark:text-ink-600 italic">—</span>
                                             )}
                                         </td>

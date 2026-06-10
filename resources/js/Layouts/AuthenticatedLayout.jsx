@@ -178,7 +178,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className={`group flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-2xl transition-all duration-200 ${
+                                    className={`group flex items-center gap-3 px-4 py-3 text-[15px] font-semibold rounded-2xl transition-all duration-200 ${
                                         item.active
                                             ? 'bg-blue-50 dark:bg-blue-500/10 text-[#1B4FD8] dark:text-blue-400 shadow-sm border-l-4 border-[#1B4FD8] dark:border-blue-400'
                                             : 'text-slate-600 dark:text-ink-400 hover:bg-slate-50 dark:hover:bg-ink-800 hover:text-slate-900 dark:hover:text-ink-100 border-l-4 border-transparent'
@@ -238,7 +238,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                             key={item.name}
                                             href={item.href}
                                             onClick={() => setSidebarOpen(false)}
-                                            className={`group flex items-center gap-3 px-4 py-3.5 text-sm font-semibold rounded-2xl transition-all duration-200 ${
+                                            className={`group flex items-center gap-3 px-4 py-3.5 text-[15px] font-semibold rounded-2xl transition-all duration-200 ${
                                                 item.active
                                                     ? 'bg-blue-50 dark:bg-blue-500/10 text-[#1B4FD8] dark:text-blue-400 shadow-sm border-l-4 border-[#1B4FD8] dark:border-blue-400'
                                                     : 'text-slate-600 dark:text-ink-400 hover:bg-slate-50 dark:hover:bg-ink-800 hover:text-slate-900 dark:hover:text-ink-100 border-l-4 border-transparent'
@@ -268,26 +268,30 @@ export default function AuthenticatedLayout({ header, children }) {
                     </div>
                 </main>
 
-                {/* Mobile Bottom Tab Bar */}
-                <nav className="fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-ink-900 border-t border-slate-200 dark:border-ink-750 md:hidden flex items-center justify-around z-40 px-2 shadow-[0_-4px_10px_rgba(0,0,0,0.03)] dark:shadow-[0_-4px_10px_rgba(0,0,0,0.3)] transition-colors duration-200">
-                    {navigation.slice(0, 4).map((item) => {
+                {/* Mobile Bottom Tab Bar — shows all nav items, scrollable */}
+                <nav className="fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-ink-900 border-t border-slate-200 dark:border-ink-750 md:hidden flex items-center justify-around z-40 px-1 shadow-[0_-4px_10px_rgba(0,0,0,0.03)] dark:shadow-[0_-4px_10px_rgba(0,0,0,0.3)] transition-colors duration-200 overflow-x-auto gap-0">
+                    {navigation.map((item) => {
                         const Icon = item.icon;
+                        const label = item.name === 'Purchase Orders' ? 'Orders' :
+                                      item.name === 'Dashboard' ? 'Home' :
+                                      item.name === 'Categories' ? 'Categories' :
+                                      item.name;
                         return (
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`flex flex-col items-center justify-center flex-1 py-1 transition-all ${
+                                className={`flex flex-col items-center justify-center flex-1 min-w-[52px] py-1 transition-all ${
                                     item.active ? 'text-[#1B4FD8] dark:text-blue-400' : 'text-slate-400 dark:text-ink-400'
                                 }`}
                             >
                                 <Icon className="h-5 w-5" />
-                                <span className="text-[10px] font-bold mt-1 tracking-tight">{item.name}</span>
+                                <span className="text-[10px] font-bold mt-1 tracking-tight leading-none text-center whitespace-nowrap">{label}</span>
                             </Link>
                         );
                     })}
                     <button
                         onClick={handleLogout}
-                        className="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"
+                        className="flex flex-col items-center justify-center flex-1 min-w-[52px] py-1 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"
                     >
                         <LogOut className="h-5 w-5" />
                         <span className="text-[10px] font-bold mt-1 tracking-tight">Logout</span>

@@ -145,6 +145,12 @@ class ProductController extends Controller
             ->when($request->filled('filter_type'), fn ($q) =>
                 $q->where('type', $request->filter_type)
             )
+            ->when($request->filled('filter_from'), fn ($q) =>
+                $q->whereDate('created_at', '>=', $request->filter_from)
+            )
+            ->when($request->filled('filter_to'), fn ($q) =>
+                $q->whereDate('created_at', '<=', $request->filter_to)
+            )
             ->with(['location', 'user'])
             ->orderBy('created_at', 'desc')
             ->paginate(15)
@@ -154,7 +160,7 @@ class ProductController extends Controller
             'product'         => $product,
             'stockLevels'     => $stockLevels,
             'movements'       => $movements,
-            'movementFilters' => $request->only(['filter_location', 'filter_type']),
+            'movementFilters' => $request->only(['filter_location', 'filter_type', 'filter_from', 'filter_to']),
             'can'             => [
                 'recordMovement' => $request->user()->can('update', $product),
             ],
