@@ -53,6 +53,11 @@ Route::middleware('auth')->group(function () {
         ->middleware('role:admin,manager')
         ->name('movements.store');
 
+    // Stock Transfer Routes
+    Route::get('/transfers', [\App\Http\Controllers\StockTransferController::class, 'index'])->name('transfers.index');
+    Route::get('/transfers/create', [\App\Http\Controllers\StockTransferController::class, 'create'])->name('transfers.create');
+    Route::post('/transfers', [\App\Http\Controllers\StockTransferController::class, 'store'])->name('transfers.store');
+
     // Purchase Order Routes
     // NOTE: specific routes (create, index) come before the {purchaseOrder} wildcard to avoid conflicts
     Route::get('/purchase-orders',             [\App\Http\Controllers\PurchaseOrderController::class, 'index'])->name('po.index');

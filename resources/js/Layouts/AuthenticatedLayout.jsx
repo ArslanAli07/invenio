@@ -20,6 +20,7 @@ import {
     AlertCircle,
     Sun,
     Moon,
+    ArrowRightLeft,
 } from 'lucide-react';
 
 export default function AuthenticatedLayout({ header, children }) {
@@ -58,6 +59,7 @@ export default function AuthenticatedLayout({ header, children }) {
         { name: 'Locations',       href: route('locations.index'),    icon: MapPin,          active: route().current('locations.*'),    roles: ['admin','manager','staff'] },
         { name: 'Suppliers',       href: route('suppliers.index'),    icon: UserCheck,       active: route().current('suppliers.*'),    roles: ['admin','manager','staff'] },
         { name: 'Purchase Orders', href: route('po.index'),           icon: ClipboardList,   active: route().current('po.*'),           roles: ['admin','manager','staff'] },
+        { name: 'Stock Transfers', href: route('transfers.index'),    icon: ArrowRightLeft,  active: route().current('transfers.*'),    roles: ['admin','manager','staff'] },
         { name: 'Stock Log',       href: route('movements.index'),    icon: Activity,        active: route().current('movements.*'),    roles: ['admin','manager','staff'] },
         { name: 'Users',           href: route('users.index'),        icon: Users,           active: route().current('users.*'),        roles: ['admin','manager'] },
     ].filter(item => item.roles.includes(user.role));
@@ -277,6 +279,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         const label = item.name === 'Purchase Orders' ? 'Orders' :
                                       item.name === 'Dashboard' ? 'Home' :
                                       item.name === 'Categories' ? 'Categories' :
+                                      item.name === 'Stock Transfers' ? 'Transfers' :
                                       item.name;
                         return (
                             <Link
