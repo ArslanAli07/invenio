@@ -145,9 +145,16 @@ class DashboardController extends Controller
             ];
         }
 
+        $driver = DB::getDriverName();
+        $dateSelect = match ($driver) {
+            'sqlite' => "strftime('%m-%d', created_at) as date_label",
+            'mysql', 'mariadb' => "DATE_FORMAT(created_at, '%m-%d') as date_label",
+            default  => "SUBSTR(created_at, 6, 5) as date_label",
+        };
+
         $dbTrend = DB::table('stock_ledger')
             ->where('created_at', '>=', now()->subDays(15)->startOfDay())
-            ->selectRaw("strftime('%m-%d', created_at) as date_label")
+            ->selectRaw($dateSelect)
             ->selectRaw("SUM(CASE WHEN type = 'in' THEN quantity ELSE 0 END) as qty_in")
             ->selectRaw("SUM(CASE WHEN type = 'out' THEN quantity ELSE 0 END) as qty_out")
             ->groupBy('date_label')
