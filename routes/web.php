@@ -12,9 +12,9 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -64,6 +64,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/purchase-orders/{purchaseOrder}/receive', [\App\Http\Controllers\PurchaseOrderController::class, 'receive'])->middleware('role:admin,manager,staff')->name('po.receive');
     Route::post('/purchase-orders/{purchaseOrder}/cancel',  [\App\Http\Controllers\PurchaseOrderController::class, 'cancel'])->middleware('role:admin,manager')->name('po.cancel');
     Route::delete('/purchase-orders/{purchaseOrder}',    [\App\Http\Controllers\PurchaseOrderController::class, 'destroy'])->middleware('role:admin')->name('po.destroy');
+
+    // User Management Routes (admin + manager only)
+    Route::get('/users',           [\App\Http\Controllers\UserController::class, 'index'])->middleware('role:admin,manager')->name('users.index');
+    Route::post('/users',          [\App\Http\Controllers\UserController::class, 'store'])->middleware('role:admin,manager')->name('users.store');
+    Route::put('/users/{user}',    [\App\Http\Controllers\UserController::class, 'update'])->middleware('role:admin,manager')->name('users.update');
+    Route::delete('/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy'])->middleware('role:admin')->name('users.destroy');
 });
 
 require __DIR__.'/auth.php';
