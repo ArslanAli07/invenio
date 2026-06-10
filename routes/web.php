@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/check-sku', [\App\Http\Controllers\ProductController::class, 'checkSku'])->middleware('role:admin,manager')->name('products.check-sku');
 
     // Stock Movement Routes
+    Route::get('/movements', [\App\Http\Controllers\StockMovementController::class, 'index'])->name('movements.index');
     Route::post('/products/{product}/movements', [\App\Http\Controllers\StockMovementController::class, 'store'])
         ->middleware('role:admin,manager')
         ->name('movements.store');

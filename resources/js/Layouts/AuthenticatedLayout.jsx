@@ -9,6 +9,7 @@ import {
     UserCheck,
     Package,
     ClipboardList,
+    Activity,
     Users,
     User as UserIcon,
     LogOut,
@@ -51,13 +52,14 @@ export default function AuthenticatedLayout({ header, children }) {
     };
 
     const navigation = [
-        { name: 'Dashboard',       href: route('dashboard'),       icon: LayoutDashboard, active: route().current('dashboard'),    roles: ['admin','manager','staff'] },
-        { name: 'Products',        href: route('products.index'),  icon: Package,         active: route().current('products.*'),   roles: ['admin','manager','staff'] },
-        { name: 'Categories',      href: route('categories.index'),icon: Boxes,           active: route().current('categories.*'), roles: ['admin','manager','staff'] },
-        { name: 'Locations',       href: route('locations.index'), icon: MapPin,          active: route().current('locations.*'),  roles: ['admin','manager','staff'] },
-        { name: 'Suppliers',       href: route('suppliers.index'), icon: UserCheck,       active: route().current('suppliers.*'),  roles: ['admin','manager','staff'] },
-        { name: 'Purchase Orders', href: route('po.index'),        icon: ClipboardList,   active: route().current('po.*'),         roles: ['admin','manager','staff'] },
-        { name: 'Users',           href: route('users.index'),     icon: Users,           active: route().current('users.*'),      roles: ['admin','manager'] },
+        { name: 'Dashboard',       href: route('dashboard'),          icon: LayoutDashboard, active: route().current('dashboard'),      roles: ['admin','manager','staff'] },
+        { name: 'Products',        href: route('products.index'),     icon: Package,         active: route().current('products.*'),     roles: ['admin','manager','staff'] },
+        { name: 'Categories',      href: route('categories.index'),   icon: Boxes,           active: route().current('categories.*'),   roles: ['admin','manager','staff'] },
+        { name: 'Locations',       href: route('locations.index'),    icon: MapPin,          active: route().current('locations.*'),    roles: ['admin','manager','staff'] },
+        { name: 'Suppliers',       href: route('suppliers.index'),    icon: UserCheck,       active: route().current('suppliers.*'),    roles: ['admin','manager','staff'] },
+        { name: 'Purchase Orders', href: route('po.index'),           icon: ClipboardList,   active: route().current('po.*'),           roles: ['admin','manager','staff'] },
+        { name: 'Stock Log',       href: route('movements.index'),    icon: Activity,        active: route().current('movements.*'),    roles: ['admin','manager','staff'] },
+        { name: 'Users',           href: route('users.index'),        icon: Users,           active: route().current('users.*'),        roles: ['admin','manager'] },
     ].filter(item => item.roles.includes(user.role));
 
     const { post } = useForm();

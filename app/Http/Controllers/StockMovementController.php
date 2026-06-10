@@ -6,10 +6,65 @@ use App\Models\Location;
 use App\Models\Product;
 use App\Models\StockLedger;
 use App\Http\Requests\StoreMovementRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class StockMovementController extends Controller
 {
+    /**
+     * Global movement log — all stock changes across all products.
+     */
+    public function index(Request $request): Response
+    {
+        $query = StockLedger::with(['product', 'location', 'createdBy']);
+
+        if ($search = $request->input('search')) {
+            $query->whereHas('product', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('sku',  'like', "%{$search}%");
+            });
+        }
+
+        if ($locationId = $request->input('filter_location')) {
+            $query->where('location_id', $locationId);
+        }
+
+        if ($type = $request->input('filter_type')) {
+            $query->where('type', $type);
+        }
+
+        if ($from = $request->input('filter_from')) {
+            $query->whereDate('created_at', '>=', $from);
+        }
+
+        if ($to = $request->input('filter_to')) {
+            $query->whereDate('created_at', '<=', $to);
+        }
+
+        $movements = $query
+            ->orderBy('created_at', 'desc')
+            ->paginate(25)
+            ->withQueryString();
+
+        $locations = Location::orderBy('name')->get(['id', 'name', 'code']);
+
+        return Inertia::render('Movements/Index', [
+            'movements' => $movements,
+            'locations' => $locations,
+            'filters'   => $request->only([
+                'search', 'filter_location', 'filter_type', 'filter_from', 'filter_to',
+            ]),
+            'summary' => [
+                'total'   => StockLedger::count(),
+                'in'      => StockLedger::where('type', 'in')->count(),
+                'out'     => StockLedger::where('type', 'out')->count(),
+                'adjust'  => StockLedger::where('type', 'adjust')->count(),
+            ],
+        ]);
+    }
+
     /**
      * Record a stock movement (in / out / adjust) against a product.
      *
