@@ -4,56 +4,43 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
-class PurchaseOrderItem extends Model
+class ProductImage extends Model
 {
-    /**
-     * PO items have no timestamps — they're part of the immutable PO record.
-     */
-    public $timestamps = false;
-
     protected $fillable = [
-        'purchase_order_id',
         'product_id',
         'variant_id',
-        'qty_ordered',
-        'unit_cost',
-        'qty_received',
+        'path',
+        'alt_text',
+        'is_primary',
+        'sort_order',
     ];
 
     protected function casts(): array
     {
         return [
-            'qty_ordered'  => 'decimal:3',
-            'qty_received' => 'decimal:3',
-            'unit_cost'    => 'decimal:4',
+            'is_primary'  => 'boolean',
+            'sort_order'  => 'integer',
         ];
     }
 
     // ──────────────────────────────────────────
-    // Computed Accessors
+    // Accessors
     // ──────────────────────────────────────────
 
-    /** How many units still need to be received. */
-    public function getQtyOutstandingAttribute(): float
+    /**
+     * Returns the full public URL for the image.
+     * e.g. https://invenio.test/storage/products/42/front.webp
+     */
+    public function getUrlAttribute(): string
     {
-        return (float) $this->qty_ordered - (float) $this->qty_received;
-    }
-
-    /** Total cost for this line (qty_ordered × unit_cost). */
-    public function getLineTotalAttribute(): float
-    {
-        return (float) $this->qty_ordered * (float) $this->unit_cost;
+        return Storage::url($this->path);
     }
 
     // ──────────────────────────────────────────
     // Relationships
     // ──────────────────────────────────────────
-
-    public function purchaseOrder(): BelongsTo
-    {
-        return $this->belongsTo(PurchaseOrder::class);
-    }
 
     public function product(): BelongsTo
     {

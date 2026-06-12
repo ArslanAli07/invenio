@@ -59,16 +59,24 @@ If you're using Laravel Herd, the site is at `http://invenio.test` after setup.
 app/
   Http/
     Controllers/      # CategoryController, LocationController, SupplierController,
-                      # ProductController, StockMovementController, PurchaseOrderController
+                      # ProductController, StockMovementController, PurchaseOrderController,
+                      # StockTransferController, DashboardController, UserController
     Requests/         # One Store + Update FormRequest per resource, plus StoreMovementRequest,
                       # StorePurchaseOrderRequest, UpdatePurchaseOrderRequest, ReceiveItemsRequest
     Middleware/       # EnsureRole — gates routes by role string
     Policies/         # Eloquent policies for all resources
     Mail/             # PurchaseOrderSentMail (queued, ShouldQueue)
   Models/
-    StockLedger.php   # computeStock() aggregates ledger rows per product/location
-    PurchaseOrder.php # generatePoNumber(), isDraft() helpers
-    PurchaseOrderItem.php  # qty_outstanding, line_total accessors
+    StockLedger.php        # computeStock(), computeGlobalStock() — variant-aware stock aggregation
+    PurchaseOrder.php      # generatePoNumber(), isDraft() helpers
+    PurchaseOrderItem.php  # qty_outstanding, line_total accessors; variant_id support
+    Product.php            # auto-slug, scopeOnStore(), scopeFeatured(), all storefront relations
+    Category.php           # auto-slug, scopeOnStore()
+    CustomerOrder.php      # STATUS_* constants, transition rules, auto order number generation
+    CustomerOrderItem.php  # line_total, display_name accessors
+    ProductVariant.php     # effective price fallback to parent product
+    ProductImage.php       # url accessor → public storage URL
+    ProductSpec.php        # key-value technical specs
 
 resources/js/
   Layouts/
@@ -96,7 +104,7 @@ resources/views/
     purchase-order-sent.blade.php   # HTML email sent to supplier on PO send
 
 database/
-  migrations/   # Schema for all 10 tables
+  migrations/   # Schema for all 19 tables (including storefront & order tables)
   seeders/      # Demo data across all entities
 ```
 
@@ -121,8 +129,28 @@ php artisan test
 - [x] Phase 5 — User management & dashboard stats
 - [x] Phase 6 — Global stock log (/movements)
 - [x] Phase 7 — Dashboard charts (Recharts)
-- [x] Phase 8 — Stock transfers
-- [ ] Phase 9 — Low-stock email alerts
+- [x] Phase 8 — Stock transfers between locations
+- [x] Phase 9 — Database foundation for public storefront & order management
+- [ ] Phase 10 — Dashboard: product images, variants, specs, pricing, manual stock adjustment, supplier portal
+- [ ] Phase 11 — Dashboard: customer orders management with stock reversal on cancellation
+- [ ] Phase 12 — Public website: layout, home page, about, contact
+- [ ] Phase 13 — Public website: catalogue, category pages, product detail
+- [ ] Phase 14 — Public website: cart, checkout (COD), order placement
+- [ ] Phase 15 — Testing, SEO, revenue reports, final polish
+
+---
+
+## Storefront expansion
+
+Phases 9–15 expand Invenio into a full-stack product. The same domain serves both the internal dashboard (`/dashboard`) and a public-facing mobile phone storefront (`/store`). When a customer places a Cash on Delivery order:
+
+1. Stock is immediately deducted from the nearest warehouse (matched by city)
+2. An immutable ledger entry is written — same as any PO receive or transfer
+3. A customer order record is created (status: Pending)
+4. Dashboard staff are notified and manage the order lifecycle through to delivery
+5. Cancellations write a reverse ledger entry, fully restoring stock
+
+The storefront is read-only for customers. All inventory data stays in a single source of truth.
 
 ---
 

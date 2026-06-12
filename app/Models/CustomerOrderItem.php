@@ -5,54 +5,51 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PurchaseOrderItem extends Model
+class CustomerOrderItem extends Model
 {
-    /**
-     * PO items have no timestamps — they're part of the immutable PO record.
-     */
-    public $timestamps = false;
-
     protected $fillable = [
-        'purchase_order_id',
+        'customer_order_id',
         'product_id',
         'variant_id',
-        'qty_ordered',
-        'unit_cost',
-        'qty_received',
+        'quantity',
+        'unit_price',
     ];
 
     protected function casts(): array
     {
         return [
-            'qty_ordered'  => 'decimal:3',
-            'qty_received' => 'decimal:3',
-            'unit_cost'    => 'decimal:4',
+            'quantity'   => 'integer',
+            'unit_price' => 'decimal:2',
         ];
     }
 
     // ──────────────────────────────────────────
-    // Computed Accessors
+    // Accessors
     // ──────────────────────────────────────────
 
-    /** How many units still need to be received. */
-    public function getQtyOutstandingAttribute(): float
-    {
-        return (float) $this->qty_ordered - (float) $this->qty_received;
-    }
-
-    /** Total cost for this line (qty_ordered × unit_cost). */
+    /** Line total = unit_price × quantity */
     public function getLineTotalAttribute(): float
     {
-        return (float) $this->qty_ordered * (float) $this->unit_cost;
+        return (float) $this->unit_price * $this->quantity;
+    }
+
+    /** Display label: product name + variant name if applicable */
+    public function getDisplayNameAttribute(): string
+    {
+        $name = $this->product?->name ?? 'Unknown Product';
+        if ($this->variant) {
+            $name .= ' — ' . $this->variant->name;
+        }
+        return $name;
     }
 
     // ──────────────────────────────────────────
     // Relationships
     // ──────────────────────────────────────────
 
-    public function purchaseOrder(): BelongsTo
+    public function order(): BelongsTo
     {
-        return $this->belongsTo(PurchaseOrder::class);
+        return $this->belongsTo(CustomerOrder::class, 'customer_order_id');
     }
 
     public function product(): BelongsTo
