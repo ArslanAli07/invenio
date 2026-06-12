@@ -26,6 +26,10 @@ class User extends Authenticatable
         'status',
     ];
 
+    protected $appends = [
+        'is_active',
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -76,6 +80,11 @@ class User extends Authenticatable
     public function isActive(): bool
     {
         return $this->status === 'active';
+    }
+
+    public function getIsActiveAttribute(): bool
+    {
+        return $this->isActive();
     }
 
     // ──────────────────────────────────────────

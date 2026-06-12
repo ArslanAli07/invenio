@@ -29,7 +29,7 @@ class UserController extends Controller
         }
 
         if ($status = $request->input('status')) {
-            $query->where('is_active', $status === 'active');
+            $query->where('status', $status);
         }
 
         $users = $query->latest()->paginate(20)->withQueryString();
@@ -65,7 +65,7 @@ class UserController extends Controller
             'email'     => $data['email'],
             'password'  => Hash::make($data['password']),
             'role'      => $data['role'],
-            'is_active' => $data['is_active'] ?? true,
+            'status'    => ($data['is_active'] ?? true) ? 'active' : 'inactive',
         ]);
 
         return back()->with('success', "User \"{$data['name']}\" created successfully.");
@@ -93,7 +93,7 @@ class UserController extends Controller
 
         // Prevent the last admin from being demoted or deactivated
         if ($user->role === 'admin' && ($data['role'] !== 'admin' || !($data['is_active'] ?? true))) {
-            $adminCount = User::where('role', 'admin')->where('is_active', true)->count();
+            $adminCount = User::where('role', 'admin')->where('status', 'active')->count();
             if ($adminCount <= 1) {
                 return back()->withErrors(['role' => 'Cannot demote or deactivate the last active admin.']);
             }
@@ -103,7 +103,7 @@ class UserController extends Controller
             'name'      => $data['name'],
             'email'     => $data['email'],
             'role'      => $data['role'],
-            'is_active' => $data['is_active'] ?? $user->is_active,
+            'status'    => ($data['is_active'] ?? true) ? 'active' : 'inactive',
         ];
 
         if (!empty($data['password'])) {
@@ -124,14 +124,14 @@ class UserController extends Controller
 
         // Prevent last admin deletion
         if ($user->role === 'admin') {
-            $adminCount = User::where('role', 'admin')->count();
+            $adminCount = User::where('role', 'admin')->where('status', 'active')->count();
             if ($adminCount <= 1) {
                 return back()->withErrors(['delete' => 'Cannot delete the last admin account.']);
             }
         }
 
         $name = $user->name;
-        $user->update(['is_active' => false]);   // Soft-deactivate — never hard delete
+        $user->update(['status' => 'inactive']);   // Soft-deactivate — never hard delete
 
         return back()->with('success', "\"{$name}\" has been deactivated.");
     }
