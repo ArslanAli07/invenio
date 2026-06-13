@@ -132,7 +132,7 @@ php artisan test
 - [x] Phase 8 — Stock transfers between locations
 - [x] Phase 9 — Database foundation for public storefront & order management
 - [x] Phase 10 — Dashboard: product images, variants, specs, pricing, manual stock adjustment, supplier portal
-- [ ] Phase 11 — Dashboard: customer orders management with stock reversal on cancellation
+- [x] Phase 11 — Dashboard: customer orders management with stock reversal on cancellation
 - [ ] Phase 12 — Public website: layout, home page, about, contact
 - [ ] Phase 13 — Public website: catalogue, category pages, product detail
 - [ ] Phase 14 — Public website: cart, checkout (COD), order placement

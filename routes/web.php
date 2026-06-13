@@ -89,6 +89,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/purchase-orders/{purchaseOrder}/cancel',  [\App\Http\Controllers\PurchaseOrderController::class, 'cancel'])->middleware('role:admin,manager')->name('po.cancel');
     Route::delete('/purchase-orders/{purchaseOrder}',    [\App\Http\Controllers\PurchaseOrderController::class, 'destroy'])->middleware('role:admin')->name('po.destroy');
 
+    // Customer Order Routes
+    Route::get('/orders', [\App\Http\Controllers\CustomerOrderController::class, 'index'])->middleware('role:admin,manager,staff')->name('orders.index');
+    Route::get('/orders/{order}', [\App\Http\Controllers\CustomerOrderController::class, 'show'])->middleware('role:admin,manager,staff')->name('orders.show');
+    Route::patch('/orders/{order}/status', [\App\Http\Controllers\CustomerOrderController::class, 'updateStatus'])->middleware('role:admin,manager')->name('orders.update-status');
+    Route::post('/orders/{order}/cancel', [\App\Http\Controllers\CustomerOrderController::class, 'cancel'])->middleware('role:admin,manager')->name('orders.cancel');
+
     // User Management Routes (admin + manager only)
     Route::get('/users',           [\App\Http\Controllers\UserController::class, 'index'])->middleware('role:admin,manager')->name('users.index');
     Route::post('/users',          [\App\Http\Controllers\UserController::class, 'store'])->middleware('role:admin,manager')->name('users.store');
