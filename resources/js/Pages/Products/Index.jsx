@@ -21,27 +21,18 @@ import {
     Trash2,
     Eye,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    Store
 } from 'lucide-react';
+import ProductForm from './Partials/ProductForm';
 
 export default function Index({ products, categories, filters, can }) {
     const [search, setSearch] = useState(filters.search || '');
     const [categoryId, setCategoryId] = useState(filters.category_id || '');
     const [status, setStatus] = useState(filters.status || 'all');
     
-    // Sheet modal states
     const [isOpen, setIsOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
-
-    const { data, setData, post, put, delete: destroy, setError, clearErrors, processing, errors, reset } = useForm({
-        sku: '',
-        name: '',
-        description: '',
-        unit: 'pcs',
-        category_id: '',
-        reorder_level: 10,
-        is_active: true
-    });
 
     const handleFilterChange = (newSearch, newCatId, newStatus) => {
         router.get(route('products.index'), {
@@ -59,91 +50,23 @@ export default function Index({ products, categories, filters, can }) {
         handleFilterChange(search, categoryId, status);
     };
 
-    const checkSkuUniqueness = async (e) => {
-        const sku = e.target.value;
-        if (!sku) return;
-        
-        // If editing and SKU hasn't changed, skip check
-        if (editingProduct && editingProduct.sku === sku) {
-            clearErrors('sku');
-            return;
-        }
-
-        try {
-            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-            const response = await fetch(route('products.check-sku'), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': token,
-                },
-                body: JSON.stringify({ 
-                    sku: sku,
-                    ignore_id: editingProduct ? editingProduct.id : null 
-                })
-            });
-            const result = await response.json();
-            if (!result.available) {
-                setError('sku', 'This SKU is already assigned to another product.');
-            } else {
-                clearErrors('sku');
-            }
-        } catch (error) {
-            console.error('SKU check failed:', error);
-        }
-    };
-
     const openCreateSheet = () => {
-        clearErrors();
-        reset();
         setEditingProduct(null);
-        setData({
-            sku: '',
-            name: '',
-            description: '',
-            unit: 'pcs',
-            category_id: categories[0]?.id || '',
-            reorder_level: 10,
-            is_active: true
-        });
         setIsOpen(true);
     };
 
     const openEditSheet = (product) => {
-        clearErrors();
         setEditingProduct(product);
-        setData({
-            sku: product.sku,
-            name: product.name,
-            description: product.description || '',
-            unit: product.unit || 'pcs',
-            category_id: product.category_id || '',
-            reorder_level: product.reorder_level || 0,
-            is_active: !!product.is_active
-        });
         setIsOpen(true);
     };
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-        
-        if (editingProduct) {
-            put(route('products.update', editingProduct.id), {
-                onSuccess: () => setIsOpen(false)
-            });
-        } else {
-            post(route('products.store'), {
-                onSuccess: () => {
-                    setIsOpen(false);
-                    reset();
-                }
-            });
-        }
+    const handleSuccess = () => {
+        setIsOpen(false);
     };
 
-    const handleDelete = (product) => {
-        if (confirm(`Are you sure you want to delete product "${product.sku}"?`)) {
-            destroy(route('products.destroy', product.id));
+    const deleteProduct = (product) => {
+        if (confirm('Are you sure you want to delete this product?')) {
+            router.delete(route('products.destroy', product.id));
         }
     };
 
@@ -167,7 +90,6 @@ export default function Index({ products, categories, filters, can }) {
                 )}
             </div>
 
-            {/* Filter controls */}
             <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 mb-6 shadow-sm">
                 <form onSubmit={handleSearchSubmit} className="flex flex-col lg:flex-row gap-4 items-center justify-between">
                     <div className="relative w-full lg:max-w-md">
@@ -215,66 +137,72 @@ export default function Index({ products, categories, filters, can }) {
                 </form>
             </div>
 
-            {/* Products Table Card */}
             <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex-1 flex flex-col">
                 <div className="overflow-x-auto flex-1">
                     <table className="w-full text-left border-collapse min-w-[900px]">
                         <thead>
                             <tr className="bg-slate-50/75 dark:bg-ink-800/50 border-b border-slate-200 dark:border-ink-700 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-ink-400 sticky top-0 z-10">
-                                <th className="px-6 py-4">SKU</th>
-                                <th className="px-6 py-4">Name</th>
-                                <th className="px-6 py-4">Category</th>
-                                <th className="px-6 py-4">Current Stock</th>
-                                <th className="px-6 py-4">Reorder Level</th>
-                                <th className="px-6 py-4">Status</th>
-                                <th className="px-6 py-4 text-right">Actions</th>
+                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300">Product</th>
+                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300">SKU</th>
+                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300 text-right">Price</th>
+                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300 text-right">Stock</th>
+                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300 text-center">Status</th>
+                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-ink-750">
                             {products.data.length > 0 ? (
                                 products.data.map((product) => (
                                     <tr key={product.id} className="hover:bg-slate-50/50 dark:hover:bg-ink-800/40 transition-colors">
-                                        <td className="px-6 py-4">
-                                            <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
+                                        <td className="py-4 align-top">
+                                            <div className="flex items-center gap-3">
+                                                {product.primary_image && product.primary_image.length > 0 ? (
+                                                    <img src={`/storage/${product.primary_image[0].path}`} alt={product.name} className="w-10 h-10 rounded-lg object-cover border border-slate-200 dark:border-ink-700 shadow-sm shrink-0" />
+                                                ) : (
+                                                    <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-ink-800 border border-slate-200 dark:border-ink-700 flex items-center justify-center shrink-0">
+                                                        <Package className="w-5 h-5 text-slate-400" />
+                                                    </div>
+                                                )}
+                                                <div>
+                                                    <div className="font-semibold text-slate-900 dark:text-ink-100">{product.name}</div>
+                                                    <div className="text-xs text-slate-500">{product.category.name}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="py-4 align-top">
+                                            <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-1 rounded border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
                                                 {product.sku}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex flex-col">
-                                                <span className="font-semibold text-slate-900 dark:text-ink-100 text-sm">{product.name}</span>
-                                                <span className="text-[10px] text-slate-400 dark:text-ink-400 capitalize mt-0.5">unit: {product.unit}</span>
+                                        <td className="py-4 align-top text-right">
+                                            <div className="font-medium text-slate-900 dark:text-ink-100">
+                                                {product.price ? `Rs ${product.price}` : '-'}
                                             </div>
+                                            {product.variants?.length > 0 && (
+                                                <div className="text-[10px] text-slate-500 uppercase mt-0.5">{product.variants.length} Variants</div>
+                                            )}
                                         </td>
-                                        <td className="px-6 py-4">
-                                            <span className="text-xs font-medium text-slate-600 dark:text-ink-400">
-                                                {product.category?.name || '—'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
+                                        <td className="py-4 align-top text-right">
                                             <span className="font-bold text-sm text-slate-800 dark:text-ink-200">
                                                 {product.global_stock ?? 0}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">
-                                            <span className="text-xs font-semibold text-slate-500">
-                                                {product.reorder_level}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {product.is_low_stock ? (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-100 animate-pulse">
-                                                    <span className="relative flex h-2 w-2">
-                                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                                        <td className="py-4 align-top text-center">
+                                            <div className="flex flex-col items-center gap-1.5">
+                                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
+                                                    product.is_active 
+                                                        ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20' 
+                                                        : 'bg-slate-50 dark:bg-ink-800 text-slate-600 dark:text-ink-300 border-slate-200 dark:border-ink-700'
+                                                }`}>
+                                                    {product.is_active ? 'Active' : 'Inactive'}
+                                                </span>
+                                                {product.show_on_store && (
+                                                    <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold text-indigo-600 dark:text-indigo-400">
+                                                        <Store className="w-3 h-3" />
+                                                        Store
                                                     </span>
-                                                    Low Stock
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
-                                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                                                    In Stock
-                                                </span>
-                                            )}
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
@@ -299,7 +227,7 @@ export default function Index({ products, categories, filters, can }) {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        onClick={() => handleDelete(product)}
+                                                        onClick={() => deleteProduct(product)}
                                                         className="hover:bg-red-50 dark:hover:bg-red-500/10 text-red-600 rounded-xl"
                                                         title="Delete product"
                                                     >
@@ -312,15 +240,12 @@ export default function Index({ products, categories, filters, can }) {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="7" className="px-6 py-16 text-center">
+                                    <td colSpan="6" className="px-6 py-16 text-center">
                                         <div className="flex flex-col items-center justify-center max-w-sm mx-auto">
                                             <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-slate-500 mb-4">
                                                 <Package className="h-8 w-8" />
                                             </div>
                                             <h3 className="text-base font-bold text-slate-900 dark:text-ink-100">No products found</h3>
-                                            <p className="text-xs text-slate-500 dark:text-ink-400 mt-1 text-center leading-relaxed">
-                                                Try adjusting search parameters, clearing filters, or adding a new SKU.
-                                            </p>
                                         </div>
                                     </td>
                                 </tr>
@@ -329,7 +254,6 @@ export default function Index({ products, categories, filters, can }) {
                     </table>
                 </div>
 
-                {/* Table Pagination */}
                 {products.links && products.data.length > 0 && (
                     <div className="px-6 py-4 border-t border-slate-200 dark:border-ink-700 flex items-center justify-between bg-slate-50/50 dark:bg-ink-800/30">
                         <span className="text-xs text-slate-500 dark:text-ink-400">
@@ -402,137 +326,12 @@ export default function Index({ products, categories, filters, can }) {
                         </SheetDescription>
                     </SheetHeader>
 
-                    <form onSubmit={handleFormSubmit} className="flex-1 flex flex-col min-h-0">
-                        <div className="space-y-4 flex-1 overflow-y-auto pr-1 mb-4 min-h-0">
-                            <div>
-                                <InputLabel htmlFor="sku" value="Product SKU" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
-                                <TextInput
-                                    id="sku"
-                                    type="text"
-                                    name="sku"
-                                    value={data.sku}
-                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm font-mono uppercase"
-                                    onChange={(e) => setData('sku', e.target.value.toUpperCase())}
-                                    onBlur={checkSkuUniqueness}
-                                    placeholder="e.g. ELEC-010"
-                                    isFocused={!editingProduct}
-                                    disabled={!!editingProduct}
-                                />
-                                <InputError message={errors.sku} className="mt-1.5 text-xs text-rose-500" />
-                            </div>
-
-                            <div>
-                                <InputLabel htmlFor="name" value="Product Name" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
-                                <TextInput
-                                    id="name"
-                                    type="text"
-                                    name="name"
-                                    value={data.name}
-                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
-                                    onChange={(e) => setData('name', e.target.value)}
-                                    placeholder="e.g. 7-Port HighSpeed USB Hub"
-                                />
-                                <InputError message={errors.name} className="mt-1.5 text-xs text-rose-500" />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <InputLabel htmlFor="unit" value="Unit" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
-                                    <TextInput
-                                        id="unit"
-                                        type="text"
-                                        name="unit"
-                                        value={data.unit}
-                                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
-                                        onChange={(e) => setData('unit', e.target.value)}
-                                        placeholder="e.g. pcs, box"
-                                    />
-                                    <InputError message={errors.unit} className="mt-1.5 text-xs text-rose-500" />
-                                </div>
-
-                                <div>
-                                    <InputLabel htmlFor="reorder_level" value="Reorder Level" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
-                                    <TextInput
-                                        id="reorder_level"
-                                        type="number"
-                                        name="reorder_level"
-                                        value={data.reorder_level}
-                                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
-                                        onChange={(e) => setData('reorder_level', parseInt(e.target.value) || 0)}
-                                    />
-                                    <InputError message={errors.reorder_level} className="mt-1.5 text-xs text-rose-500" />
-                                </div>
-                            </div>
-
-                            <div>
-                                <InputLabel htmlFor="category_id" value="Category" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
-                                <select
-                                    id="category_id"
-                                    value={data.category_id}
-                                    onChange={(e) => setData('category_id', e.target.value)}
-                                    className="block w-full bg-slate-50/50 border border-slate-200 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
-                                >
-                                    {categories.map((cat) => (
-                                        <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                    ))}
-                                </select>
-                                <InputError message={errors.category_id} className="mt-1.5 text-xs text-rose-500" />
-                            </div>
-
-                            <div>
-                                <InputLabel htmlFor="description" value="Description" className="text-slate-700 font-semibold mb-1.5" />
-                                <textarea
-                                    id="description"
-                                    name="description"
-                                    value={data.description}
-                                    rows="2"
-                                    className="block w-full bg-slate-50/50 border border-slate-200 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
-                                    onChange={(e) => setData('description', e.target.value)}
-                                    placeholder="Enter physical SKU description details..."
-                                />
-                                <InputError message={errors.description} className="mt-1.5 text-xs text-rose-500" />
-                            </div>
-
-                            <div className="bg-slate-50/50 dark:bg-ink-800/30 rounded-xl p-4 border border-slate-200 dark:border-ink-700">
-                                <label className="flex items-center cursor-pointer select-none">
-                                    <Checkbox
-                                        name="is_active"
-                                        checked={data.is_active}
-                                        className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
-                                        onChange={(e) => setData('is_active', e.target.checked)}
-                                    />
-                                    <div className="ms-3">
-                                        <span className="text-sm font-semibold text-slate-900 dark:text-ink-100 block">Active Status</span>
-                                        <span className="text-[11px] text-slate-500 mt-0.5 block leading-tight">
-                                            Deactivated SKUs won't show in ledger adjustments or draft POs.
-                                        </span>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div className="border-t border-slate-100 dark:border-ink-700 pt-4 flex gap-3">
-                            <Button 
-                                type="button" 
-                                variant="outline"
-                                onClick={() => setIsOpen(false)}
-                                className="flex-1 rounded-xl py-5 hover:bg-slate-50 dark:hover:bg-ink-800 dark:border-ink-650 dark:text-ink-200 font-semibold text-sm"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                disabled={processing}
-                                className="flex-1 bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl py-5 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/10"
-                            >
-                                {processing ? (
-                                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                                ) : (
-                                    <span>{editingProduct ? 'Save Changes' : 'Create'}</span>
-                                )}
-                            </Button>
-                        </div>
-                    </form>
+                    <ProductForm 
+                        product={editingProduct} 
+                        categories={categories} 
+                        onSuccess={handleSuccess} 
+                        onCancel={() => setIsOpen(false)} 
+                    />
                 </SheetContent>
             </Sheet>
         </AuthenticatedLayout>

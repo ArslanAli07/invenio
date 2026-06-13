@@ -22,7 +22,7 @@ class ProductController extends Controller
     {
         Gate::authorize('viewAny', Product::class);
 
-        $query = Product::query()->with('category');
+        $query = Product::query()->with(['category', 'primaryImage', 'images', 'variants', 'specs']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -102,6 +102,7 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
         $validated['is_active'] = $request->input('is_active', true);
+        $validated['show_on_store'] = $request->input('show_on_store', false);
 
         Product::create($validated);
 
@@ -116,21 +117,38 @@ class ProductController extends Controller
     {
         Gate::authorize('view', $product);
 
-        $product->load('category');
+        $product->load(['category', 'variants', 'images', 'specs']);
 
         $locations = Location::active()->orderBy('code')->get();
 
-        // Calculate cached stock values for each location per North Star rule
-        $stockLevels = $locations->map(function ($loc) use ($product) {
-            $currentStock = StockLedger::computeStock($product->id, $loc->id);
-            return [
-                'location_id'   => $loc->id,
-                'location_code' => $loc->code,
-                'location_name' => $loc->name,
-                'current_stock' => $currentStock,
-                'is_low'        => $currentStock < $product->reorder_level,
-            ];
-        });
+        $stockLevels = [];
+        foreach ($locations as $loc) {
+            if ($product->variants->isNotEmpty()) {
+                foreach ($product->variants as $variant) {
+                    $currentStock = StockLedger::computeStock($product->id, $loc->id, $variant->id);
+                    $stockLevels[] = [
+                        'location_id'   => $loc->id,
+                        'location_code' => $loc->code,
+                        'location_name' => $loc->name,
+                        'variant_id'    => $variant->id,
+                        'variant_name'  => $variant->name,
+                        'current_stock' => $currentStock,
+                        'is_low'        => $currentStock < $product->reorder_level,
+                    ];
+                }
+            } else {
+                $currentStock = StockLedger::computeStock($product->id, $loc->id);
+                $stockLevels[] = [
+                    'location_id'   => $loc->id,
+                    'location_code' => $loc->code,
+                    'location_name' => $loc->name,
+                    'variant_id'    => null,
+                    'variant_name'  => null,
+                    'current_stock' => $currentStock,
+                    'is_low'        => $currentStock < $product->reorder_level,
+                ];
+            }
+        }
 
         // Filtered, paginated movement history
         $movements = StockLedger::where('product_id', $product->id)
@@ -146,7 +164,7 @@ class ProductController extends Controller
             ->when($request->filled('filter_to'), fn ($q) =>
                 $q->whereDate('created_at', '<=', $request->filter_to)
             )
-            ->with(['location', 'user'])
+            ->with(['location', 'user', 'variant'])
             ->orderBy('created_at', 'desc')
             ->paginate(15)
             ->withQueryString();
@@ -169,6 +187,9 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
         $validated['is_active'] = $request->input('is_active', $product->is_active);
+        if ($request->has('show_on_store')) {
+            $validated['show_on_store'] = $request->input('show_on_store');
+        }
 
         $product->update($validated);
 

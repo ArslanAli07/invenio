@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
+        'supplier_id',
     ];
 
     protected $appends = [
@@ -77,6 +78,11 @@ class User extends Authenticatable
         return $this->role === 'staff';
     }
 
+    public function isSupplier(): bool
+    {
+        return $this->role === 'supplier';
+    }
+
     public function isActive(): bool
     {
         return $this->status === 'active';
@@ -109,5 +115,10 @@ class User extends Authenticatable
     public function activityLogs(): HasMany
     {
         return $this->hasMany(ActivityLog::class, 'user_id');
+    }
+
+    public function supplier(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
     }
 }

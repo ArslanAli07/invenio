@@ -22,12 +22,20 @@ class PurchaseOrderPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRole('admin', 'manager', 'staff');
+        return $user->hasRole('admin', 'manager', 'staff', 'supplier');
     }
 
     public function view(User $user, PurchaseOrder $purchaseOrder): bool
     {
-        return $user->hasRole('admin', 'manager', 'staff');
+        if ($user->hasRole('admin', 'manager', 'staff')) {
+            return true;
+        }
+
+        if ($user->isSupplier()) {
+            return $user->supplier_id === $purchaseOrder->supplier_id;
+        }
+
+        return false;
     }
 
     /**

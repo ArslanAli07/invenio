@@ -22,11 +22,14 @@ class StoreProductRequest extends FormRequest
         return [
             'sku' => 'required|string|max:100|unique:products,sku|alpha_dash',
             'name' => 'required|string|max:255',
+            'short_description' => 'nullable|string|max:500',
             'description' => 'nullable|string',
+            'price' => 'nullable|numeric|min:0',
             'unit' => 'required|string|max:50',
             'category_id' => 'required|exists:categories,id',
             'reorder_level' => 'required|integer|min:0',
             'is_active' => 'boolean',
+            'show_on_store' => 'boolean',
         ];
     }
 

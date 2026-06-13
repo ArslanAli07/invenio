@@ -34,16 +34,22 @@ class PurchaseOrderController extends Controller
         $query = PurchaseOrder::query()
             ->with(['supplier', 'location', 'createdBy', 'items']);
 
+        // If supplier, restrict to their POs only
+        if ($request->user()->isSupplier()) {
+            $query->where('supplier_id', $request->user()->supplier_id);
+        } else {
+            // Only allow filtering by supplier for internal staff
+            if ($request->filled('supplier_id')) {
+                $query->where('supplier_id', $request->supplier_id);
+            }
+        }
+
         if ($request->filled('search')) {
             $query->where('po_number', 'like', '%' . $request->search . '%');
         }
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
-        }
-
-        if ($request->filled('supplier_id')) {
-            $query->where('supplier_id', $request->supplier_id);
         }
 
         $purchaseOrders = $query

@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Button } from '@/Components/ui/button';
 import {
@@ -57,6 +57,9 @@ export default function Index({ purchaseOrders, suppliers, filters, can }) {
     const [search, setSearch]     = useState(filters.search || '');
     const [status, setStatus]     = useState(filters.status || '');
     const [supplierId, setSupplierId] = useState(filters.supplier_id || '');
+
+    const { auth } = usePage().props;
+    const isSupplierRole = auth.user.role === 'supplier';
 
     const applyFilters = (newSearch, newStatus, newSupplier) => {
         router.get(
@@ -150,16 +153,18 @@ export default function Index({ purchaseOrders, suppliers, filters, can }) {
                         </select>
 
                         {/* Supplier */}
-                        <select
-                            value={supplierId}
-                            onChange={handleSupplier}
-                            className="w-full md:w-48 px-3 py-2.5 bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 text-slate-700 dark:text-ink-200 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/30"
-                        >
-                            <option value="">All Suppliers</option>
-                            {suppliers.map((s) => (
-                                <option key={s.id} value={s.id}>{s.name}</option>
-                            ))}
-                        </select>
+                        {!isSupplierRole && (
+                            <select
+                                value={supplierId}
+                                onChange={handleSupplier}
+                                className="w-full md:w-48 px-3 py-2.5 bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 text-slate-700 dark:text-ink-200 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                            >
+                                <option value="">All Suppliers</option>
+                                {suppliers.map((s) => (
+                                    <option key={s.id} value={s.id}>{s.name}</option>
+                                ))}
+                            </select>
+                        )}
 
                         {/* Clear */}
                         {hasFilters && (

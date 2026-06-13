@@ -85,6 +85,7 @@ class StockMovementController extends Controller
 
         $data       = $request->validated();
         $locationId = (int) $data['location_id'];
+        $variantId  = isset($data['variant_id']) ? (int) $data['variant_id'] : null;
         $type       = $data['type'];
         $quantity   = (float) $data['quantity'];
 
@@ -106,7 +107,7 @@ class StockMovementController extends Controller
 
         // ── Guard 3: Negative-stock guard ─────────────────────────────────────
         if ($type === 'out') {
-            $current = StockLedger::computeStock($product->id, $locationId);
+            $current = StockLedger::computeStock($product->id, $locationId, $variantId);
 
             if ($quantity > $current) {
                 return back()
@@ -119,7 +120,7 @@ class StockMovementController extends Controller
         }
 
         if ($type === 'adjust') {
-            $current = StockLedger::computeStock($product->id, $locationId);
+            $current = StockLedger::computeStock($product->id, $locationId, $variantId);
 
             if (($current + $quantity) < 0) {
                 return back()
@@ -134,6 +135,7 @@ class StockMovementController extends Controller
         // ── Write immutable ledger entry ───────────────────────────────────────
         StockLedger::create([
             'product_id'     => $product->id,
+            'variant_id'     => $variantId,
             'location_id'    => $locationId,
             'type'           => $type,
             'quantity'       => $quantity,
@@ -147,7 +149,7 @@ class StockMovementController extends Controller
         ]);
 
         // ── Bust the 60-second stock cache for this product + location ─────────
-        StockLedger::bustCache($product->id, $locationId);
+        StockLedger::bustCache($product->id, $locationId, $variantId);
 
         return redirect()
             ->route('products.show', $product)

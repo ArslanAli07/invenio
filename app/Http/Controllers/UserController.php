@@ -34,10 +34,13 @@ class UserController extends Controller
 
         $users = $query->latest()->paginate(20)->withQueryString();
 
+        $suppliers = \App\Models\Supplier::active()->orderBy('name')->get(['id', 'name']);
+
         return Inertia::render('Users/Index', [
-            'users'   => $users,
-            'filters' => $request->only(['search', 'role', 'status']),
-            'can'     => [
+            'users'     => $users,
+            'suppliers' => $suppliers,
+            'filters'   => $request->only(['search', 'role', 'status']),
+            'can'       => [
                 'create' => in_array(auth()->user()->role, ['admin', 'manager']),
                 'update' => in_array(auth()->user()->role, ['admin', 'manager']),
                 'delete' => auth()->user()->role === 'admin',
@@ -50,8 +53,9 @@ class UserController extends Controller
         $data = $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8'],
-            'role'     => ['required', Rule::in(['admin', 'manager', 'staff'])],
+            'password'    => ['required', 'string', 'min:8'],
+            'role'        => ['required', Rule::in(['admin', 'manager', 'staff', 'supplier'])],
+            'supplier_id' => ['nullable', 'required_if:role,supplier', 'exists:suppliers,id'],
             'is_active'=> ['boolean'],
         ]);
 
@@ -61,11 +65,12 @@ class UserController extends Controller
         }
 
         User::create([
-            'name'      => $data['name'],
-            'email'     => $data['email'],
-            'password'  => Hash::make($data['password']),
-            'role'      => $data['role'],
-            'status'    => ($data['is_active'] ?? true) ? 'active' : 'inactive',
+            'name'        => $data['name'],
+            'email'       => $data['email'],
+            'password'    => Hash::make($data['password']),
+            'role'        => $data['role'],
+            'supplier_id' => $data['role'] === 'supplier' ? $data['supplier_id'] : null,
+            'status'      => ($data['is_active'] ?? true) ? 'active' : 'inactive',
         ]);
 
         return back()->with('success', "User \"{$data['name']}\" created successfully.");
@@ -81,8 +86,9 @@ class UserController extends Controller
         $data = $request->validate([
             'name'      => ['required', 'string', 'max:255'],
             'email'     => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'password'  => ['nullable', 'string', 'min:8'],
-            'role'      => ['required', Rule::in(['admin', 'manager', 'staff'])],
+            'password'    => ['nullable', 'string', 'min:8'],
+            'role'        => ['required', Rule::in(['admin', 'manager', 'staff', 'supplier'])],
+            'supplier_id' => ['nullable', 'required_if:role,supplier', 'exists:suppliers,id'],
             'is_active' => ['boolean'],
         ]);
 
@@ -100,10 +106,11 @@ class UserController extends Controller
         }
 
         $updateData = [
-            'name'      => $data['name'],
-            'email'     => $data['email'],
-            'role'      => $data['role'],
-            'status'    => ($data['is_active'] ?? true) ? 'active' : 'inactive',
+            'name'        => $data['name'],
+            'email'       => $data['email'],
+            'role'        => $data['role'],
+            'supplier_id' => $data['role'] === 'supplier' ? $data['supplier_id'] : null,
+            'status'      => ($data['is_active'] ?? true) ? 'active' : 'inactive',
         ];
 
         if (!empty($data['password'])) {

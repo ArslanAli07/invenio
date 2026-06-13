@@ -28,9 +28,10 @@ import {
 
 // ── Role badge ───────────────────────────────────────────────────────────────
 const ROLE_CONFIG = {
-    admin:   { label: 'Admin',   icon: ShieldCheck, class: 'bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-100 dark:border-purple-500/20' },
-    manager: { label: 'Manager', icon: Shield,      class: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-500/20' },
-    staff:   { label: 'Staff',   icon: Eye,         class: 'bg-slate-100 dark:bg-ink-800 text-slate-600 dark:text-ink-300 border-slate-200 dark:border-ink-700' },
+    admin:    { label: 'Admin',    icon: ShieldCheck, class: 'bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-100 dark:border-purple-500/20' },
+    manager:  { label: 'Manager',  icon: Shield,      class: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-500/20' },
+    staff:    { label: 'Staff',    icon: Eye,         class: 'bg-slate-100 dark:bg-ink-800 text-slate-600 dark:text-ink-300 border-slate-200 dark:border-ink-700' },
+    supplier: { label: 'Supplier', icon: Users,       class: 'bg-orange-50 dark:bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-100 dark:border-orange-500/20' },
 };
 
 function RoleBadge({ role }) {
@@ -44,7 +45,7 @@ function RoleBadge({ role }) {
     );
 }
 
-export default function Index({ users, filters, can }) {
+export default function Index({ users, suppliers, filters, can }) {
     const [search, setSearch] = useState(filters.search || '');
     const [role,   setRole]   = useState(filters.role   || '');
     const [status, setStatus] = useState(filters.status || '');
@@ -54,11 +55,12 @@ export default function Index({ users, filters, can }) {
     const [showPassword, setShowPassword] = useState(false);
 
     const { data, setData, post, put, delete: destroy, processing, errors, reset, clearErrors } = useForm({
-        name:      '',
-        email:     '',
-        password:  '',
-        role:      'staff',
-        is_active: true,
+        name:        '',
+        email:       '',
+        password:    '',
+        role:        'staff',
+        supplier_id: '',
+        is_active:   true,
     });
 
     // ── Filters ──────────────────────────────────────────────────────────────
@@ -74,7 +76,7 @@ export default function Index({ users, filters, can }) {
     const openCreate = () => {
         clearErrors();
         reset();
-        setData({ name: '', email: '', password: '', role: 'staff', is_active: true });
+        setData({ name: '', email: '', password: '', role: 'staff', supplier_id: '', is_active: true });
         setEditingUser(null);
         setShowPassword(false);
         setIsOpen(true);
@@ -83,7 +85,7 @@ export default function Index({ users, filters, can }) {
     const openEdit = (user) => {
         clearErrors();
         setEditingUser(user);
-        setData({ name: user.name, email: user.email, password: '', role: user.role, is_active: !!user.is_active });
+        setData({ name: user.name, email: user.email, password: '', role: user.role, supplier_id: user.supplier_id || '', is_active: !!user.is_active });
         setShowPassword(false);
         setIsOpen(true);
     };
@@ -150,6 +152,7 @@ export default function Index({ users, filters, can }) {
                         <option value="admin">Admin</option>
                         <option value="manager">Manager</option>
                         <option value="staff">Staff</option>
+                        <option value="supplier">Supplier</option>
                     </select>
 
                     {/* Status */}
@@ -390,6 +393,7 @@ export default function Index({ users, filters, can }) {
                                     <option value="staff">Staff — view and record movements</option>
                                     <option value="manager">Manager — full CRUD, no admin settings</option>
                                     <option value="admin">Admin — full access</option>
+                                    <option value="supplier">Supplier — vendor portal access only</option>
                                 </select>
                                 <InputError message={errors.role} className="mt-1.5 text-xs text-rose-500" />
                             </div>
@@ -398,8 +402,29 @@ export default function Index({ users, filters, can }) {
                             <div className="bg-slate-50 dark:bg-ink-800/30 rounded-xl p-3 border border-slate-100 dark:border-ink-700 text-xs text-slate-500 dark:text-ink-400 space-y-1">
                                 <p><span className="font-semibold text-purple-600 dark:text-purple-400">Admin</span> — manage users, delete anything, full system access</p>
                                 <p><span className="font-semibold text-blue-600 dark:text-blue-400">Manager</span> — create/edit products, POs, suppliers, locations. Cannot manage users.</p>
-                                <p><span className="font-semibold text-slate-600 dark:text-ink-300">Staff</span> — view everything, record movements, receive PO deliveries. Read-only otherwise.</p>
+                                <p><span className="font-semibold text-slate-600 dark:text-ink-300">Staff</span> — view everything, record movements, receive PO deliveries.</p>
+                                <p><span className="font-semibold text-orange-600 dark:text-orange-400">Supplier</span> — log in to view their assigned POs only. No other access.</p>
                             </div>
+
+                            {/* Supplier ID Selection (Only if role is Supplier) */}
+                            {data.role === 'supplier' && (
+                                <div>
+                                    <InputLabel htmlFor="supplier_id" value="Assigned Supplier" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                    <select
+                                        id="supplier_id"
+                                        value={data.supplier_id}
+                                        onChange={(e) => setData('supplier_id', e.target.value)}
+                                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition focus:outline-none"
+                                        required
+                                    >
+                                        <option value="" disabled>Select a supplier…</option>
+                                        {suppliers.map(sup => (
+                                            <option key={sup.id} value={sup.id}>{sup.name}</option>
+                                        ))}
+                                    </select>
+                                    <InputError message={errors.supplier_id} className="mt-1.5 text-xs text-rose-500" />
+                                </div>
+                            )}
 
                             {/* Active toggle */}
                             <div className="bg-slate-50/50 dark:bg-ink-800/30 rounded-xl p-4 border border-slate-150 dark:border-ink-700">

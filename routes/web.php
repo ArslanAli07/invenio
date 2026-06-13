@@ -22,40 +22,58 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Categories Routes
-    Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->middleware('role:admin,manager,staff')->name('categories.index');
     Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->middleware('role:admin,manager')->name('categories.store');
     Route::put('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'update'])->middleware('role:admin,manager')->name('categories.update');
     Route::delete('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->middleware('role:admin,manager')->name('categories.destroy');
 
     // Locations Routes
-    Route::get('/locations', [\App\Http\Controllers\LocationController::class, 'index'])->name('locations.index');
+    Route::get('/locations', [\App\Http\Controllers\LocationController::class, 'index'])->middleware('role:admin,manager,staff')->name('locations.index');
     Route::post('/locations', [\App\Http\Controllers\LocationController::class, 'store'])->middleware('role:admin,manager')->name('locations.store');
     Route::put('/locations/{location}', [\App\Http\Controllers\LocationController::class, 'update'])->middleware('role:admin,manager')->name('locations.update');
     Route::delete('/locations/{location}', [\App\Http\Controllers\LocationController::class, 'destroy'])->middleware('role:admin,manager')->name('locations.destroy');
 
     // Suppliers Routes
-    Route::get('/suppliers', [\App\Http\Controllers\SupplierController::class, 'index'])->name('suppliers.index');
+    Route::get('/suppliers', [\App\Http\Controllers\SupplierController::class, 'index'])->middleware('role:admin,manager,staff')->name('suppliers.index');
     Route::post('/suppliers', [\App\Http\Controllers\SupplierController::class, 'store'])->middleware('role:admin,manager')->name('suppliers.store');
     Route::put('/suppliers/{supplier}', [\App\Http\Controllers\SupplierController::class, 'update'])->middleware('role:admin,manager')->name('suppliers.update');
     Route::delete('/suppliers/{supplier}', [\App\Http\Controllers\SupplierController::class, 'destroy'])->middleware('role:admin,manager')->name('suppliers.destroy');
 
     // Products Routes
-    Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
-    Route::get('/products/{product}', [\App\Http\Controllers\ProductController::class, 'show'])->name('products.show');
+    Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index'])->middleware('role:admin,manager,staff')->name('products.index');
+    Route::get('/products/{product}', [\App\Http\Controllers\ProductController::class, 'show'])->middleware('role:admin,manager,staff')->name('products.show');
     Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store'])->middleware('role:admin,manager')->name('products.store');
     Route::put('/products/{product}', [\App\Http\Controllers\ProductController::class, 'update'])->middleware('role:admin,manager')->name('products.update');
     Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy'])->middleware('role:admin,manager')->name('products.destroy');
     Route::post('/products/check-sku', [\App\Http\Controllers\ProductController::class, 'checkSku'])->middleware('role:admin,manager')->name('products.check-sku');
 
+    // Product Images
+    Route::post('/products/{product}/images', [\App\Http\Controllers\ProductImageController::class, 'store'])->middleware('role:admin,manager')->name('products.images.store');
+    Route::patch('/products/{product}/images/{image}', [\App\Http\Controllers\ProductImageController::class, 'update'])->middleware('role:admin,manager')->name('products.images.update');
+    Route::delete('/products/{product}/images/{image}', [\App\Http\Controllers\ProductImageController::class, 'destroy'])->middleware('role:admin,manager')->name('products.images.destroy');
+
+    // Product Variants
+    Route::post('/products/{product}/variants', [\App\Http\Controllers\ProductVariantController::class, 'store'])->middleware('role:admin,manager')->name('products.variants.store');
+    Route::put('/products/{product}/variants/{variant}', [\App\Http\Controllers\ProductVariantController::class, 'update'])->middleware('role:admin,manager')->name('products.variants.update');
+    Route::delete('/products/{product}/variants/{variant}', [\App\Http\Controllers\ProductVariantController::class, 'destroy'])->middleware('role:admin,manager')->name('products.variants.destroy');
+
+    // Product Specs
+    Route::post('/products/{product}/specs', [\App\Http\Controllers\ProductSpecController::class, 'store'])->middleware('role:admin,manager')->name('products.specs.store');
+    Route::put('/products/{product}/specs/{spec}', [\App\Http\Controllers\ProductSpecController::class, 'update'])->middleware('role:admin,manager')->name('products.specs.update');
+    Route::delete('/products/{product}/specs/{spec}', [\App\Http\Controllers\ProductSpecController::class, 'destroy'])->middleware('role:admin,manager')->name('products.specs.destroy');
+
+    // Manual Stock Adjustment
+    Route::post('/stock-adjustments', [\App\Http\Controllers\StockAdjustmentController::class, 'store'])->middleware('role:admin,manager')->name('stock-adjustments.store');
+
     // Stock Movement Routes
-    Route::get('/movements', [\App\Http\Controllers\StockMovementController::class, 'index'])->name('movements.index');
+    Route::get('/movements', [\App\Http\Controllers\StockMovementController::class, 'index'])->middleware('role:admin,manager,staff')->name('movements.index');
     Route::post('/products/{product}/movements', [\App\Http\Controllers\StockMovementController::class, 'store'])
         ->middleware('role:admin,manager')
         ->name('movements.store');
 
     // Stock Transfer Routes
-    Route::get('/transfers', [\App\Http\Controllers\StockTransferController::class, 'index'])->name('transfers.index');
-    Route::get('/transfers/create', [\App\Http\Controllers\StockTransferController::class, 'create'])->name('transfers.create');
+    Route::get('/transfers', [\App\Http\Controllers\StockTransferController::class, 'index'])->middleware('role:admin,manager,staff')->name('transfers.index');
+    Route::get('/transfers/create', [\App\Http\Controllers\StockTransferController::class, 'create'])->middleware('role:admin,manager,staff')->name('transfers.create');
     Route::post('/transfers', [\App\Http\Controllers\StockTransferController::class, 'store'])->name('transfers.store');
 
     // Purchase Order Routes

@@ -33,15 +33,20 @@ export default function Show({ product, stockLevels, movements, movementFilters 
 
     const { data, setData, post, processing, errors, reset } = useForm({
         location_id:      '',
+        variant_id:       '',
         type:             'in',
         quantity:         '',
         reference_source: '',
         note:             '',
     });
 
-    // Find the stock level object for the currently-selected location
+    // Find the stock level object for the currently-selected location and variant
     const selectedLevel = data.location_id
-        ? stockLevels.find((l) => l.location_id === parseInt(data.location_id))
+        ? stockLevels.find((l) => {
+            const locMatch = l.location_id === parseInt(data.location_id);
+            const varMatch = data.variant_id ? l.variant_id === parseInt(data.variant_id) : l.variant_id === null;
+            return locMatch && varMatch;
+        })
         : null;
 
     const handleOpen = () => {
@@ -180,11 +185,18 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                             <MapPin className="h-4.5 w-4.5 text-blue-600" />
                             <span>Storage Location Inventory Levels</span>
                         </h3>
-                        <div className="divide-y divide-slate-100 dark:divide-ink-750">
+                        <div className="divide-y divide-slate-100 dark:divide-ink-750 max-h-[300px] overflow-y-auto pr-2">
                             {stockLevels.map((level) => (
-                                <div key={level.location_id} className="flex items-center justify-between py-3.5">
+                                <div key={`${level.location_id}-${level.variant_id || 'base'}`} className="flex items-center justify-between py-3.5">
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-semibold text-slate-900 dark:text-ink-100">{level.location_name}</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-semibold text-slate-900 dark:text-ink-100">{level.location_name}</span>
+                                            {level.variant_name && (
+                                                <span className="text-[10px] bg-slate-100 dark:bg-ink-800 text-slate-600 dark:text-ink-300 px-1.5 py-0.5 rounded font-medium">
+                                                    {level.variant_name}
+                                                </span>
+                                            )}
+                                        </div>
                                         <span className="font-mono text-[10px] text-slate-400 dark:text-ink-400 mt-0.5 uppercase">code: {level.location_code}</span>
                                     </div>
                                     <div className="flex items-center gap-4">
@@ -357,9 +369,14 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-xs font-semibold text-slate-600 dark:text-ink-400">
+                                            <div className="text-xs font-semibold text-slate-600 dark:text-ink-400">
                                                 {movement.location?.name || '—'}
-                                            </span>
+                                            </div>
+                                            {movement.variant && (
+                                                <div className="text-[10px] text-slate-500 dark:text-ink-500 mt-0.5">
+                                                    Var: {movement.variant.name}
+                                                </div>
+                                            )}
                                         </td>
                                         <td className="px-6 py-4 text-xs">
                                             {movement.reference_type ? (() => {
@@ -510,14 +527,35 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                         className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
                                     >
                                         <option value="">Select a location…</option>
-                                        {stockLevels.map((level) => (
-                                            <option key={level.location_id} value={level.location_id}>
-                                                {level.location_name} ({level.location_code}) — {level.current_stock} {product.unit}
+                                        {Array.from(new Map(stockLevels.map(l => [l.location_id, {id: l.location_id, name: l.location_name, code: l.location_code}])).values()).map(loc => (
+                                            <option key={loc.id} value={loc.id}>
+                                                {loc.name} ({loc.code})
                                             </option>
                                         ))}
                                     </select>
                                     <InputError message={errors.location_id} className="mt-1.5 text-xs text-rose-500" />
                                 </div>
+
+                                {/* ── Variant (Optional) ───────────────────── */}
+                                {product.variants && product.variants.length > 0 && (
+                                    <div>
+                                        <InputLabel htmlFor="variant_id" value="Variant (Optional)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                        <select
+                                            id="variant_id"
+                                            value={data.variant_id}
+                                            onChange={(e) => setData('variant_id', e.target.value)}
+                                            className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
+                                        >
+                                            <option value="">Base Product (No specific variant)</option>
+                                            {product.variants.map((v) => (
+                                                <option key={v.id} value={v.id}>
+                                                    {v.name} ({v.sku})
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <InputError message={errors.variant_id} className="mt-1.5 text-xs text-rose-500" />
+                                    </div>
+                                )}
 
                                 {/* ── Quantity ──────────────────────────────── */}
                                 <div>

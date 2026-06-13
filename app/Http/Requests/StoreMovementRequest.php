@@ -23,6 +23,7 @@ class StoreMovementRequest extends FormRequest
     {
         return [
             'location_id'      => ['required', 'integer', 'exists:locations,id'],
+            'variant_id'       => ['nullable', 'integer', 'exists:product_variants,id'],
             'type'             => ['required', 'string', 'in:in,out,adjust'],
             'quantity'         => ['required', 'numeric', 'not_in:0'],
             'reference_source' => ['nullable', 'string', 'max:100'],
