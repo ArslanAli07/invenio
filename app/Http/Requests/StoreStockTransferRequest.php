@@ -32,6 +32,19 @@ class StoreStockTransferRequest extends FormRequest
                     }
                 },
             ],
+            'variant_id' => [
+                'nullable',
+                'exists:product_variants,id',
+                function ($attribute, $value, $fail) {
+                    $product = Product::with('variants')->find($this->input('product_id'));
+                    if ($product && $product->variants->isNotEmpty() && !$value) {
+                        $fail('The variant field is required when the selected product has variants.');
+                    }
+                    if ($product && $product->variants->isEmpty() && $value) {
+                        $fail('The selected product does not have variants.');
+                    }
+                },
+            ],
             'from_location_id' => [
                 'required',
                 'exists:locations,id',

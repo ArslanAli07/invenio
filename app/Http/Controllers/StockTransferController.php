@@ -42,34 +42,46 @@ class StockTransferController extends Controller
         // Fetch active locations
         $locations = Location::active()->orderBy('name')->get(['id', 'name', 'code']);
 
-        // Aggregate stock totals per product and location
+        // Aggregate stock totals per product, variant and location
         $stockLedgerTotals = DB::table('stock_ledger')
-            ->select('product_id', 'location_id')
+            ->select('product_id', 'variant_id', 'location_id')
             ->selectRaw("SUM(CASE type
                 WHEN 'in'     THEN  quantity
                 WHEN 'out'    THEN -quantity
                 WHEN 'adjust' THEN  quantity
             END) as current_stock")
-            ->groupBy('product_id', 'location_id')
+            ->groupBy('product_id', 'variant_id', 'location_id')
             ->get();
 
         $stockMap = [];
         foreach ($stockLedgerTotals as $total) {
-            $stockMap[$total->product_id][$total->location_id] = (float)$total->current_stock;
+            $vid = $total->variant_id ?? 'null';
+            $stockMap[$total->product_id][$vid][$total->location_id] = (float)$total->current_stock;
         }
 
         // Map stock levels onto active products
         $products = Product::active()
+            ->with('variants')
             ->orderBy('name')
             ->get(['id', 'sku', 'name', 'unit'])
             ->map(function ($product) use ($stockMap) {
-                return [
+                $mapped = [
                     'id'     => $product->id,
                     'sku'    => $product->sku,
                     'name'   => $product->name,
                     'unit'   => $product->unit,
-                    'stocks' => $stockMap[$product->id] ?? [],
+                    'has_variants' => $product->variants->isNotEmpty(),
+                    'stocks' => $stockMap[$product->id]['null'] ?? [],
+                    'variants' => $product->variants->map(function ($v) use ($product, $stockMap) {
+                        return [
+                            'id' => $v->id,
+                            'name' => $v->name,
+                            'sku' => $v->sku,
+                            'stocks' => $stockMap[$product->id][$v->id] ?? [],
+                        ];
+                    })
                 ];
+                return $mapped;
             });
 
         return Inertia::render('Transfers/Create', [
@@ -88,7 +100,7 @@ class StockTransferController extends Controller
         $qty = (float) $request->quantity;
 
         // Perform strict availability check
-        $availableStock = StockLedger::computeStock($request->product_id, $request->from_location_id);
+        $availableStock = StockLedger::computeStock($request->product_id, $request->from_location_id, $request->variant_id);
         if ($availableStock < $qty) {
             return back()->withErrors([
                 'quantity' => "Insufficient stock at the source location. Available: {$availableStock}."
@@ -99,6 +111,7 @@ class StockTransferController extends Controller
         DB::transaction(function () use ($request, $qty) {
             $transfer = StockTransfer::create([
                 'product_id'       => $request->product_id,
+                'variant_id'       => $request->variant_id,
                 'from_location_id' => $request->from_location_id,
                 'to_location_id'   => $request->to_location_id,
                 'quantity'         => $qty,
@@ -112,6 +125,7 @@ class StockTransferController extends Controller
             // 1. Stock Out from source location
             StockLedger::create([
                 'product_id'     => $request->product_id,
+                'variant_id'     => $request->variant_id,
                 'location_id'    => $request->from_location_id,
                 'type'           => 'out',
                 'quantity'       => $qty,
@@ -124,6 +138,7 @@ class StockTransferController extends Controller
             // 2. Stock In to destination location
             StockLedger::create([
                 'product_id'     => $request->product_id,
+                'variant_id'     => $request->variant_id,
                 'location_id'    => $request->to_location_id,
                 'type'           => 'in',
                 'quantity'       => $qty,
@@ -134,8 +149,8 @@ class StockTransferController extends Controller
             ]);
 
             // 3. Bust caches for both locations
-            StockLedger::bustCache($request->product_id, $request->from_location_id);
-            StockLedger::bustCache($request->product_id, $request->to_location_id);
+            StockLedger::bustCache($request->product_id, $request->from_location_id, $request->variant_id);
+            StockLedger::bustCache($request->product_id, $request->to_location_id, $request->variant_id);
         });
 
         $product = Product::find($request->product_id);

@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // Update enum to include 'supplier'
-            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'manager', 'staff', 'supplier') NOT NULL DEFAULT 'staff'");
+            if (DB::getDriverName() !== 'sqlite') {
+                DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'manager', 'staff', 'supplier') NOT NULL DEFAULT 'staff'");
+            }
             $table->foreignId('supplier_id')->nullable()->constrained()->nullOnDelete();
         });
     }
@@ -27,7 +29,9 @@ return new class extends Migration
             $table->dropForeign(['supplier_id']);
             $table->dropColumn('supplier_id');
             // Revert enum
-            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'manager', 'staff') NOT NULL DEFAULT 'staff'");
+            if (DB::getDriverName() !== 'sqlite') {
+                DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'manager', 'staff') NOT NULL DEFAULT 'staff'");
+            }
         });
     }
 };

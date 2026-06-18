@@ -422,7 +422,7 @@ export default function Dashboard({
                                     return (
                                         <Link
                                             key={p.id}
-                                            href={route('products.show', p.id)}
+                                            href={route('products.show', p.product_id)}
                                             className="flex items-center gap-3 px-5 py-3.5 hover:bg-slate-50/60 dark:hover:bg-ink-800/40 transition-colors group"
                                         >
                                             {/* Severity dot */}

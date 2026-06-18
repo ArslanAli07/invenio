@@ -79,7 +79,7 @@ class PurchaseOrderController extends Controller
         return Inertia::render('PurchaseOrders/Create', [
             'suppliers' => Supplier::active()->orderBy('name')->get(['id', 'name', 'email']),
             'locations' => Location::active()->orderBy('name')->get(['id', 'code', 'name']),
-            'products'  => Product::active()->orderBy('sku')->get(['id', 'sku', 'name', 'unit']),
+            'products'  => Product::with('variants')->active()->orderBy('sku')->get(['id', 'sku', 'name', 'unit']),
         ]);
     }
 
@@ -120,6 +120,7 @@ class PurchaseOrderController extends Controller
                 PurchaseOrderItem::create([
                     'purchase_order_id' => $po->id,
                     'product_id'        => $item['product_id'],
+                    'variant_id'        => $item['variant_id'] ?? null,
                     'qty_ordered'       => $item['qty_ordered'],
                     'unit_cost'         => $item['unit_cost'],
                     'qty_received'      => 0,
@@ -141,7 +142,7 @@ class PurchaseOrderController extends Controller
     {
         Gate::authorize('view', $purchaseOrder);
 
-        $purchaseOrder->load(['supplier', 'location', 'createdBy', 'items.product']);
+        $purchaseOrder->load(['supplier', 'location', 'createdBy', 'items.product', 'items.variant']);
 
         return Inertia::render('PurchaseOrders/Show', [
             'purchaseOrder' => $purchaseOrder,
@@ -169,7 +170,7 @@ class PurchaseOrderController extends Controller
             'purchaseOrder' => $purchaseOrder,
             'suppliers'     => Supplier::active()->orderBy('name')->get(['id', 'name', 'email']),
             'locations'     => Location::active()->orderBy('name')->get(['id', 'code', 'name']),
-            'products'      => Product::active()->orderBy('sku')->get(['id', 'sku', 'name', 'unit']),
+            'products'      => Product::with('variants')->active()->orderBy('sku')->get(['id', 'sku', 'name', 'unit']),
         ]);
     }
 
@@ -209,6 +210,7 @@ class PurchaseOrderController extends Controller
                 PurchaseOrderItem::create([
                     'purchase_order_id' => $purchaseOrder->id,
                     'product_id'        => $item['product_id'],
+                    'variant_id'        => $item['variant_id'] ?? null,
                     'qty_ordered'       => $item['qty_ordered'],
                     'unit_cost'         => $item['unit_cost'],
                     'qty_received'      => 0,
@@ -321,6 +323,7 @@ class PurchaseOrderController extends Controller
                 // reference_type = full class name → matches polymorphic format used in seeder + Show.jsx
                 StockLedger::create([
                     'product_id'     => $item->product_id,
+                    'variant_id'     => $item->variant_id,
                     'location_id'    => $purchaseOrder->location_id,
                     'type'           => 'in',
                     'quantity'       => $qtyReceived,
@@ -330,7 +333,7 @@ class PurchaseOrderController extends Controller
                     'created_by'     => $request->user()->id,
                 ]);
 
-                StockLedger::bustCache($item->product_id, $purchaseOrder->location_id);
+                StockLedger::bustCache($item->product_id, $purchaseOrder->location_id, $item->variant_id);
             }
 
             // Reload fresh qty_received values to determine new PO status

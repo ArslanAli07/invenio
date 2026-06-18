@@ -1,6 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { GeneralManager, ImageManager, VariantManager, SpecManager } from './Partials/ProductManagers';
 import { Button } from '@/Components/ui/button';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -26,31 +27,60 @@ import {
     ArrowDownToLine,
     ArrowUpFromLine,
     SlidersHorizontal,
+    Image as ImageIcon,
+    CheckCircle2
 } from 'lucide-react';
 
-export default function Show({ product, stockLevels, movements, movementFilters = {}, can }) {
+export default function Show({ product, categories, stockLevels, movements, movementFilters = {}, can }) {
     const [isOpen, setIsOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('inventory');
+    
+    // Select the initial variant
+    const [selectedVariantId, setSelectedVariantId] = useState(
+        movementFilters.filter_variant 
+            ? parseInt(movementFilters.filter_variant) 
+            : (product.variants && product.variants.length > 0 ? product.variants[0].id : null)
+    );
 
     const { data, setData, post, processing, errors, reset } = useForm({
         location_id:      '',
-        variant_id:       '',
+        variant_id:       selectedVariantId || '',
         type:             'in',
         quantity:         '',
         reference_source: '',
         note:             '',
     });
 
-    // Find the stock level object for the currently-selected location and variant
-    const selectedLevel = data.location_id
-        ? stockLevels.find((l) => {
-            const locMatch = l.location_id === parseInt(data.location_id);
-            const varMatch = data.variant_id ? l.variant_id === parseInt(data.variant_id) : l.variant_id === null;
-            return locMatch && varMatch;
-        })
-        : null;
+    // Update form's variant_id when selectedVariantId changes
+    useEffect(() => {
+        setData('variant_id', selectedVariantId || '');
+    }, [selectedVariantId]);
+
+    // Compute derived data for the selected variant (or base product)
+    const selectedVariant = product.variants?.find(v => v.id === selectedVariantId);
+    
+    // Filter stock levels to only show the relevant ones
+    const filteredStockLevels = stockLevels.filter(l => 
+        selectedVariantId ? l.variant_id === selectedVariantId : l.variant_id === null
+    );
+
+    // Get specific global stock for the header
+    const currentGlobalStock = selectedVariantId 
+        ? selectedVariant?.global_stock 
+        : stockLevels.reduce((acc, curr) => acc + curr.current_stock, 0);
+
+    const handleVariantSelect = (variantId) => {
+        setSelectedVariantId(variantId);
+        router.get(
+            route('products.show', product.id),
+            { filter_variant: variantId },
+            { preserveState: true, preserveScroll: true, replace: true }
+        );
+    };
 
     const handleOpen = () => {
         reset();
+        setData('variant_id', selectedVariantId || '');
         setIsOpen(true);
     };
 
@@ -63,6 +93,11 @@ export default function Show({ product, stockLevels, movements, movementFilters 
             },
         });
     };
+
+    // Find the stock level object for the currently-selected location and variant inside the sheet form
+    const selectedLevelInForm = data.location_id
+        ? filteredStockLevels.find(l => l.location_id === parseInt(data.location_id))
+        : null;
 
     // Type config — drives styling and helper text
     const typeConfig = {
@@ -80,8 +115,8 @@ export default function Show({ product, stockLevels, movements, movementFilters 
             color:       'rose',
             activeClass: 'bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-500/10 dark:border-rose-500/30 dark:text-rose-400',
             qtyLabel:    'Quantity to Dispatch',
-            qtyHint:     selectedLevel
-                ? `Available at this location: ${selectedLevel.current_stock} ${product.unit}`
+            qtyHint:     selectedLevelInForm
+                ? `Available at this location: ${selectedLevelInForm.current_stock} ${product.unit}`
                 : null,
         },
         adjust: {
@@ -90,13 +125,18 @@ export default function Show({ product, stockLevels, movements, movementFilters 
             color:       'amber',
             activeClass: 'bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-500/10 dark:border-amber-500/30 dark:text-amber-400',
             qtyLabel:    'Adjustment Amount',
-            qtyHint:     selectedLevel
-                ? `Current stock: ${selectedLevel.current_stock} ${product.unit} — use a negative number to reduce (e.g. -3 for a write-off)`
+            qtyHint:     selectedLevelInForm
+                ? `Current stock: ${selectedLevelInForm.current_stock} ${product.unit} — use a negative number to reduce (e.g. -3 for a write-off)`
                 : 'Use a negative number to reduce stock (e.g. -3 for a write-off).',
         },
     };
 
     const activeType = typeConfig[data.type];
+
+    // Helper to get image URL
+    const getImageUrl = (imagePath) => {
+        return imagePath && !imagePath.startsWith('http') ? `/storage/${imagePath}` : imagePath;
+    };
 
     return (
         <AuthenticatedLayout>
@@ -106,372 +146,361 @@ export default function Show({ product, stockLevels, movements, movementFilters 
             <div className="mb-6">
                 <Link
                     href={route('products.index')}
-                    className="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-ink-400 hover:text-slate-900 dark:hover:text-ink-100 transition-colors font-medium mb-3"
+                    className="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-ink-400 hover:text-slate-900 dark:hover:text-ink-100 transition-colors font-medium mb-4"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     <span>Back to Products</span>
                 </Link>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
-                        <div className="flex items-center gap-3">
-                            <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
-                                {product.sku}
-                            </span>
-                            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-ink-800 text-slate-700 dark:text-ink-200">
-                                {product.category?.name || 'Uncategorized'}
-                            </span>
+                
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 bg-white dark:bg-ink-900 p-6 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm">
+                    <div className="flex gap-6">
+                        <div className="hidden sm:flex h-24 w-24 bg-slate-100 dark:bg-ink-800 rounded-xl items-center justify-center border border-slate-200 dark:border-ink-700 overflow-hidden flex-shrink-0">
+                            {product.images?.length > 0 ? (
+                                <img src={getImageUrl(product.images[0].path)} alt={product.name} className="h-full w-full object-cover" />
+                            ) : (
+                                <ImageIcon className="h-8 w-8 text-slate-300 dark:text-ink-600" />
+                            )}
                         </div>
-                        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-ink-100 mt-2">{product.name}</h1>
+                        <div>
+                            <div className="flex items-center gap-3 mb-2">
+                                <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
+                                    {product.sku}
+                                </span>
+                                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-ink-800 text-slate-700 dark:text-ink-200 uppercase tracking-wide">
+                                    {product.category?.name || 'Uncategorized'}
+                                </span>
+                            </div>
+                            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-ink-100 mb-1">{product.name}</h1>
+                            <p className="text-sm text-slate-500 dark:text-ink-400 max-w-xl line-clamp-2">
+                                {product.description || 'No description provided.'}
+                            </p>
+                        </div>
                     </div>
-
-                    {/* Record Movement CTA — Admin/Manager only */}
-                    {can?.recordMovement && (
-                        <Button
-                            onClick={handleOpen}
-                            className="bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl px-5 py-2.5 flex items-center gap-2 shadow-md shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-95 self-start sm:self-auto"
-                        >
-                            <Plus className="h-4 w-4" />
-                            Record Movement
-                        </Button>
-                    )}
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                {/* Product Info Card */}
-                <div className="lg:col-span-1 bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <h3 className="text-sm font-bold text-slate-900 dark:text-ink-100 flex items-center gap-2 mb-4 pb-3 border-b border-slate-100 dark:border-ink-750">
-                            <Layers className="h-4.5 w-4.5 text-blue-600" />
-                            <span>Product Specifications</span>
-                        </h3>
-                        <div className="space-y-4">
-                            <div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-ink-400 block">Unit of Measure</span>
-                                <span className="text-sm text-slate-800 dark:text-ink-200 font-semibold mt-1 block">{product.unit || 'pcs'}</span>
-                            </div>
-                            <div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-ink-400 block">Reorder Alert Level</span>
-                                <span className="text-sm text-slate-800 dark:text-ink-200 font-semibold mt-1 block">{product.reorder_level} {product.unit || 'pcs'}</span>
-                            </div>
-                            <div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-ink-400 block">Catalog Status</span>
-                                {product.is_active ? (
-                                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 mt-1">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                                        Active
-                                    </span>
-                                ) : (
-                                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-50 text-slate-500 border border-slate-200 mt-1">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
-                                        Inactive
-                                    </span>
-                                )}
-                            </div>
-                            {product.description && (
-                                <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-ink-400 block">Description</span>
-                                    <p className="text-xs text-slate-500 dark:text-ink-400 mt-1 leading-relaxed">{product.description}</p>
-                                </div>
-                            )}
-                        </div>
+            {/* Tabs Navigation */}
+            <div className="flex space-x-1 border-b border-slate-200 dark:border-ink-700 mb-6 overflow-x-auto">
+                <button 
+                    onClick={() => setActiveTab('inventory')}
+                    className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'inventory' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
+                >
+                    Inventory & Ledger
+                </button>
+                <button 
+                    onClick={() => setActiveTab('general')}
+                    className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'general' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
+                >
+                    General Info
+                </button>
+                <button 
+                    onClick={() => setActiveTab('media_variants')}
+                    className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'media_variants' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
+                >
+                    Media & Variants
+                </button>
+            </div>
+
+            {/* Inventory Tab Content */}
+            <div className={activeTab === 'inventory' ? 'block' : 'hidden'}>
+                {/* Variants Grid */}
+                {product.variants && product.variants.length > 0 && (
+                <div className="mb-8">
+                    <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-ink-100 flex items-center gap-2 mb-4">
+                        <Layers className="h-5 w-5 text-blue-600 dark:text-blue-500" />
+                        Select Variant
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {product.variants.map((v) => {
+                            const isSelected = selectedVariantId === v.id;
+                            const variantImage = product.images?.find(img => img.variant_id === v.id);
+                            
+                            return (
+                                <button
+                                    key={v.id}
+                                    onClick={() => handleVariantSelect(v.id)}
+                                    className={`relative text-left flex items-start gap-4 p-4 rounded-2xl border transition-all duration-200 ${
+                                        isSelected 
+                                            ? 'bg-blue-50/50 dark:bg-blue-900/20 border-blue-500 ring-1 ring-blue-500 shadow-md' 
+                                            : 'bg-white dark:bg-ink-900 border-slate-200 dark:border-ink-700 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-sm'
+                                    }`}
+                                >
+                                    {isSelected && (
+                                        <div className="absolute top-3 right-3 text-blue-600 dark:text-blue-400">
+                                            <CheckCircle2 className="h-5 w-5" />
+                                        </div>
+                                    )}
+                                    <div className="h-16 w-16 bg-slate-100 dark:bg-ink-800 rounded-lg flex items-center justify-center border border-slate-200/50 dark:border-ink-700 overflow-hidden flex-shrink-0">
+                                        {variantImage ? (
+                                            <img src={getImageUrl(variantImage.path)} alt={v.name} className="h-full w-full object-cover" />
+                                        ) : (
+                                            <ImageIcon className="h-5 w-5 text-slate-300 dark:text-ink-600" />
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-w-0 pr-6">
+                                        <h3 className={`font-bold text-sm truncate ${isSelected ? 'text-blue-900 dark:text-blue-100' : 'text-slate-900 dark:text-ink-100'}`}>
+                                            {v.name}
+                                        </h3>
+                                        <div className="font-mono text-[10px] text-slate-500 dark:text-ink-400 mt-0.5 mb-2 truncate uppercase">
+                                            {v.sku}
+                                        </div>
+                                        <div className="flex items-end justify-between mt-auto">
+                                            <span className="font-bold text-sm text-slate-900 dark:text-ink-100">
+                                                Rs {parseFloat(v.price || product.price).toFixed(2)}
+                                            </span>
+                                            <span className="text-[10px] font-semibold text-slate-500 dark:text-ink-400 bg-slate-100 dark:bg-ink-800 px-2 py-0.5 rounded-full">
+                                                {v.global_stock || 0} {product.unit || 'pcs'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
+            )}
 
-                {/* Warehouse Stock Card */}
-                <div className="lg:col-span-2 bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <h3 className="text-sm font-bold text-slate-900 dark:text-ink-100 flex items-center gap-2 mb-4 pb-3 border-b border-slate-100 dark:border-ink-750">
-                            <MapPin className="h-4.5 w-4.5 text-blue-600" />
-                            <span>Storage Location Inventory Levels</span>
-                        </h3>
+            {/* Selected Variant Details Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                {/* Variant Info / Stock Card */}
+                <div className="lg:col-span-1 flex flex-col gap-6">
+                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+                        <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-ink-750">
+                            <h3 className="text-sm font-bold text-slate-900 dark:text-ink-100 flex items-center gap-2">
+                                <MapPin className="h-4.5 w-4.5 text-blue-600" />
+                                <span>Storage Locations</span>
+                            </h3>
+                            <span className="text-xs font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 px-2.5 py-1 rounded-lg">
+                                Total: {currentGlobalStock || 0}
+                            </span>
+                        </div>
                         <div className="divide-y divide-slate-100 dark:divide-ink-750 max-h-[300px] overflow-y-auto pr-2">
-                            {stockLevels.map((level) => (
-                                <div key={`${level.location_id}-${level.variant_id || 'base'}`} className="flex items-center justify-between py-3.5">
+                            {filteredStockLevels.length > 0 ? filteredStockLevels.map((level) => (
+                                <div key={level.location_id} className="flex items-center justify-between py-3.5">
                                     <div className="flex flex-col">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-sm font-semibold text-slate-900 dark:text-ink-100">{level.location_name}</span>
-                                            {level.variant_name && (
-                                                <span className="text-[10px] bg-slate-100 dark:bg-ink-800 text-slate-600 dark:text-ink-300 px-1.5 py-0.5 rounded font-medium">
-                                                    {level.variant_name}
-                                                </span>
-                                            )}
-                                        </div>
+                                        <span className="text-sm font-semibold text-slate-900 dark:text-ink-100">{level.location_name}</span>
                                         <span className="font-mono text-[10px] text-slate-400 dark:text-ink-400 mt-0.5 uppercase">code: {level.location_code}</span>
                                     </div>
-                                    <div className="flex items-center gap-4">
-                                        {level.is_low ? (
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-600 border border-rose-100 animate-pulse">
-                                                <span className="relative flex h-1.5 w-1.5">
-                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                                                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-rose-500"></span>
-                                                </span>
-                                                Below Reorder Alert
-                                            </span>
-                                        ) : (
-                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
-                                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                                                In Stock
+                                    <div className="flex items-center gap-3">
+                                        {level.is_low && (
+                                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-50 text-rose-600 border border-rose-100 animate-pulse">
+                                                Low
                                             </span>
                                         )}
-                                        <span className="font-bold text-sm text-slate-900 dark:text-ink-100 bg-slate-50 dark:bg-ink-800 border border-slate-200/50 dark:border-ink-700 px-3 py-1 rounded-xl">
-                                            {level.current_stock} <span className="text-[10px] text-slate-400 dark:text-ink-400 font-semibold">{product.unit || 'pcs'}</span>
+                                        <span className="font-bold text-sm text-slate-900 dark:text-ink-100 bg-slate-50 dark:bg-ink-800 border border-slate-200/50 dark:border-ink-700 px-3 py-1 rounded-xl min-w-[3rem] text-center">
+                                            {level.current_stock}
                                         </span>
                                     </div>
                                 </div>
-                            ))}
+                            )) : (
+                                <div className="text-center py-6 text-sm text-slate-500 dark:text-ink-400 italic">
+                                    No storage locations setup.
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Movement History Table */}
-            <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden mb-6 flex flex-col">
-                {/* Card header + filter bar */}
-                <div className="px-6 py-4 border-b border-slate-100 dark:border-ink-700 bg-slate-50/50 dark:bg-ink-800/30">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                        <h3 className="text-sm font-bold text-slate-900 dark:text-ink-100 flex items-center gap-2">
-                            <TrendingUp className="h-4.5 w-4.5 text-blue-600" />
-                            <span>Ledger Movement History</span>
-                            {movements.total > 0 && (
-                                <span className="ml-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-ink-700 text-slate-600 dark:text-ink-300">
-                                    {movements.total}
-                                </span>
-                            )}
-                        </h3>
-                        {/* Filters */}
-                        <div className="flex items-center gap-2 flex-wrap">
-                            <select
-                                value={movementFilters.filter_location || ''}
-                                onChange={(e) => router.get(
-                                    route('products.show', product.id),
-                                    { ...movementFilters, filter_location: e.target.value || undefined },
-                                    { preserveState: true, preserveScroll: true, replace: true }
-                                )}
-                                className="text-xs bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 text-slate-700 dark:text-ink-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30 cursor-pointer"
-                            >
-                                <option value="">All Locations</option>
-                                {stockLevels.map((l) => (
-                                    <option key={l.location_id} value={l.location_id}>
-                                        {l.location_name}
-                                    </option>
-                                ))}
-                            </select>
-                            <select
-                                value={movementFilters.filter_type || ''}
-                                onChange={(e) => router.get(
-                                    route('products.show', product.id),
-                                    { ...movementFilters, filter_type: e.target.value || undefined },
-                                    { preserveState: true, preserveScroll: true, replace: true }
-                                )}
-                                className="text-xs bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 text-slate-700 dark:text-ink-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30 cursor-pointer"
-                            >
-                                <option value="">All Types</option>
-                                <option value="in">Stock In</option>
-                                <option value="out">Stock Out</option>
-                                <option value="adjust">Adjustment</option>
-                            </select>
-                            {/* Date from */}
-                            <input
-                                type="date"
-                                value={movementFilters.filter_from || ''}
-                                onChange={(e) => router.get(
-                                    route('products.show', product.id),
-                                    { ...movementFilters, filter_from: e.target.value || undefined },
-                                    { preserveState: true, preserveScroll: true, replace: true }
-                                )}
-                                className="text-xs bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 text-slate-700 dark:text-ink-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30 cursor-pointer"
-                                title="From date"
-                            />
-                            {/* Date to */}
-                            <input
-                                type="date"
-                                value={movementFilters.filter_to || ''}
-                                onChange={(e) => router.get(
-                                    route('products.show', product.id),
-                                    { ...movementFilters, filter_to: e.target.value || undefined },
-                                    { preserveState: true, preserveScroll: true, replace: true }
-                                )}
-                                className="text-xs bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 text-slate-700 dark:text-ink-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30 cursor-pointer"
-                                title="To date"
-                            />
-                            {(movementFilters.filter_location || movementFilters.filter_type || movementFilters.filter_from || movementFilters.filter_to) && (
-                                <button
-                                    onClick={() => router.get(
-                                        route('products.show', product.id),
-                                        {},
-                                        { preserveState: true, preserveScroll: true, replace: true }
+                {/* Ledger Movement History */}
+                <div className="lg:col-span-2">
+                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col h-full">
+                        <div className="px-6 py-4 border-b border-slate-100 dark:border-ink-700 bg-slate-50/50 dark:bg-ink-800/30">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <h3 className="text-sm font-bold text-slate-900 dark:text-ink-100 flex items-center gap-2">
+                                    <TrendingUp className="h-4.5 w-4.5 text-blue-600" />
+                                    <span>
+                                        Ledger History
+                                        {selectedVariant && ` — ${selectedVariant.name}`}
+                                    </span>
+                                    {movements.total > 0 && (
+                                        <span className="ml-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-ink-700 text-slate-600 dark:text-ink-300">
+                                            {movements.total}
+                                        </span>
                                     )}
-                                    className="text-xs text-slate-500 dark:text-ink-400 hover:text-slate-800 dark:hover:text-ink-100 font-medium px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-ink-750 transition-colors"
-                                >
-                                    × Clear
-                                </button>
-                            )}
+                                </h3>
+                                
+                                <div className="flex items-center gap-3">
+                                    {can?.recordMovement && (
+                                        <Button
+                                            onClick={handleOpen}
+                                            className="bg-[#1B4FD8] hover:bg-blue-700 text-white text-xs font-semibold rounded-xl px-4 py-2 flex items-center gap-1.5 shadow-md shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-95"
+                                        >
+                                            <Plus className="h-3.5 w-3.5" />
+                                            Record Movement
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse min-w-[800px]">
-                        <thead>
-                            <tr className="bg-slate-50/75 dark:bg-ink-800/50 border-b border-slate-200 dark:border-ink-700 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-ink-400">
-                                <th className="px-6 py-4">Timestamp</th>
-                                <th className="px-6 py-4">Movement Type</th>
-                                <th className="px-6 py-4">Quantity</th>
-                                <th className="px-6 py-4">Location</th>
-                                <th className="px-6 py-4">Reference</th>
-                                <th className="px-6 py-4">Notes</th>
-                                <th className="px-6 py-4">Operator</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-ink-750">
-                            {movements.data.length > 0 ? (
-                                movements.data.map((movement) => (
-                                    <tr key={movement.id} className="hover:bg-slate-50/30 dark:hover:bg-ink-800/40 transition-colors">
-                                        <td className="px-6 py-4 text-xs text-slate-500 dark:text-ink-400 font-medium">
-                                            <span className="flex items-center gap-1.5">
-                                                <Calendar className="h-3.5 w-3.5 text-slate-400" />
-                                                {new Date(movement.created_at).toLocaleString()}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {movement.type === 'in' && (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20">
-                                                    <ArrowDownToLine className="h-3 w-3" />
-                                                    Stock In
-                                                </span>
-                                            )}
-                                            {movement.type === 'out' && (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20">
-                                                    <ArrowUpFromLine className="h-3 w-3" />
-                                                    Stock Out
-                                                </span>
-                                            )}
-                                            {movement.type === 'adjust' && (
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-500/20">
-                                                    <SlidersHorizontal className="h-3 w-3" />
-                                                    Adjustment
-                                                </span>
-                                            )}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className={`font-bold text-sm ${
-                                                movement.type === 'in'
-                                                    ? 'text-emerald-600 dark:text-emerald-400'
-                                                    : movement.type === 'out'
-                                                    ? 'text-rose-600 dark:text-rose-400'
-                                                    : 'text-amber-600 dark:text-amber-400'
-                                            }`}>
-                                                {movement.type === 'in'
-                                                    ? `+${parseFloat(movement.quantity)}`
-                                                    : movement.type === 'out'
-                                                    ? `-${parseFloat(movement.quantity)}`
-                                                    : (parseFloat(movement.quantity) > 0 ? `+${parseFloat(movement.quantity)}` : parseFloat(movement.quantity))}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="text-xs font-semibold text-slate-600 dark:text-ink-400">
-                                                {movement.location?.name || '—'}
-                                            </div>
-                                            {movement.variant && (
-                                                <div className="text-[10px] text-slate-500 dark:text-ink-500 mt-0.5">
-                                                    Var: {movement.variant.name}
-                                                </div>
-                                            )}
-                                        </td>
-                                        <td className="px-6 py-4 text-xs">
-                                            {movement.reference_type ? (() => {
-                                                const isPo = movement.reference_type.includes('PurchaseOrder');
-                                                const refLabel = movement.reference_type.includes('\\')
-                                                    ? `${movement.reference_type.split('\\').pop()} #${movement.reference_id}`
-                                                    : movement.reference_type;
-                                                if (isPo && movement.reference_id) {
-                                                    return (
-                                                        <Link
-                                                            href={route('po.show', movement.reference_id)}
-                                                            className="inline-flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-mono text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
-                                                        >
-                                                            <FileText className="h-3.5 w-3.5 flex-shrink-0" />
-                                                            {refLabel}
-                                                        </Link>
-                                                    );
-                                                }
-                                                return (
-                                                    <span className="flex items-center gap-1.5 text-slate-600 dark:text-ink-400 font-mono text-[10px] bg-slate-100 dark:bg-ink-800 px-2 py-0.5 rounded border border-slate-200 dark:border-ink-700">
-                                                        <FileText className="h-3.5 w-3.5 text-slate-400 flex-shrink-0" />
-                                                        {refLabel}
-                                                    </span>
-                                                );
-                                            })() : (
-                                                <span className="text-slate-400 dark:text-ink-600 italic">—</span>
-                                            )}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className="text-xs text-slate-500 dark:text-ink-400 line-clamp-1 max-w-[200px]" title={movement.note}>
-                                                {movement.note || '—'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-xs text-slate-600 dark:text-ink-400 font-medium">
-                                            <span className="flex items-center gap-1.5">
-                                                <User className="h-3.5 w-3.5 text-slate-400" />
-                                                {movement.user?.name || 'Unknown'}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="7" className="px-6 py-12 text-center text-slate-400 text-xs italic">
-                                        No ledger movements logged for this SKU yet.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
 
-                {/* Movements pagination */}
-                {movements.links && movements.data.length > 0 && (
-                    <div className="px-6 py-4 border-t border-slate-200 dark:border-ink-700 flex items-center justify-between bg-slate-50/50 dark:bg-ink-800/30">
-                        <span className="text-xs text-slate-500 dark:text-ink-400">
-                            Showing <span className="font-semibold text-slate-800 dark:text-ink-200">{movements.from}</span> to{' '}
-                            <span className="font-semibold text-slate-800 dark:text-ink-200">{movements.to}</span> of{' '}
-                            <span className="font-semibold text-slate-800 dark:text-ink-200">{movements.total}</span> movements
-                        </span>
-                        <div className="flex gap-1.5">
-                            {movements.links.map((link, idx) => {
-                                if (link.url === null) return null;
-                                let label = link.label;
-                                if (label.includes('Previous')) {
-                                    return (
-                                        <Button key={idx} variant="outline" size="sm"
-                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200"
-                                            onClick={() => router.get(link.url, {}, { preserveState: true })}>
-                                            <ChevronLeft className="h-4 w-4" /><span>Previous</span>
-                                        </Button>
-                                    );
-                                }
-                                if (label.includes('Next')) {
-                                    return (
-                                        <Button key={idx} variant="outline" size="sm"
-                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200"
-                                            onClick={() => router.get(link.url, {}, { preserveState: true })}>
-                                            <span>Next</span><ChevronRight className="h-4 w-4" />
-                                        </Button>
-                                    );
-                                }
-                                return (
-                                    <Button key={idx}
-                                        variant={link.active ? 'default' : 'outline'} size="sm"
-                                        className={`rounded-xl h-9 w-9 p-0 ${link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100'}`}
-                                        onClick={() => router.get(link.url, {}, { preserveState: true })}>
-                                        {label}
-                                    </Button>
-                                );
-                            })}
+                        <div className="overflow-x-auto flex-1">
+                            <table className="w-full text-left border-collapse min-w-[700px]">
+                                <thead>
+                                    <tr className="bg-slate-50/75 dark:bg-ink-800/50 border-b border-slate-200 dark:border-ink-700 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-ink-400">
+                                        <th className="px-5 py-3">Date</th>
+                                        <th className="px-5 py-3">Type & Location</th>
+                                        <th className="px-5 py-3">Qty</th>
+                                        <th className="px-5 py-3">Reference / Notes</th>
+                                        <th className="px-5 py-3">User</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100 dark:divide-ink-750">
+                                    {movements.data.length > 0 ? (
+                                        movements.data.map((movement) => (
+                                            <tr key={movement.id} className="hover:bg-slate-50/30 dark:hover:bg-ink-800/40 transition-colors">
+                                                <td className="px-5 py-3.5 text-xs text-slate-500 dark:text-ink-400 font-medium">
+                                                    {new Date(movement.created_at).toLocaleDateString()}
+                                                    <div className="text-[10px] text-slate-400 mt-0.5">{new Date(movement.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                                                </td>
+                                                <td className="px-5 py-3.5">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        {movement.type === 'in' && (
+                                                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 uppercase">
+                                                                <ArrowDownToLine className="h-3 w-3" /> In
+                                                            </span>
+                                                        )}
+                                                        {movement.type === 'out' && (
+                                                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 uppercase">
+                                                                <ArrowUpFromLine className="h-3 w-3" /> Out
+                                                            </span>
+                                                        )}
+                                                        {movement.type === 'adjust' && (
+                                                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 uppercase">
+                                                                <SlidersHorizontal className="h-3 w-3" /> Adj
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className="text-xs font-semibold text-slate-700 dark:text-ink-300">
+                                                        {movement.location?.name || '—'}
+                                                    </div>
+                                                </td>
+                                                <td className="px-5 py-3.5">
+                                                    <span className={`font-bold text-sm ${
+                                                        movement.type === 'in'
+                                                            ? 'text-emerald-600 dark:text-emerald-400'
+                                                            : movement.type === 'out'
+                                                            ? 'text-rose-600 dark:text-rose-400'
+                                                            : 'text-amber-600 dark:text-amber-400'
+                                                    }`}>
+                                                        {movement.type === 'in'
+                                                            ? `+${parseFloat(movement.quantity)}`
+                                                            : movement.type === 'out'
+                                                            ? `-${parseFloat(movement.quantity)}`
+                                                            : (parseFloat(movement.quantity) > 0 ? `+${parseFloat(movement.quantity)}` : parseFloat(movement.quantity))}
+                                                    </span>
+                                                </td>
+                                                <td className="px-5 py-3.5">
+                                                    {movement.reference_type ? (() => {
+                                                        const isPo = movement.reference_type.includes('PurchaseOrder');
+                                                        const refLabel = movement.reference_type.includes('\\')
+                                                            ? `${movement.reference_type.split('\\').pop()} #${movement.reference_id}`
+                                                            : movement.reference_type;
+                                                        return isPo && movement.reference_id ? (
+                                                            <Link
+                                                                href={route('po.show', movement.reference_id)}
+                                                                className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-mono text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/20"
+                                                            >
+                                                                {refLabel}
+                                                            </Link>
+                                                        ) : (
+                                                            <span className="inline-flex items-center gap-1 text-slate-600 dark:text-ink-400 font-mono text-[10px] bg-slate-100 dark:bg-ink-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-ink-700">
+                                                                {refLabel}
+                                                            </span>
+                                                        );
+                                                    })() : null}
+                                                    {movement.note && (
+                                                        <div className="text-[11px] text-slate-500 dark:text-ink-400 mt-1 line-clamp-2" title={movement.note}>
+                                                            {movement.note}
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td className="px-5 py-3.5 text-xs text-slate-600 dark:text-ink-400 font-medium">
+                                                    <span className="flex items-center gap-1.5">
+                                                        <User className="h-3 w-3 text-slate-400" />
+                                                        {movement.user?.name || 'Unknown'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="5" className="px-6 py-12 text-center text-slate-400 text-xs italic">
+                                                No ledger movements logged for this variant yet.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
                         </div>
+
+                        {/* Pagination */}
+                        {movements.links && movements.data.length > 0 && (
+                            <div className="px-5 py-3 border-t border-slate-200 dark:border-ink-700 flex flex-wrap items-center justify-between gap-4 bg-slate-50/50 dark:bg-ink-800/30">
+                                <span className="text-[11px] text-slate-500 dark:text-ink-400">
+                                    Showing <span className="font-semibold text-slate-800 dark:text-ink-200">{movements.from}</span> to{' '}
+                                    <span className="font-semibold text-slate-800 dark:text-ink-200">{movements.to}</span>
+                                </span>
+                                <div className="flex gap-1">
+                                    {movements.links.map((link, idx) => {
+                                        if (link.url === null) return null;
+                                        let label = link.label;
+                                        if (label.includes('Previous')) {
+                                            return (
+                                                <Button key={idx} variant="outline" size="sm"
+                                                    className="h-7 px-2 flex items-center bg-white dark:bg-ink-800 text-slate-600 dark:text-ink-300"
+                                                    onClick={() => router.get(link.url, {}, { preserveState: true })}>
+                                                    <ChevronLeft className="h-3.5 w-3.5" />
+                                                </Button>
+                                            );
+                                        }
+                                        if (label.includes('Next')) {
+                                            return (
+                                                <Button key={idx} variant="outline" size="sm"
+                                                    className="h-7 px-2 flex items-center bg-white dark:bg-ink-800 text-slate-600 dark:text-ink-300"
+                                                    onClick={() => router.get(link.url, {}, { preserveState: true })}>
+                                                    <ChevronRight className="h-3.5 w-3.5" />
+                                                </Button>
+                                            );
+                                        }
+                                        return (
+                                            <Button key={idx}
+                                                variant={link.active ? 'default' : 'outline'} size="sm"
+                                                className={`h-7 min-w-[1.75rem] px-1 text-xs ${link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'bg-white dark:bg-ink-800 text-slate-600 dark:text-ink-300'}`}
+                                                onClick={() => router.get(link.url, {}, { preserveState: true })}>
+                                                {label}
+                                            </Button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
+                </div>
             </div>
+            {/* End Inventory Tab Content */}
+            </div>
+
+            {/* Other Tabs */}
+            {activeTab === 'general' && (
+                <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+                    <GeneralManager product={product} brands={categories} />
+                </div>
+            )}
+            {activeTab === 'media_variants' && (
+                <div className="space-y-6">
+                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+                        <ImageManager product={product} />
+                    </div>
+                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+                        <h2 className="text-xl font-bold text-slate-900 dark:text-ink-100 mb-6">Manage Variants</h2>
+                        <VariantManager product={product} />
+                    </div>
+                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+                        <h2 className="text-xl font-bold text-slate-900 dark:text-ink-100 mb-6">Technical Specifications</h2>
+                        <SpecManager product={product} />
+                    </div>
+                </div>
+            )}
 
             {/* ── Record Movement Slide-over ──────────────────────────────────── */}
             {can?.recordMovement && (
@@ -482,15 +511,16 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                 Record Stock Movement
                             </SheetTitle>
                             <SheetDescription className="text-xs text-slate-500 dark:text-ink-400">
-                                <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">{product.sku}</span>
-                                {' — '}{product.name}
+                                <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">
+                                    {selectedVariant ? selectedVariant.sku : product.sku}
+                                </span>
+                                {' — '}{product.name} {selectedVariant ? ` (${selectedVariant.name})` : ''}
                             </SheetDescription>
                         </SheetHeader>
 
                         <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
                             <div className="flex-1 overflow-y-auto pr-1 min-h-0 space-y-5">
-
-                                {/* ── Movement Type Selector ─────────────────── */}
+                                {/* Movement Type Selector */}
                                 <div>
                                     <InputLabel value="Movement Type" className="text-slate-700 dark:text-ink-200 font-semibold mb-2" />
                                     <div className="grid grid-cols-3 gap-2">
@@ -517,7 +547,7 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                     <InputError message={errors.type} className="mt-1.5 text-xs text-rose-500" />
                                 </div>
 
-                                {/* ── Location ──────────────────────────────── */}
+                                {/* Location */}
                                 <div>
                                     <InputLabel htmlFor="location_id" value="Location" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                     <select
@@ -536,28 +566,7 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                     <InputError message={errors.location_id} className="mt-1.5 text-xs text-rose-500" />
                                 </div>
 
-                                {/* ── Variant (Optional) ───────────────────── */}
-                                {product.variants && product.variants.length > 0 && (
-                                    <div>
-                                        <InputLabel htmlFor="variant_id" value="Variant (Optional)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
-                                        <select
-                                            id="variant_id"
-                                            value={data.variant_id}
-                                            onChange={(e) => setData('variant_id', e.target.value)}
-                                            className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
-                                        >
-                                            <option value="">Base Product (No specific variant)</option>
-                                            {product.variants.map((v) => (
-                                                <option key={v.id} value={v.id}>
-                                                    {v.name} ({v.sku})
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <InputError message={errors.variant_id} className="mt-1.5 text-xs text-rose-500" />
-                                    </div>
-                                )}
-
-                                {/* ── Quantity ──────────────────────────────── */}
+                                {/* Quantity */}
                                 <div>
                                     <InputLabel htmlFor="quantity" value={activeType.qtyLabel} className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                     <TextInput
@@ -570,7 +579,6 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                         placeholder={data.type === 'adjust' ? 'e.g. 5 or -3' : 'e.g. 50'}
                                         className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
                                     />
-                                    {/* Context-aware hint */}
                                     {activeType.qtyHint && (
                                         <p className={`text-[11px] mt-1.5 leading-snug ${
                                             data.type === 'out'
@@ -583,7 +591,7 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                     <InputError message={errors.quantity} className="mt-1.5 text-xs text-rose-500" />
                                 </div>
 
-                                {/* ── Reference Source ──────────────────────── */}
+                                {/* Reference Source */}
                                 <div>
                                     <InputLabel htmlFor="reference_source" value="Reference Source (optional)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                     <TextInput
@@ -597,7 +605,7 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                     <InputError message={errors.reference_source} className="mt-1.5 text-xs text-rose-500" />
                                 </div>
 
-                                {/* ── Notes ─────────────────────────────────── */}
+                                {/* Notes */}
                                 <div>
                                     <InputLabel htmlFor="note" value="Notes (optional)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                     <textarea
@@ -612,7 +620,7 @@ export default function Show({ product, stockLevels, movements, movementFilters 
                                 </div>
                             </div>
 
-                            {/* ── Footer ────────────────────────────────────── */}
+                            {/* Footer */}
                             <div className="border-t border-slate-100 dark:border-ink-700/50 pt-4 mt-4 flex gap-3">
                                 <Button
                                     type="button"

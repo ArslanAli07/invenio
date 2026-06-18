@@ -45,4 +45,22 @@ class StoreMovementRequest extends FormRequest
             'note.max'             => 'Notes must not exceed 500 characters.',
         ];
     }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $product = $this->route('product');
+            $variantId = $this->input('variant_id');
+
+            if ($product) {
+                $hasVariants = $product->variants()->exists();
+                if ($hasVariants && empty($variantId)) {
+                    $validator->errors()->add('variant_id', 'The variant field is required when the product has variants.');
+                }
+                if (!$hasVariants && !empty($variantId)) {
+                    $validator->errors()->add('variant_id', 'The selected product does not have variants.');
+                }
+            }
+        });
+    }
 }

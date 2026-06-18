@@ -27,6 +27,7 @@ class StorePurchaseOrderRequest extends FormRequest
             // Line items — at least one row required
             'items'                  => ['required', 'array', 'min:1'],
             'items.*.product_id'     => ['required', 'integer', 'exists:products,id'],
+            'items.*.variant_id'     => ['nullable', 'integer', 'exists:product_variants,id'],
             'items.*.qty_ordered'    => ['required', 'numeric', 'min:0.001'],
             'items.*.unit_cost'      => ['required', 'numeric', 'min:0'],
         ];
@@ -44,10 +45,38 @@ class StorePurchaseOrderRequest extends FormRequest
             'items.min'                      => 'At least one line item is required.',
             'items.*.product_id.required'    => 'Each line item must have a product.',
             'items.*.product_id.exists'      => 'One or more selected products do not exist.',
+            'items.*.variant_id.exists'      => 'One or more selected variants do not exist.',
             'items.*.qty_ordered.required'   => 'Quantity is required for each line item.',
             'items.*.qty_ordered.min'        => 'Quantity must be greater than zero.',
             'items.*.unit_cost.required'     => 'Unit cost is required for each line item.',
             'items.*.unit_cost.min'          => 'Unit cost cannot be negative.',
         ];
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $items = $this->input('items', []);
+            if (is_array($items)) {
+                foreach ($items as $index => $item) {
+                    $productId = $item['product_id'] ?? null;
+                    $variantId = $item['variant_id'] ?? null;
+                    
+                    if ($productId) {
+                        $product = \App\Models\Product::with('variants')->find($productId);
+                        if ($product) {
+                            $hasVariants = $product->variants->isNotEmpty();
+                            
+                            if ($hasVariants && empty($variantId)) {
+                                $validator->errors()->add("items.{$index}.variant_id", 'The variant field is required when the selected product has variants.');
+                            }
+                            if (!$hasVariants && !empty($variantId)) {
+                                $validator->errors()->add("items.{$index}.variant_id", 'The selected product does not have variants.');
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 }

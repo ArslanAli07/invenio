@@ -38,7 +38,7 @@ class CategoryController extends Controller
             ->withQueryString();
 
         return Inertia::render('Categories/Index', [
-            'categories' => $categories,
+            'brands' => $categories,
             'filters' => $request->only(['search', 'status']),
             'can' => [
                 'create' => $request->user()->can('create', Category::class),
@@ -59,7 +59,7 @@ class CategoryController extends Controller
         Category::create($validated);
 
         return redirect()->route('categories.index')
-            ->with('success', 'Category created successfully.');
+            ->with('success', 'Brand created successfully.');
     }
 
     /**
@@ -73,7 +73,7 @@ class CategoryController extends Controller
         $category->update($validated);
 
         return redirect()->route('categories.index')
-            ->with('success', 'Category updated successfully.');
+            ->with('success', 'Brand updated successfully.');
     }
 
     /**
@@ -86,12 +86,12 @@ class CategoryController extends Controller
         // Check if there are products in this category
         if ($category->products()->exists()) {
             return redirect()->route('categories.index')
-                ->with('error', 'Cannot delete category: it has active products.');
+                ->with('error', 'Cannot delete brand: it has active products.');
         }
 
         $category->delete();
 
         return redirect()->route('categories.index')
-            ->with('success', 'Category deleted successfully.');
+            ->with('success', 'Brand deleted successfully.');
     }
 }

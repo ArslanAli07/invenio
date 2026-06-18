@@ -5,12 +5,20 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    if (auth()->check()) {
-        return redirect()->route('dashboard');
-    }
-    return redirect()->route('login');
-});
+// Public Storefront Routes
+Route::get('/', [App\Http\Controllers\PublicController::class, 'home'])->name('public.home');
+Route::get('/store', [App\Http\Controllers\PublicController::class, 'store'])->name('public.store.index');
+Route::get('/store/category/{category_slug}', [App\Http\Controllers\PublicController::class, 'category'])->name('public.store.category');
+Route::get('/store/category/{category_slug}/{product_slug}', [App\Http\Controllers\PublicController::class, 'product'])->name('public.store.product');
+
+Route::get('/about', [App\Http\Controllers\PublicController::class, 'about'])->name('public.about');
+Route::get('/contact', [App\Http\Controllers\PublicController::class, 'contact'])->name('public.contact');
+
+// Cart & Checkout
+Route::get('/cart', [App\Http\Controllers\CheckoutController::class, 'cart'])->name('public.cart');
+Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'checkout'])->name('public.checkout');
+Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'store'])->name('public.checkout.store');
+Route::get('/order/confirmation/{order_number}', [App\Http\Controllers\CheckoutController::class, 'success'])->name('public.checkout.success');
 
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -24,20 +32,20 @@ Route::middleware('auth')->group(function () {
     // Categories Routes
     Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->middleware('role:admin,manager,staff')->name('categories.index');
     Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->middleware('role:admin,manager')->name('categories.store');
-    Route::put('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'update'])->middleware('role:admin,manager')->name('categories.update');
-    Route::delete('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->middleware('role:admin,manager')->name('categories.destroy');
+    Route::put('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'update'])->middleware('role:admin,manager')->whereNumber('category')->name('categories.update');
+    Route::delete('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->middleware('role:admin,manager')->whereNumber('category')->name('categories.destroy');
 
     // Locations Routes
     Route::get('/locations', [\App\Http\Controllers\LocationController::class, 'index'])->middleware('role:admin,manager,staff')->name('locations.index');
     Route::post('/locations', [\App\Http\Controllers\LocationController::class, 'store'])->middleware('role:admin,manager')->name('locations.store');
-    Route::put('/locations/{location}', [\App\Http\Controllers\LocationController::class, 'update'])->middleware('role:admin,manager')->name('locations.update');
-    Route::delete('/locations/{location}', [\App\Http\Controllers\LocationController::class, 'destroy'])->middleware('role:admin,manager')->name('locations.destroy');
+    Route::put('/locations/{location}', [\App\Http\Controllers\LocationController::class, 'update'])->middleware('role:admin,manager')->whereNumber('location')->name('locations.update');
+    Route::delete('/locations/{location}', [\App\Http\Controllers\LocationController::class, 'destroy'])->middleware('role:admin,manager')->whereNumber('location')->name('locations.destroy');
 
     // Suppliers Routes
     Route::get('/suppliers', [\App\Http\Controllers\SupplierController::class, 'index'])->middleware('role:admin,manager,staff')->name('suppliers.index');
     Route::post('/suppliers', [\App\Http\Controllers\SupplierController::class, 'store'])->middleware('role:admin,manager')->name('suppliers.store');
-    Route::put('/suppliers/{supplier}', [\App\Http\Controllers\SupplierController::class, 'update'])->middleware('role:admin,manager')->name('suppliers.update');
-    Route::delete('/suppliers/{supplier}', [\App\Http\Controllers\SupplierController::class, 'destroy'])->middleware('role:admin,manager')->name('suppliers.destroy');
+    Route::put('/suppliers/{supplier}', [\App\Http\Controllers\SupplierController::class, 'update'])->middleware('role:admin,manager')->whereNumber('supplier')->name('suppliers.update');
+    Route::delete('/suppliers/{supplier}', [\App\Http\Controllers\SupplierController::class, 'destroy'])->middleware('role:admin,manager')->whereNumber('supplier')->name('suppliers.destroy');
 
     // Products Routes
     Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index'])->middleware('role:admin,manager,staff')->name('products.index');
@@ -58,6 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/products/{product}/variants/{variant}', [\App\Http\Controllers\ProductVariantController::class, 'destroy'])->middleware('role:admin,manager')->name('products.variants.destroy');
 
     // Product Specs
+    Route::put('/products/{product}/specs/bulk', [\App\Http\Controllers\ProductSpecController::class, 'bulkUpdate'])->middleware('role:admin,manager')->name('products.specs.bulk');
     Route::post('/products/{product}/specs', [\App\Http\Controllers\ProductSpecController::class, 'store'])->middleware('role:admin,manager')->name('products.specs.store');
     Route::put('/products/{product}/specs/{spec}', [\App\Http\Controllers\ProductSpecController::class, 'update'])->middleware('role:admin,manager')->name('products.specs.update');
     Route::delete('/products/{product}/specs/{spec}', [\App\Http\Controllers\ProductSpecController::class, 'destroy'])->middleware('role:admin,manager')->name('products.specs.destroy');
@@ -92,6 +101,7 @@ Route::middleware('auth')->group(function () {
     // Customer Order Routes
     Route::get('/orders', [\App\Http\Controllers\CustomerOrderController::class, 'index'])->middleware('role:admin,manager,staff')->name('orders.index');
     Route::get('/orders/{order}', [\App\Http\Controllers\CustomerOrderController::class, 'show'])->middleware('role:admin,manager,staff')->name('orders.show');
+    Route::get('/orders/{order}/invoice', [\App\Http\Controllers\CustomerOrderController::class, 'invoice'])->middleware('role:admin,manager,staff')->name('orders.invoice');
     Route::patch('/orders/{order}/status', [\App\Http\Controllers\CustomerOrderController::class, 'updateStatus'])->middleware('role:admin,manager')->name('orders.update-status');
     Route::post('/orders/{order}/cancel', [\App\Http\Controllers\CustomerOrderController::class, 'cancel'])->middleware('role:admin,manager')->name('orders.cancel');
 

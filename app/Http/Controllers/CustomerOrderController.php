@@ -72,6 +72,20 @@ class CustomerOrderController extends Controller
     }
 
     /**
+     * Display the printable invoice for the customer order.
+     */
+    public function invoice(Request $request, CustomerOrder $order)
+    {
+        Gate::authorize('view', $order);
+
+        $order->load(['fulfillingLocation', 'cancelledBy', 'items.product', 'items.variant']);
+
+        return Inertia::render('CustomerOrders/Invoice', [
+            'order' => $order,
+        ]);
+    }
+
+    /**
      * Advance the order status.
      */
     public function updateStatus(Request $request, CustomerOrder $order)

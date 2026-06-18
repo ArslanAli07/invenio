@@ -26,13 +26,12 @@ import {
 } from 'lucide-react';
 import ProductForm from './Partials/ProductForm';
 
-export default function Index({ products, categories, filters, can }) {
+export default function Index({ products, brands, filters, can }) {
     const [search, setSearch] = useState(filters.search || '');
     const [categoryId, setCategoryId] = useState(filters.category_id || '');
     const [status, setStatus] = useState(filters.status || 'all');
     
     const [isOpen, setIsOpen] = useState(false);
-    const [editingProduct, setEditingProduct] = useState(null);
 
     const handleFilterChange = (newSearch, newCatId, newStatus) => {
         router.get(route('products.index'), {
@@ -51,12 +50,6 @@ export default function Index({ products, categories, filters, can }) {
     };
 
     const openCreateSheet = () => {
-        setEditingProduct(null);
-        setIsOpen(true);
-    };
-
-    const openEditSheet = (product) => {
-        setEditingProduct(product);
         setIsOpen(true);
     };
 
@@ -115,8 +108,8 @@ export default function Index({ products, categories, filters, can }) {
                             }}
                             className="w-full sm:w-48 px-3 py-2.5 bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 dark:text-ink-200 text-sm focus:border-blue-500 focus:ring-blue-500 rounded-xl"
                         >
-                            <option value="">All Categories</option>
-                            {categories.map((cat) => (
+                            <option value="">All Brands</option>
+                            {brands.map((cat) => (
                                 <option key={cat.id} value={cat.id}>{cat.name}</option>
                             ))}
                         </select>
@@ -142,19 +135,19 @@ export default function Index({ products, categories, filters, can }) {
                     <table className="w-full text-left border-collapse min-w-[900px]">
                         <thead>
                             <tr className="bg-slate-50/75 dark:bg-ink-800/50 border-b border-slate-200 dark:border-ink-700 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-ink-400 sticky top-0 z-10">
-                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300">Product</th>
-                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300">SKU</th>
-                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300 text-right">Price</th>
-                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300 text-right">Stock</th>
-                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300 text-center">Status</th>
-                                <th className="pb-3 font-semibold text-slate-600 dark:text-ink-300 text-right">Actions</th>
+                                <th className="px-6 py-4 font-semibold text-slate-500 dark:text-ink-400 w-[30%]">Product</th>
+                                <th className="px-6 py-4 font-semibold text-slate-500 dark:text-ink-400 w-[15%]">SKU</th>
+                                <th className="px-6 py-4 font-semibold text-slate-500 dark:text-ink-400 text-right w-[15%]">Price</th>
+                                <th className="px-6 py-4 font-semibold text-slate-500 dark:text-ink-400 text-right w-[15%]">Stock</th>
+                                <th className="px-6 py-4 font-semibold text-slate-500 dark:text-ink-400 text-center w-[15%]">Status</th>
+                                <th className="px-6 py-4 font-semibold text-slate-600 dark:text-ink-300 text-right w-[10%]">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-ink-750">
                             {products.data.length > 0 ? (
                                 products.data.map((product) => (
                                     <tr key={product.id} className="hover:bg-slate-50/50 dark:hover:bg-ink-800/40 transition-colors">
-                                        <td className="py-4 align-top">
+                                        <td className="px-6 py-4 align-top">
                                             <div className="flex items-center gap-3">
                                                 {product.primary_image && product.primary_image.length > 0 ? (
                                                     <img src={`/storage/${product.primary_image[0].path}`} alt={product.name} className="w-10 h-10 rounded-lg object-cover border border-slate-200 dark:border-ink-700 shadow-sm shrink-0" />
@@ -169,12 +162,12 @@ export default function Index({ products, categories, filters, can }) {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-4 align-top">
+                                        <td className="px-6 py-4 align-top">
                                             <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-1 rounded border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
                                                 {product.sku}
                                             </span>
                                         </td>
-                                        <td className="py-4 align-top text-right">
+                                        <td className="px-6 py-4 align-top text-right">
                                             <div className="font-medium text-slate-900 dark:text-ink-100">
                                                 {product.price ? `Rs ${product.price}` : '-'}
                                             </div>
@@ -182,12 +175,12 @@ export default function Index({ products, categories, filters, can }) {
                                                 <div className="text-[10px] text-slate-500 uppercase mt-0.5">{product.variants.length} Variants</div>
                                             )}
                                         </td>
-                                        <td className="py-4 align-top text-right">
+                                        <td className="px-6 py-4 align-top text-right">
                                             <span className="font-bold text-sm text-slate-800 dark:text-ink-200">
                                                 {product.global_stock ?? 0}
                                             </span>
                                         </td>
-                                        <td className="py-4 align-top text-center">
+                                        <td className="px-6 py-4 align-top text-center">
                                             <div className="flex flex-col items-center gap-1.5">
                                                 <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
                                                     product.is_active 
@@ -209,20 +202,10 @@ export default function Index({ products, categories, filters, can }) {
                                                 <Link
                                                     href={route('products.show', product.id)}
                                                     className="inline-flex items-center justify-center p-2 hover:bg-slate-100 dark:hover:bg-ink-750 text-slate-600 dark:text-ink-400 rounded-xl transition-colors"
-                                                    title="View stock breakdown"
+                                                    title="Manage Product"
                                                 >
-                                                    <Eye className="h-4 w-4" />
+                                                    <Edit2 className="h-4 w-4" />
                                                 </Link>
-                                                {can.update && (
-                                                    <Button 
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        onClick={() => openEditSheet(product)}
-                                                        className="hover:bg-slate-100 dark:hover:bg-ink-750 text-slate-600 dark:text-ink-400 rounded-xl"
-                                                    >
-                                                        <Edit2 className="h-4 w-4" />
-                                                    </Button>
-                                                )}
                                                 {can.delete && (
                                                     <Button
                                                         variant="ghost"
@@ -319,16 +302,15 @@ export default function Index({ products, categories, filters, can }) {
                 <SheetContent side="right" className="w-full sm:max-w-md bg-white dark:bg-ink-900 p-6 border-l border-slate-200 dark:border-ink-700 shadow-2xl flex flex-col h-full overflow-hidden z-50">
                     <SheetHeader className="mb-6">
                         <SheetTitle className="text-lg font-bold text-slate-900 dark:text-ink-100">
-                            {editingProduct ? 'Edit Product' : 'Add Product'}
+                            Add Product
                         </SheetTitle>
                         <SheetDescription className="text-xs text-slate-500">
-                            Draft a new item in the catalog. Includes instant blur SKU validation checks.
+                            Create a new product. You can add images, variants, and details after creation.
                         </SheetDescription>
                     </SheetHeader>
 
                     <ProductForm 
-                        product={editingProduct} 
-                        categories={categories} 
+                        brands={brands} 
                         onSuccess={handleSuccess} 
                         onCancel={() => setIsOpen(false)} 
                     />

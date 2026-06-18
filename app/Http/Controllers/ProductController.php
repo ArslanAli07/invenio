@@ -85,7 +85,7 @@ class ProductController extends Controller
 
         return Inertia::render('Products/Index', [
             'products' => $products,
-            'categories' => $categories,
+            'brands' => $categories,
             'filters' => $request->only(['search', 'category_id', 'status']),
             'can' => [
                 'create' => $request->user()->can('create', Product::class),
@@ -104,10 +104,10 @@ class ProductController extends Controller
         $validated['is_active'] = $request->input('is_active', true);
         $validated['show_on_store'] = $request->input('show_on_store', false);
 
-        Product::create($validated);
+        $product = Product::create($validated);
 
-        return redirect()->route('products.index')
-            ->with('success', 'Product created successfully.');
+        return redirect()->route('products.show', $product->id)
+            ->with('success', 'Product created successfully. You can now add photos and details.');
     }
 
     /**
@@ -150,6 +150,16 @@ class ProductController extends Controller
             }
         }
 
+        // Attach total stock per variant for the Variants table display
+        if ($product->variants->isNotEmpty()) {
+            $product->variants->transform(function ($variant) use ($stockLevels) {
+                $variant->global_stock = collect($stockLevels)
+                    ->where('variant_id', $variant->id)
+                    ->sum('current_stock');
+                return $variant;
+            });
+        }
+
         // Filtered, paginated movement history
         $movements = StockLedger::where('product_id', $product->id)
             ->when($request->filled('filter_location'), fn ($q) =>
@@ -164,6 +174,9 @@ class ProductController extends Controller
             ->when($request->filled('filter_to'), fn ($q) =>
                 $q->whereDate('created_at', '<=', $request->filter_to)
             )
+            ->when($request->filled('filter_variant'), fn ($q) =>
+                $q->where('variant_id', $request->filter_variant)
+            )
             ->with(['location', 'user', 'variant'])
             ->orderBy('created_at', 'desc')
             ->paginate(15)
@@ -171,9 +184,10 @@ class ProductController extends Controller
 
         return Inertia::render('Products/Show', [
             'product'         => $product,
+            'categories'      => \App\Models\Category::orderBy('name')->get(),
             'stockLevels'     => $stockLevels,
             'movements'       => $movements,
-            'movementFilters' => $request->only(['filter_location', 'filter_type', 'filter_from', 'filter_to']),
+            'movementFilters' => $request->only(['filter_location', 'filter_type', 'filter_from', 'filter_to', 'filter_variant']),
             'can'             => [
                 'recordMovement' => $request->user()->can('update', $product),
             ],

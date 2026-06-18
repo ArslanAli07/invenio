@@ -64,7 +64,7 @@ const STATUS_CONFIG = {
 };
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
-const fmt   = (n) => parseFloat(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmt   = (n) => 'Rs ' + parseFloat(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtQty = (n) => parseFloat(n || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 3 });
 const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 
@@ -547,6 +547,11 @@ export default function Show({ purchaseOrder, can }) {
                                                 <span className="text-sm font-semibold text-slate-800 dark:text-ink-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                                     {item.product?.name}
                                                 </span>
+                                                {item.variant && (
+                                                    <span className="block text-[11px] text-slate-500 dark:text-ink-400 mt-0.5 font-medium">
+                                                        {item.variant.name}
+                                                    </span>
+                                                )}
                                                 <span className="block text-[10px] text-slate-400 dark:text-ink-500 mt-0.5 uppercase font-semibold">
                                                     {item.product?.unit}
                                                 </span>

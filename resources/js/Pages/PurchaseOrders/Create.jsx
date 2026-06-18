@@ -12,11 +12,10 @@ import {
     Building2,
     MapPin,
     Package,
-    DollarSign,
 } from 'lucide-react';
 
 // Blank line-item template
-const blankItem = () => ({ product_id: '', qty_ordered: '', unit_cost: '' });
+const blankItem = () => ({ product_id: '', variant_id: '', qty_ordered: '', unit_cost: '' });
 
 export default function Create({ suppliers, locations, products }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -51,10 +50,10 @@ export default function Create({ suppliers, locations, products }) {
 
     const grandTotal = data.items.reduce((sum, item) => sum + lineTotal(item), 0);
 
-    const fmt = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmt = (n) => 'Rs ' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     // ── Product lookup ─────────────────────────────────────────────────────
-    const productById = (id) => products.find((p) => p.id === parseInt(id));
+    const productById = (id) => products.find((p) => p.id.toString() === (id || '').toString());
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -201,19 +200,46 @@ export default function Create({ suppliers, locations, products }) {
                                         <tr key={idx} className="group">
                                             {/* Product select */}
                                             <td className="px-4 py-3">
-                                                <select
-                                                    value={item.product_id}
-                                                    onChange={(e) => updateItem(idx, 'product_id', e.target.value)}
-                                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 text-sm rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
-                                                >
-                                                    <option value="">Select product…</option>
-                                                    {products.map((p) => (
-                                                        <option key={p.id} value={p.id}>
-                                                            {p.sku} — {p.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                                <InputError message={errors[`items.${idx}.product_id`]} className="mt-1 text-[11px] text-rose-500" />
+                                                <div className="flex flex-col gap-2">
+                                                    <div>
+                                                        <select
+                                                            value={item.product_id}
+                                                            onChange={(e) => {
+                                                                const updated = data.items.map((item, i) =>
+                                                                    i === idx ? { ...item, product_id: e.target.value, variant_id: '' } : item
+                                                                );
+                                                                setData('items', updated);
+                                                            }}
+                                                            className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 text-sm rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                                                        >
+                                                            <option value="">Select product…</option>
+                                                            {products.map((p) => (
+                                                                <option key={p.id} value={p.id}>
+                                                                    {p.sku} — {p.name}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                        <InputError message={errors[`items.${idx}.product_id`]} className="mt-1 text-[11px] text-rose-500" />
+                                                    </div>
+                                                    
+                                                    {prod && prod.variants && prod.variants.length > 0 && (
+                                                        <div>
+                                                            <select
+                                                                value={item.variant_id || ''}
+                                                                onChange={(e) => updateItem(idx, 'variant_id', e.target.value)}
+                                                                className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                                                            >
+                                                                <option value="">Select variant…</option>
+                                                                {prod.variants.map((v) => (
+                                                                    <option key={v.id} value={v.id}>
+                                                                        {v.name}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                            <InputError message={errors[`items.${idx}.variant_id`]} className="mt-1 text-[11px] text-rose-500" />
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </td>
 
                                             {/* Qty ordered */}
@@ -238,7 +264,7 @@ export default function Create({ suppliers, locations, products }) {
                                             {/* Unit cost */}
                                             <td className="px-4 py-3">
                                                 <div className="relative">
-                                                    <DollarSign className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400">Rs</span>
                                                     <input
                                                         type="number"
                                                         min="0"
@@ -246,7 +272,7 @@ export default function Create({ suppliers, locations, products }) {
                                                         value={item.unit_cost}
                                                         onChange={(e) => updateItem(idx, 'unit_cost', e.target.value)}
                                                         placeholder="0.00"
-                                                        className="block w-full pl-7 bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 text-sm rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                                                        className="block w-full pl-8 bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 text-sm rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
                                                     />
                                                 </div>
                                                 <InputError message={errors[`items.${idx}.unit_cost`]} className="mt-1 text-[11px] text-rose-500" />

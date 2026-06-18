@@ -56,7 +56,7 @@ export default function AuthenticatedLayout({ header, children }) {
     const navigation = [
         { name: 'Dashboard',       href: route('dashboard'),          icon: LayoutDashboard, active: route().current('dashboard'),      roles: ['admin','manager','staff','supplier'] },
         { name: 'Products',        href: route('products.index'),     icon: Package,         active: route().current('products.*'),     roles: ['admin','manager','staff'] },
-        { name: 'Categories',      href: route('categories.index'),   icon: Boxes,           active: route().current('categories.*'),   roles: ['admin','manager','staff'] },
+        { name: 'Brands',          href: route('categories.index'),   icon: Boxes,           active: route().current('categories.*'),   roles: ['admin','manager','staff'] },
         { name: 'Locations',       href: route('locations.index'),    icon: MapPin,          active: route().current('locations.*'),    roles: ['admin','manager','staff'] },
         { name: 'Suppliers',       href: route('suppliers.index'),    icon: UserCheck,       active: route().current('suppliers.*'),    roles: ['admin','manager','staff'] },
         { name: 'Purchase Orders', href: route('po.index'),           icon: ClipboardList,   active: route().current('po.*'),           roles: ['admin','manager','staff','supplier'] },
@@ -176,7 +176,7 @@ export default function AuthenticatedLayout({ header, children }) {
             <div className="flex flex-1 pt-16 relative">
 
                 {/* Desktop Sidebar (240px) */}
-                <aside className="hidden lg:flex flex-col w-60 border-r border-slate-200 dark:border-ink-750 bg-white dark:bg-ink-900 fixed top-16 bottom-0 left-0 z-30 transition-colors duration-200">
+                <aside className="hidden lg:flex flex-col w-60 border-r border-slate-200 dark:border-ink-750 bg-white dark:bg-ink-900 fixed top-16 bottom-0 left-0 z-30 transition-colors duration-200 overflow-y-auto">
                     <nav className="flex-1 p-4 space-y-1">
                         {navigation.map((item) => {
                             const Icon = item.icon;
@@ -199,7 +199,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 </aside>
 
                 {/* Tablet Sidebar (64px icon-only) */}
-                <aside className="hidden md:flex lg:hidden flex-col w-16 border-r border-slate-200 dark:border-ink-750 bg-white dark:bg-ink-900 fixed top-16 bottom-0 left-0 z-30 items-center py-4 space-y-4 transition-colors duration-200">
+                <aside className="hidden md:flex lg:hidden flex-col w-16 border-r border-slate-200 dark:border-ink-750 bg-white dark:bg-ink-900 fixed top-16 bottom-0 left-0 z-30 items-center py-4 space-y-4 transition-colors duration-200 overflow-y-auto">
                     {navigation.map((item) => {
                         const Icon = item.icon;
                         return (
@@ -236,7 +236,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <X className="h-5 w-5" />
                                 </button>
                             </div>
-                            <nav className="flex-1 space-y-1.5">
+                            <nav className="flex-1 space-y-1.5 overflow-y-auto">
                                 {navigation.map((item) => {
                                     const Icon = item.icon;
                                     return (
@@ -280,7 +280,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         const Icon = item.icon;
                         const label = item.name === 'Purchase Orders' ? 'Orders' :
                                       item.name === 'Dashboard' ? 'Home' :
-                                      item.name === 'Categories' ? 'Categories' :
+                                      item.name === 'Brands' ? 'Brands' :
                                       item.name === 'Stock Transfers' ? 'Transfers' :
                                       item.name;
                         return (

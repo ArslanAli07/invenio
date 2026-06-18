@@ -93,8 +93,6 @@ class StockLedger extends Model
 
             if ($variantId !== null) {
                 $query->where('variant_id', $variantId);
-            } else {
-                $query->whereNull('variant_id');
             }
 
             $result = $query->selectRaw(

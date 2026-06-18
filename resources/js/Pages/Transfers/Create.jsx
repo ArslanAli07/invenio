@@ -10,6 +10,7 @@ import { ArrowLeft, ArrowRightLeft, Package, MapPin } from 'lucide-react';
 export default function Create({ products, locations }) {
     const { data, setData, post, processing, errors } = useForm({
         product_id: '',
+        variant_id: '',
         from_location_id: '',
         to_location_id: '',
         quantity: '',
@@ -20,30 +21,52 @@ export default function Create({ products, locations }) {
     const [availableLocations, setAvailableLocations] = useState([]);
     const [availableStock, setAvailableStock] = useState(0);
 
+    // Helper to get the correct stock map (either product level or variant level)
+    const getStockMap = () => {
+        if (!selectedProduct) return {};
+        if (selectedProduct.has_variants) {
+            if (!data.variant_id) return {};
+            const variant = selectedProduct.variants.find(v => v.id.toString() === data.variant_id.toString());
+            return variant ? variant.stocks : {};
+        }
+        return selectedProduct.stocks;
+    };
+
     // Watch product selection
     useEffect(() => {
         if (data.product_id) {
-            const prod = products.find(p => p.id === parseInt(data.product_id));
+            const prod = products.find(p => p.id.toString() === data.product_id.toString());
             setSelectedProduct(prod);
-            // Reset locations and qty on product change
-            setData(prev => ({
-                ...prev,
-                from_location_id: '',
-                to_location_id: '',
-                quantity: '',
-            }));
-            setAvailableStock(0);
         } else {
             setSelectedProduct(null);
-            setAvailableStock(0);
         }
+        setData(prev => ({
+            ...prev,
+            variant_id: '',
+            from_location_id: '',
+            to_location_id: '',
+            quantity: '',
+        }));
+        setAvailableStock(0);
     }, [data.product_id]);
+
+    // Watch variant selection
+    useEffect(() => {
+        setData(prev => ({
+            ...prev,
+            from_location_id: '',
+            to_location_id: '',
+            quantity: '',
+        }));
+        setAvailableStock(0);
+    }, [data.variant_id]);
 
     // Watch source location selection
     useEffect(() => {
         if (data.from_location_id && selectedProduct) {
             const locId = parseInt(data.from_location_id);
-            const stock = parseFloat(selectedProduct.stocks[locId] || 0);
+            const stockMap = getStockMap();
+            const stock = parseFloat(stockMap[locId] || 0);
             setAvailableStock(stock);
             
             // Destination locations are active locations excluding the source location
@@ -53,16 +76,17 @@ export default function Create({ products, locations }) {
             setAvailableStock(0);
             setAvailableLocations([]);
         }
-    }, [data.from_location_id, selectedProduct]);
+    }, [data.from_location_id, selectedProduct, data.variant_id]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route('transfers.store'));
     };
 
-    // Helper to filter locations that have positive stock for the selected product
-    const sourceLocations = selectedProduct
-        ? locations.filter(l => parseFloat(selectedProduct.stocks[l.id] || 0) > 0)
+    // Helper to filter locations that have positive stock for the selected product/variant
+    const stockMap = getStockMap();
+    const sourceLocations = selectedProduct && (!selectedProduct.has_variants || data.variant_id)
+        ? locations.filter(l => parseFloat(stockMap[l.id] || 0) > 0)
         : [];
 
     return (
@@ -112,8 +136,29 @@ export default function Create({ products, locations }) {
                             <InputError message={errors.product_id} className="mt-1.5 text-xs text-rose-500" />
                         </div>
 
-                        {/* If product is selected, show location and qty inputs */}
-                        {selectedProduct && (
+                        {/* Variant select (only if product has variants) */}
+                        {selectedProduct && selectedProduct.has_variants && (
+                            <div>
+                                <InputLabel htmlFor="variant_id" value="Select Variant" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                <select
+                                    id="variant_id"
+                                    value={data.variant_id}
+                                    onChange={(e) => setData('variant_id', e.target.value)}
+                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-3 text-sm cursor-pointer"
+                                >
+                                    <option value="">Select a variant...</option>
+                                    {selectedProduct.variants.map((v) => (
+                                        <option key={v.id} value={v.id}>
+                                            {v.name} ({v.sku})
+                                        </option>
+                                    ))}
+                                </select>
+                                <InputError message={errors.variant_id} className="mt-1.5 text-xs text-rose-500" />
+                            </div>
+                        )}
+
+                        {/* If product (and optionally variant) is selected, show location and qty inputs */}
+                        {selectedProduct && (!selectedProduct.has_variants || data.variant_id) && (
                             <>
                                 <hr className="border-slate-100 dark:border-ink-750 my-4" />
 
@@ -130,7 +175,7 @@ export default function Create({ products, locations }) {
                                             >
                                                 <option value="">Select source...</option>
                                                 {sourceLocations.map((l) => {
-                                                    const stock = parseFloat(selectedProduct.stocks[l.id] || 0);
+                                                    const stock = parseFloat(stockMap[l.id] || 0);
                                                     return (
                                                         <option key={l.id} value={l.id}>
                                                             {l.name} (Available: {stock.toLocaleString()} {selectedProduct.unit})
@@ -213,7 +258,7 @@ export default function Create({ products, locations }) {
                     </div>
 
                     {/* Notes card */}
-                    {selectedProduct && data.from_location_id && (
+                    {selectedProduct && (!selectedProduct.has_variants || data.variant_id) && data.from_location_id && (
                         <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm p-6 space-y-4">
                             <div>
                                 <InputLabel htmlFor="notes" value="Transfer Notes / Description (Optional)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />

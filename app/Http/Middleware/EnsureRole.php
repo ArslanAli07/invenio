@@ -38,8 +38,7 @@ class EnsureRole
         // Check if user has any of the allowed roles
         if (! $user->hasRole(...$roles)) {
             if ($request->header('X-Inertia')) {
-                // Inertia-aware 403: return JSON so Inertia can display the error
-                return response()->json(['message' => 'Forbidden.'], 403);
+                return redirect()->back()->with('error', 'You do not have permission to perform this action.');
             }
 
             abort(403, 'You do not have permission to access this page.');

@@ -24,13 +24,13 @@ import {
     ChevronRight
 } from 'lucide-react';
 
-export default function Index({ categories, filters, can }) {
+export default function Index({ brands, filters, can }) {
     const [search, setSearch] = useState(filters.search || '');
     const [status, setStatus] = useState(filters.status || 'all');
     
     // Sheet modal states
     const [isOpen, setIsOpen] = useState(false);
-    const [editingCategory, setEditingCategory] = useState(null);
+    const [editingbrand, setEditingbrand] = useState(null);
 
     const { data, setData, post, put, delete: destroy, processing, errors, reset, clearErrors } = useForm({
         name: '',
@@ -56,17 +56,17 @@ export default function Index({ categories, filters, can }) {
     const openCreateSheet = () => {
         clearErrors();
         reset();
-        setEditingCategory(null);
+        setEditingbrand(null);
         setData({ name: '', is_active: true });
         setIsOpen(true);
     };
 
-    const openEditSheet = (category) => {
+    const openEditSheet = (brand) => {
         clearErrors();
-        setEditingCategory(category);
+        setEditingbrand(brand);
         setData({
-            name: category.name,
-            is_active: !!category.is_active
+            name: brand.name,
+            is_active: !!brand.is_active
         });
         setIsOpen(true);
     };
@@ -74,8 +74,8 @@ export default function Index({ categories, filters, can }) {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         
-        if (editingCategory) {
-            put(route('categories.update', editingCategory.id), {
+        if (editingbrand) {
+            put(route('categories.update', editingbrand.id), {
                 onSuccess: () => setIsOpen(false)
             });
         } else {
@@ -88,20 +88,20 @@ export default function Index({ categories, filters, can }) {
         }
     };
 
-    const handleDelete = (category) => {
-        if (confirm(`Are you sure you want to delete the category "${category.name}"?`)) {
-            destroy(route('categories.destroy', category.id));
+    const handleDelete = (brand) => {
+        if (confirm(`Are you sure you want to delete the brand "${brand.name}"?`)) {
+            destroy(route('categories.destroy', brand.id));
         }
     };
 
     return (
         <AuthenticatedLayout>
-            <Head title="Categories" />
+            <Head title="Brands" />
 
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-ink-100">Categories</h1>
-                    <p className="text-sm text-slate-500 dark:text-ink-400 mt-1">Manage product categories and groupings.</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-ink-100">Brands</h1>
+                    <p className="text-sm text-slate-500 dark:text-ink-400 mt-1">Manage product Brands and groupings.</p>
                 </div>
                 {can.create && (
                     <Button 
@@ -109,7 +109,7 @@ export default function Index({ categories, filters, can }) {
                         className="bg-[#1B4FD8] hover:bg-blue-700 text-white rounded-xl shadow-md flex items-center gap-2 self-start sm:self-auto"
                     >
                         <Plus className="h-4.5 w-4.5" />
-                        <span>Add Category</span>
+                        <span>Add brand</span>
                     </Button>
                 )}
             </div>
@@ -126,7 +126,7 @@ export default function Index({ categories, filters, can }) {
                                 setSearch(e.target.value);
                                 handleFilterChange(e.target.value, status);
                             }}
-                            placeholder="Search categories by name..."
+                            placeholder="Search brands by name..."
                             className="w-full pl-10 pr-4 py-2.5 bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-sm focus:border-blue-500 focus:ring-blue-500 rounded-xl"
                         />
                     </div>
@@ -148,7 +148,7 @@ export default function Index({ categories, filters, can }) {
                 </form>
             </div>
 
-            {/* Categories Table Card */}
+            {/* Brands Table Card */}
             <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm dark:shadow-ink-950/20 overflow-hidden flex-1 flex flex-col">
                 <div className="overflow-x-auto flex-1">
                     <table className="w-full text-left border-collapse min-w-[600px]">
@@ -161,19 +161,19 @@ export default function Index({ categories, filters, can }) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-ink-750">
-                            {categories.data.length > 0 ? (
-                                categories.data.map((category) => (
-                                    <tr key={category.id} className="hover:bg-slate-50/50 dark:hover:bg-ink-800/50 transition-colors">
+                            {brands.data.length > 0 ? (
+                                brands.data.map((brand) => (
+                                    <tr key={brand.id} className="hover:bg-slate-50/50 dark:hover:bg-ink-800/50 transition-colors">
                                         <td className="px-6 py-4">
-                                            <span className="font-semibold text-slate-900 dark:text-ink-100 text-sm">{category.name}</span>
+                                            <span className="font-semibold text-slate-900 dark:text-ink-100 text-sm">{brand.name}</span>
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className="inline-flex items-center bg-slate-100 dark:bg-ink-800 text-slate-700 dark:text-ink-200 px-2.5 py-0.5 rounded-full text-xs font-bold">
-                                                {category.products_count || 0} products
+                                                {brand.products_count || 0} products
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
-                                            {category.is_active ? (
+                                            {brand.is_active ? (
                                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
                                                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                                                     Active
@@ -191,7 +191,7 @@ export default function Index({ categories, filters, can }) {
                                                     <Button 
                                                         variant="ghost"
                                                         size="icon"
-                                                        onClick={() => openEditSheet(category)}
+                                                        onClick={() => openEditSheet(brand)}
                                                         className="hover:bg-slate-100 dark:hover:bg-ink-750 text-slate-600 dark:text-ink-400 rounded-xl"
                                                     >
                                                         <Edit2 className="h-4 w-4" />
@@ -201,10 +201,10 @@ export default function Index({ categories, filters, can }) {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        onClick={() => handleDelete(category)}
-                                                        disabled={category.products_count > 0}
+                                                        onClick={() => handleDelete(brand)}
+                                                        disabled={brand.products_count > 0}
                                                         className="hover:bg-red-50 dark:hover:bg-red-500/10 text-red-600 rounded-xl disabled:opacity-30 disabled:hover:bg-transparent"
-                                                        title={category.products_count > 0 ? "Cannot delete category with associated products" : "Delete category"}
+                                                        title={brand.products_count > 0 ? "Cannot delete brand with associated products" : "Delete brand"}
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
@@ -220,9 +220,9 @@ export default function Index({ categories, filters, can }) {
                                             <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-slate-500 mb-4">
                                                 <Folder className="h-8 w-8" />
                                             </div>
-                                            <h3 className="text-base font-bold text-slate-900 dark:text-ink-100">No categories found</h3>
+                                            <h3 className="text-base font-bold text-slate-900 dark:text-ink-100">No Brands found</h3>
                                             <p className="text-xs text-slate-500 dark:text-ink-400 mt-1 text-center leading-relaxed">
-                                                Try adjusting your search criteria, clearing filters, or adding a new category to get started.
+                                                Try adjusting your search criteria, clearing filters, or adding a new brand to get started.
                                             </p>
                                         </div>
                                     </td>
@@ -233,15 +233,15 @@ export default function Index({ categories, filters, can }) {
                 </div>
 
                 {/* Table Pagination */}
-                {categories.links && categories.data.length > 0 && (
-                    <div className="px-6 py-4 border-t border-slate-200 dark:border-ink-700 flex items-center justify-between bg-slate-50/50 dark:bg-ink-800/30">
-                        <span className="text-xs text-slate-500 dark:text-ink-400">
-                            Showing <span className="font-semibold text-slate-800 dark:text-ink-200">{categories.from}</span> to{' '}
-                            <span className="font-semibold text-slate-800 dark:text-ink-200">{categories.to}</span> of{' '}
-                            <span className="font-semibold text-slate-800 dark:text-ink-200">{categories.total}</span> entries
-                        </span>
-                        <div className="flex gap-1.5">
-                            {categories.links.map((link, idx) => {
+                {brands.links && brands.data.length > 0 && (
+                    <div className="px-6 py-4 border-t border-slate-200 dark:border-ink-700 bg-slate-50 dark:bg-ink-900/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div className="text-sm text-slate-500 dark:text-ink-400">
+                            Showing <span className="font-semibold text-slate-800 dark:text-ink-200">{brands.from}</span> to{' '}
+                            <span className="font-semibold text-slate-800 dark:text-ink-200">{brands.to}</span> of{' '}
+                            <span className="font-semibold text-slate-800 dark:text-ink-200">{brands.total}</span> entries
+                        </div>
+                        <div className="flex items-center space-x-1">
+                            {brands.links.map((link, idx) => {
                                 if (link.url === null) return null;
                                 
                                 // Clean up label formatting
@@ -299,19 +299,19 @@ export default function Index({ categories, filters, can }) {
                 <SheetContent side="right" className="w-full sm:max-w-md bg-white dark:bg-ink-900 p-6 border-l border-slate-200 dark:border-ink-700 shadow-2xl flex flex-col h-full overflow-hidden z-50">
                     <SheetHeader className="mb-6">
                         <SheetTitle className="text-lg font-bold text-slate-900 dark:text-ink-100">
-                            {editingCategory ? 'Edit Category' : 'Add Category'}
+                            {editingbrand ? 'Edit brand' : 'Add brand'}
                         </SheetTitle>
                         <SheetDescription className="text-xs text-slate-500">
-                            {editingCategory 
-                                ? 'Modify details of the existing product category.' 
-                                : 'Create a brand new category to group your products.'}
+                            {editingbrand 
+                                ? 'Modify details of the existing product brand.' 
+                                : 'Create a brand new brand to group your products.'}
                         </SheetDescription>
                     </SheetHeader>
 
                     <form onSubmit={handleFormSubmit} className="flex-1 flex flex-col min-h-0">
                         <div className="space-y-5 overflow-y-auto min-h-0">
                             <div>
-                                <InputLabel htmlFor="name" value="Category Name" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="name" value="brand Name" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
                                 <TextInput
                                     id="name"
                                     type="text"
@@ -336,7 +336,7 @@ export default function Index({ categories, filters, can }) {
                                     <div className="ms-3">
                                         <span className="text-sm font-semibold text-slate-900 dark:text-ink-100 block">Active Status</span>
                                         <span className="text-[11px] text-slate-500 mt-0.5 block leading-tight">
-                                            Deactivated categories will hide their products from stock-in lists.
+                                            Deactivated Brands will hide their products from stock-in lists.
                                         </span>
                                     </div>
                                 </label>
@@ -360,7 +360,7 @@ export default function Index({ categories, filters, can }) {
                                 {processing ? (
                                     <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                                 ) : (
-                                    <span>{editingCategory ? 'Save Changes' : 'Create'}</span>
+                                    <span>{editingbrand ? 'Save Changes' : 'Create'}</span>
                                 )}
                             </Button>
                         </div>
