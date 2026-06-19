@@ -58,18 +58,18 @@ export default {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))',
                 },
-                // Custom dark-mode palette — blue-black tinted surface hierarchy
+                // Custom dark-mode palette — Deep Slate standard
                 ink: {
-                    950: '#0C0E14',  // Body background
-                    900: '#10131D',  // Sidebar, header, panels
-                    800: '#171C2A',  // Cards, sheet backgrounds
-                    750: '#1D2438',  // Table headers, elevated sections
-                    700: '#252E48',  // Borders
-                    650: '#2E3A57',  // Strong borders / active dividers
-                    600: '#4A5A78',  // Dimmed icons / placeholder text
-                    400: '#8A9BB8',  // Secondary text
-                    200: '#C2CEDF',  // Primary body text
-                    100: '#D8E4F2',  // Headings / high-emphasis text
+                    950: '#020617',  // Slate 950 - Body Background
+                    900: '#0f172a',  // Slate 900 - Sidebars, headers
+                    800: '#1e293b',  // Slate 800 - Cards, elevated panels
+                    750: '#293548',  // Hover states, table headers
+                    700: '#334155',  // Subtle borders
+                    650: '#3f4f65',  // Strong borders / active dividers
+                    600: '#475569',  // Muted icons / placeholder text
+                    400: '#94a3b8',  // Secondary text
+                    200: '#e2e8f0',  // Primary body text
+                    100: '#f1f5f9',  // Headings / high-emphasis text
                 },
             },
 
