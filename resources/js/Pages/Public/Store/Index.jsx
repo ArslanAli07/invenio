@@ -79,7 +79,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search products…"
-                            className="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-ink-600 rounded-xl focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/10 dark:text-white transition-all"
+                            className="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-ink-600 rounded-xl focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10 dark:text-white transition-all"
                         />
                     </div>
                 </form>
@@ -92,7 +92,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                     <Link
                         href={route('public.store.index')}
                         onClick={() => onClose?.()}
-                        className={`flex items-center px-3 py-2 rounded-xl text-sm font-medium transition-colors ${!currentbrand ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-ink-700'}`}
+                        className={`flex items-center px-3 py-2 rounded-xl text-sm font-medium transition-colors ${!currentbrand ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-ink-700'}`}
                     >
                         All Brands
                     </Link>
@@ -101,7 +101,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                             key={cat.id}
                             href={route('public.store.category', { category_slug: cat.slug })}
                             onClick={() => onClose?.()}
-                            className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${currentbrand?.id === cat.id ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-ink-700'}`}
+                            className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${currentbrand?.id === cat.id ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-ink-700'}`}
                         >
                             <BrandLogo name={cat.name} className="h-4 w-auto" />
                             {cat.name}
@@ -139,7 +139,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                 <div className="flex flex-wrap gap-1.5">
                     {storageOptions.map(opt => (
                         <button key={opt} onClick={() => { handleFilterChange('storage', opt); }}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${storage === opt ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-50 dark:bg-ink-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-ink-600 hover:border-blue-300 hover:text-blue-600'}`}
+                            className={`px-3 py-2 rounded-xl text-sm font-medium transition-all focus:outline-none ${storage === opt ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 dark:bg-ink-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-ink-600 hover:border-indigo-300 hover:text-indigo-600'}`}
                         >{opt}</button>
                     ))}
                 </div>
@@ -151,7 +151,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                 <div className="flex flex-wrap gap-1.5">
                     {ramOptions.map(opt => (
                         <button key={opt} onClick={() => { handleFilterChange('ram', opt); }}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${ram === opt ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-50 dark:bg-ink-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-ink-600 hover:border-blue-300 hover:text-blue-600'}`}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${ram === opt ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 dark:bg-ink-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-ink-600 hover:border-indigo-300 hover:text-indigo-600'}`}
                         >{opt}</button>
                     ))}
                 </div>
@@ -170,7 +170,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
             <Head title={currentbrand ? `${currentbrand.name} | Invenio` : 'All Products | Invenio'} />
 
             {/* Page Header */}
-            <div className="bg-slate-900 border-b border-slate-800 py-10">
+            <div className="bg-slate-900 dark:bg-ink-950 border-b border-slate-800 dark:border-ink-800 py-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center text-xs text-slate-500 gap-1.5 mb-3">
                         <Link href={route('public.home')} className="hover:text-slate-300 transition-colors">Home</Link>
@@ -200,7 +200,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                     </p>
                     <button
                         onClick={() => setIsMobileFiltersOpen(true)}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-600 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 shadow-sm hover:border-blue-300 transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-600 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:border-indigo-300 transition-colors"
                     >
                         <SlidersHorizontal className="h-4 w-4" />
                         Filters
@@ -249,7 +249,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                             {/* Active filter pills */}
                             <div className="flex flex-wrap items-center gap-2">
                                 {currentbrand && (
-                                    <button onClick={() => clearFilter('brand')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20 border border-blue-200/60 dark:border-blue-500/20 transition-colors">
+                                    <button onClick={() => clearFilter('brand')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/20 border border-indigo-200/60 dark:border-indigo-500/20 transition-colors">
                                         Brand: {currentbrand.name} <X className="h-3 w-3" />
                                     </button>
                                 )}
@@ -281,7 +281,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                                 <select
                                     value={sort}
                                     onChange={handleSort}
-                                    className="text-sm border border-slate-200 dark:border-ink-600 dark:bg-ink-800 dark:text-white rounded-xl px-3 py-2 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/10 transition-all"
+                                    className="text-sm border border-slate-200 dark:border-ink-600 dark:bg-ink-800 dark:text-white rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10 transition-all"
                                 >
                                     <option value="">Newest First</option>
                                     <option value="price_asc">Price: Low to High</option>
@@ -296,7 +296,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                                 <Smartphone className="h-14 w-14 text-slate-200 dark:text-ink-600 mx-auto mb-4" />
                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">No products found</h3>
                                 <p className="text-slate-500 dark:text-slate-400 text-sm mb-5">Try adjusting your search or filters.</p>
-                                <button onClick={clearAll} className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors">
+                                <button onClick={clearAll} className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors">
                                     Clear All Filters
                                 </button>
                             </div>
@@ -312,7 +312,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                                             href={route('public.store.product', { category_slug: product.category?.slug || 'all', product_slug: product.slug })}
                                             className={`block group ${outOfStock ? 'opacity-70' : ''}`}
                                         >
-                                            <div className="bg-white dark:bg-ink-800 rounded-2xl border border-slate-100 dark:border-ink-700 overflow-hidden hover:border-blue-200 dark:hover:border-blue-700/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+                                            <div className="bg-white dark:bg-ink-800 rounded-2xl border border-slate-100 dark:border-ink-700 overflow-hidden hover:border-indigo-200 dark:hover:border-indigo-700/50 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
 
                                                 {/* Image */}
                                                 <div className="relative bg-slate-50 dark:bg-ink-900 flex items-center justify-center p-5 min-h-[180px]">
@@ -335,9 +335,9 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                                                 {/* Body */}
                                                 <div className="p-4 flex flex-col flex-1">
                                                     {product.category && (
-                                                        <p className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">{product.category.name}</p>
+                                                        <p className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-1">{product.category.name}</p>
                                                     )}
-                                                    <h3 className="text-sm font-semibold text-slate-900 dark:text-white line-clamp-2 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2 flex-1">
+                                                    <h3 className="text-sm font-semibold text-slate-900 dark:text-white line-clamp-2 leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-2 flex-1">
                                                         {product.name}
                                                     </h3>
 
@@ -348,7 +348,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                                                                 {defaultVariant.name}
                                                             </span>
                                                             {product.variants.length > 1 && (
-                                                                <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400">
+                                                                <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400">
                                                                     +{product.variants.length - 1} more
                                                                 </span>
                                                             )}
@@ -373,9 +373,8 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                                                     <button
                                                         onClick={(e) => handleAddToCart(e, product, defaultVariant)}
                                                         disabled={outOfStock}
-                                                        className="w-full h-9 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 disabled:from-slate-100 disabled:to-slate-100 disabled:text-slate-400 dark:disabled:from-ink-700 dark:disabled:to-ink-700 dark:disabled:text-ink-500 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm shadow-blue-600/20 hover:shadow-blue-500/30"
+                                                        className="w-full h-9 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-100 disabled:text-slate-400 dark:disabled:bg-ink-700 dark:disabled:text-ink-500 text-white text-xs font-semibold transition-all"
                                                     >
-                                                        <ShoppingCart className="h-3.5 w-3.5" />
                                                         {outOfStock ? 'Out of Stock' : 'Add to Cart'}
                                                     </button>
                                                 </div>
@@ -396,10 +395,10 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                                             href={link.url || '#'}
                                             className={`min-w-[38px] h-9 px-3 flex items-center justify-center rounded-xl text-sm font-medium transition-all ${
                                                 link.active
-                                                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                                                    ? 'bg-indigo-600 text-white'
                                                     : !link.url
                                                         ? 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
-                                                        : 'bg-white dark:bg-ink-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-ink-600 hover:border-blue-300 hover:text-blue-600 dark:hover:text-blue-400'
+                                                        : 'bg-white dark:bg-ink-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-ink-600 hover:border-indigo-300 hover:text-indigo-600 dark:hover:text-indigo-400'
                                             }`}
                                             dangerouslySetInnerHTML={{ __html: link.label }}
                                         />

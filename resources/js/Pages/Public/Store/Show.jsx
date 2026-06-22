@@ -179,10 +179,10 @@ export default function StoreShow({ product, relatedProducts }) {
                                             <button
                                                 key={variant.id}
                                                 onClick={() => setSelectedVariant(variant)}
-                                                className={`relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all duration-300 ${
+                                                className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ${
                                                     isSelected
-                                                        ? 'border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900 shadow-xl scale-[1.02]'
-                                                        : 'border-slate-200 dark:border-ink-700 bg-white dark:bg-ink-900 text-slate-900 dark:text-white hover:border-slate-400 dark:hover:border-ink-500'
+                                                        ? 'border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-600 shadow-sm'
+                                                        : 'border-slate-200 dark:border-ink-700 bg-white dark:bg-ink-900 text-slate-900 dark:text-white hover:border-indigo-300 dark:hover:border-indigo-700'
                                                 }`}
                                             >
                                                 <span className={`font-semibold text-sm ${isSelected ? '' : 'text-slate-700 dark:text-ink-200'}`}>
@@ -208,7 +208,7 @@ export default function StoreShow({ product, relatedProducts }) {
                                 className={`group w-full py-4 px-8 rounded-xl flex items-center justify-center font-bold text-lg transition-all ${
                                     isOutOfStock 
                                         ? 'bg-slate-100 text-slate-400 dark:bg-ink-800 dark:text-slate-500 cursor-not-allowed' 
-                                        : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transform hover:-translate-y-0.5'
+                                        : 'bg-indigo-600 hover:bg-indigo-500 text-white transform hover:-translate-y-0.5'
                                 }`}
                             >
                                 <ShoppingCart className={`h-5 w-5 mr-3 ${isOutOfStock ? '' : 'group-hover:-rotate-12 transition-transform'}`} />

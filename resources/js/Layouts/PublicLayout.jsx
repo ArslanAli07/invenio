@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, usePage } from '@inertiajs/react';
-import { ShoppingCart, Menu, X, Moon, Sun, Zap, Search, Heart } from 'lucide-react';
+import { ShoppingCart, Menu, X, Moon, Sun, Zap, Search } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import { useCart } from '@/Contexts/CartContext';
 import CartDrawer from '@/Components/CartDrawer';
@@ -52,22 +52,22 @@ export default function PublicLayout({ children }) {
             <Toaster position="top-right" toastOptions={{ style: { fontFamily: 'inherit', fontSize: '14px' } }} />
 
             {/* Top Promo Bar */}
-            <div className="bg-slate-900 text-slate-400 text-xs py-2 px-4 text-center hidden md:block">
-                <span>🎉 Free delivery on orders over <strong className="text-blue-400">Rs 3,000</strong> &nbsp;·&nbsp; 🛡️ 100% Genuine Products &nbsp;·&nbsp; 📞 0311-INVENIO</span>
+            <div className="bg-slate-900 dark:bg-ink-950 text-slate-400 text-xs py-2 px-4 text-center hidden md:block">
+                <span>🎉 Free delivery on orders over <strong className="text-indigo-400">Rs 3,000</strong> &nbsp;·&nbsp; 🛡️ 100% Genuine Products &nbsp;·&nbsp; 📞 0311-INVENIO</span>
             </div>
 
             {/* Navbar */}
-            <nav className={`bg-white dark:bg-ink-800 border-b border-slate-200 dark:border-ink-700 sticky top-0 z-50 transition-all duration-200 ${isScrolled ? 'shadow-md' : ''}`}>
+            <nav className={`bg-white dark:bg-ink-800 border-b border-slate-200 dark:border-ink-700 sticky top-0 z-50 transition-all duration-200 ${isScrolled ? 'shadow-sm' : ''}`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center h-16 gap-4">
 
                         {/* Logo */}
                         <Link href={route('public.home')} className="flex items-center gap-2.5 flex-shrink-0 group">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center shadow-sm group-hover:shadow-blue-500/30 transition-shadow">
+                            <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center transition-opacity group-hover:opacity-85">
                                 <Zap className="h-4 w-4 text-white" />
                             </div>
                             <span className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
-                                Invenio<span className="text-blue-600">.</span>
+                                Invenio<span className="text-indigo-600">.</span>
                             </span>
                         </Link>
 
@@ -77,9 +77,9 @@ export default function PublicLayout({ children }) {
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                    className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
                                         link.active
-                                            ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400'
+                                            ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400'
                                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-ink-700'
                                     }`}
                                 >
@@ -100,7 +100,7 @@ export default function PublicLayout({ children }) {
                                             window.location.href = route('public.store.index') + '?search=' + encodeURIComponent(e.target.value.trim());
                                         }
                                     }}
-                                    className="w-full h-10 pl-9 pr-4 text-sm bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-ink-600 rounded-full focus:outline-none focus:border-blue-400 focus:bg-white dark:focus:bg-ink-800 focus:ring-2 focus:ring-blue-500/10 transition-all placeholder-slate-400 dark:text-white"
+                                    className="w-full h-10 pl-9 pr-4 text-sm bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-ink-600 rounded-xl focus:outline-none focus:border-indigo-400 focus:bg-white dark:focus:bg-ink-800 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder-slate-400 dark:text-white"
                                 />
                             </div>
                         </div>
@@ -109,7 +109,7 @@ export default function PublicLayout({ children }) {
                         <div className="flex items-center gap-2 ml-auto">
                             <button
                                 onClick={toggleDarkMode}
-                                className="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-ink-700 transition-colors"
+                                className="w-9 h-9 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-ink-700 transition-colors"
                                 aria-label="Toggle dark mode"
                             >
                                 {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -117,12 +117,12 @@ export default function PublicLayout({ children }) {
 
                             <button
                                 onClick={() => setIsCartOpen(true)}
-                                className="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-ink-700 border border-slate-200 dark:border-ink-600 transition-all hover:border-blue-300 dark:hover:border-blue-600"
+                                className="relative w-9 h-9 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-ink-700 border border-slate-200 dark:border-ink-600 transition-all"
                                 aria-label="Open cart"
                             >
                                 <ShoppingCart className="h-4 w-4" />
                                 {cartCount > 0 && (
-                                    <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center h-4 w-4 rounded-full bg-blue-600 text-[10px] text-white font-bold border-2 border-white dark:border-ink-800">
+                                    <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center h-4 w-4 rounded-full bg-indigo-600 text-[10px] text-white font-bold border-2 border-white dark:border-ink-800">
                                         {cartCount > 9 ? '9+' : cartCount}
                                     </span>
                                 )}
@@ -131,7 +131,7 @@ export default function PublicLayout({ children }) {
                             {/* Mobile menu */}
                             <button
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-ink-700 transition-colors"
+                                className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-ink-700 transition-colors"
                             >
                                 {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                             </button>
@@ -155,7 +155,7 @@ export default function PublicLayout({ children }) {
                                     href={link.href}
                                     className={`flex items-center px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                                         link.active
-                                            ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400'
+                                            ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400'
                                             : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-ink-700'
                                     }`}
                                     onClick={() => setIsMobileMenuOpen(false)}
@@ -174,24 +174,24 @@ export default function PublicLayout({ children }) {
             <CartDrawer />
 
             {/* Footer */}
-            <footer className="bg-slate-900 text-slate-400 mt-16">
+            <footer className="bg-slate-900 dark:bg-ink-950 text-slate-400 mt-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
 
                         {/* Brand */}
                         <div className="md:col-span-1">
                             <div className="flex items-center gap-2.5 mb-4">
-                                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center">
+                                <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center">
                                     <Zap className="h-4 w-4 text-white" />
                                 </div>
-                                <span className="text-lg font-extrabold text-white">Invenio<span className="text-blue-400">.</span></span>
+                                <span className="text-lg font-extrabold text-white">Invenio<span className="text-indigo-400">.</span></span>
                             </div>
                             <p className="text-sm leading-relaxed mb-5">
                                 Pakistan's premium tech destination. Genuine products, fast delivery, and expert support.
                             </p>
                             <div className="flex flex-wrap gap-1.5">
                                 {['COD', 'VISA', 'JazzCash', 'Easypaisa'].map(m => (
-                                    <span key={m} className="text-[11px] font-medium px-2 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300">{m}</span>
+                                    <span key={m} className="text-[11px] font-medium px-2 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300">{m}</span>
                                 ))}
                             </div>
                         </div>
@@ -202,7 +202,7 @@ export default function PublicLayout({ children }) {
                             <ul className="space-y-2.5">
                                 {[['All Products', route('public.store.index')], ['New Arrivals', route('public.store.index')], ['Flash Deals', route('public.store.index')]].map(([label, href]) => (
                                     <li key={label}>
-                                        <Link href={href} className="text-sm hover:text-blue-400 transition-colors">{label}</Link>
+                                        <Link href={href} className="text-sm hover:text-indigo-400 transition-colors">{label}</Link>
                                     </li>
                                 ))}
                             </ul>
@@ -212,7 +212,7 @@ export default function PublicLayout({ children }) {
                         <div>
                             <h3 className="text-xs font-bold text-white uppercase tracking-widest mb-4">Support</h3>
                             <ul className="space-y-2.5 text-sm">
-                                <li><Link href={route('public.contact')} className="hover:text-blue-400 transition-colors">Contact Us</Link></li>
+                                <li><Link href={route('public.contact')} className="hover:text-indigo-400 transition-colors">Contact Us</Link></li>
                                 <li><a href="https://wa.me/923000000000" className="text-green-400 hover:text-green-300 font-medium transition-colors">WhatsApp Us</a></li>
                                 <li><span>support@invenio.pk</span></li>
                             </ul>
@@ -224,7 +224,7 @@ export default function PublicLayout({ children }) {
                             <ul className="space-y-2.5">
                                 {[['About Us', route('public.about')], ['Privacy Policy', '#'], ['Terms of Service', '#']].map(([label, href]) => (
                                     <li key={label}>
-                                        <Link href={href} className="text-sm hover:text-blue-400 transition-colors">{label}</Link>
+                                        <Link href={href} className="text-sm hover:text-indigo-400 transition-colors">{label}</Link>
                                     </li>
                                 ))}
                             </ul>
