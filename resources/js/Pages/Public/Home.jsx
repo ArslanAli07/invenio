@@ -24,49 +24,44 @@ export default function Home({ featuredProducts, brands }) {
         addToCart(product, defaultVariant, 1);
     };
 
+    const uniqueBrands = brands ? [...new Map(brands.map(b => [b.id, b])).values()] : [];
+
     return (
         <PublicLayout>
             <Head title="Invenio | Premium Tech Store Pakistan" />
 
             {/* ── HERO ─────────────────────────────────────────────── */}
-            <section className="relative bg-slate-900 dark:bg-ink-950 overflow-hidden min-h-[520px] flex items-center">
-                {/* Single-color subtle radial glow — indigo only, no purple */}
-                <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-0 left-1/3 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-3xl" />
-                </div>
-                {/* Subtle dot grid */}
-                <div className="absolute inset-0 opacity-[0.035]" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
-
+            <section className="relative bg-slate-50 dark:bg-ink-950 overflow-hidden min-h-[520px] flex items-center">
                 <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
                     <div className="max-w-2xl">
                         {/* Eyebrow */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-600/15 border border-indigo-500/25 text-indigo-300 text-xs font-semibold mb-6 tracking-wide">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 dark:bg-ink-800 dark:text-slate-300 dark:border-ink-700 text-xs font-semibold mb-6 tracking-wide">
                             <Zap className="h-3 w-3" />
                             New Arrivals — Summer 2025
                         </div>
 
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight mb-6">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight mb-6">
                             Pakistan's{' '}
-                            <span className="text-indigo-400">
+                            <span className="text-slate-900 dark:text-white underline decoration-indigo-500 decoration-2 underline-offset-4">
                                 Premium
                             </span>{' '}
                             Tech Store
                         </h1>
 
-                        <p className="text-lg text-slate-400 max-w-xl mb-8 leading-relaxed font-light">
+                        <p className="text-lg text-slate-500 dark:text-slate-400 max-w-xl mb-8 leading-relaxed font-light">
                             Discover the latest smartphones, laptops, and gadgets at unbeatable prices. Genuine products. Fast delivery. Expert support.
                         </p>
 
                         <div className="flex flex-wrap gap-3">
                             <Link
                                 href={route('public.store.index')}
-                                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all hover:-translate-y-0.5"
+                                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-colors"
                             >
                                 Shop Now <ArrowRight className="h-4 w-4" />
                             </Link>
                             <Link
                                 href={route('public.store.index')}
-                                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/8 border border-white/15 hover:bg-white/15 text-white font-semibold text-sm transition-all"
+                                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-transparent border border-slate-300 text-slate-700 hover:bg-slate-100 dark:border-ink-600 dark:text-slate-300 dark:hover:bg-ink-800 font-semibold text-sm transition-colors"
                             >
                                 Explore Deals
                             </Link>
@@ -78,12 +73,10 @@ export default function Home({ featuredProducts, brands }) {
             {/* ── TRUST BAR ─────────────────────────────────────────── */}
             <section className="bg-white dark:bg-ink-800 border-b border-slate-100 dark:border-ink-700">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-100 dark:bg-ink-700 rounded-2xl overflow-hidden">
+                    <div className="flex flex-col sm:flex-row flex-wrap justify-between gap-8">
                         {trustBadges.map((badge, i) => (
-                            <div key={i} className="flex items-center gap-4 p-6 bg-white dark:bg-ink-800">
-                                <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
-                                    <badge.icon className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                                </div>
+                            <div key={i} className="flex items-center gap-3">
+                                <badge.icon className="h-6 w-6 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
                                 <div>
                                     <div className="text-sm font-semibold text-slate-900 dark:text-white">{badge.title}</div>
                                     <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{badge.desc}</div>
@@ -212,13 +205,13 @@ export default function Home({ featuredProducts, brands }) {
                     `}</style>
                     <div className="relative flex overflow-hidden z-0 py-4">
                         <div className="marquee-track flex gap-6 px-6 whitespace-nowrap items-center">
-                            {[...Array(4)].flatMap(() => brands).map((brand, i) => (
+                            {[...Array(4)].flatMap(() => uniqueBrands).map((brand, i) => (
                                 <Link
                                     key={i}
                                     href={route('public.store.category', { category_slug: brand.slug })}
                                     className="group shrink-0 focus:outline-none"
                                 >
-                                    <div className="bg-slate-50 dark:bg-ink-900 border border-slate-200/80 dark:border-ink-700 hover:border-indigo-300 dark:hover:border-indigo-700 rounded-2xl w-[200px] sm:w-[240px] h-[140px] flex flex-col items-center justify-center gap-4 transition-all duration-300 group-hover:-translate-y-1">
+                                    <div className="bg-slate-50 hover:bg-slate-100 dark:bg-ink-900 dark:hover:bg-ink-800 rounded-xl w-[200px] sm:w-[240px] h-[140px] flex flex-col items-center justify-center gap-4 transition-colors duration-300">
                                         <div className="h-12 flex items-center justify-center">
                                             <BrandLogo name={brand.name} className="h-10 w-auto object-contain max-w-[130px] transition-all duration-300" />
                                         </div>
