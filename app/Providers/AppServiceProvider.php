@@ -10,8 +10,6 @@ use App\Models\PurchaseOrder;
 use App\Models\StockLedger;
 use App\Models\Supplier;
 use App\Models\User;
-use App\Models\WebhookDelivery;
-use App\Models\WebhookEndpoint;
 use App\Policies\ActivityLogPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\LocationPolicy;
@@ -20,8 +18,6 @@ use App\Policies\PurchaseOrderPolicy;
 use App\Policies\StockLedgerPolicy;
 use App\Policies\SupplierPolicy;
 use App\Policies\UserPolicy;
-use App\Policies\WebhookDeliveryPolicy;
-use App\Policies\WebhookEndpointPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -56,8 +52,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Supplier::class,         SupplierPolicy::class);
         Gate::policy(StockLedger::class,      StockLedgerPolicy::class);
         Gate::policy(PurchaseOrder::class,    PurchaseOrderPolicy::class);
-        Gate::policy(WebhookEndpoint::class,  WebhookEndpointPolicy::class);
-        Gate::policy(WebhookDelivery::class,  WebhookDeliveryPolicy::class);
         Gate::policy(ActivityLog::class,      ActivityLogPolicy::class);
     }
 }

@@ -58,6 +58,8 @@ export default {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))',
                 },
+                // Custom olive accent
+                olive: { DEFAULT: '#6b7c5c', dark: '#5a6b4c' },
                 // Custom dark-mode palette — Deep Slate standard
                 ink: {
                     950: '#020617',  // Slate 950 - Body Background
@@ -87,10 +89,15 @@ export default {
                     from: { height: 'var(--radix-accordion-content-height)' },
                     to: { height: '0' },
                 },
+                marquee: {
+                    '0%': { transform: 'translateX(0%)' },
+                    '100%': { transform: 'translateX(-50%)' },
+                },
             },
             animation: {
                 'accordion-down': 'accordion-down 0.2s ease-out',
                 'accordion-up': 'accordion-up 0.2s ease-out',
+                marquee: 'marquee 8s linear infinite',
             },
         },
     },

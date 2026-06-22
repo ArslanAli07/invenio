@@ -107,10 +107,6 @@ class User extends Authenticatable
         return $this->hasMany(PurchaseOrder::class, 'created_by');
     }
 
-    public function webhookEndpoints(): HasMany
-    {
-        return $this->hasMany(WebhookEndpoint::class, 'created_by');
-    }
 
     public function activityLogs(): HasMany
     {

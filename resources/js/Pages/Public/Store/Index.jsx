@@ -87,11 +87,11 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
             {/* Brands */}
             <div>
                 <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-2">Brands</p>
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                     <Link
                         href={route('public.store.index')}
                         onClick={() => onClose?.()}
-                        className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${!currentbrand ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-stone-50 dark:text-zinc-400 dark:hover:bg-zinc-700'}`}
+                        className={`flex items-center px-3 py-2 rounded-md text-sm transition-colors ${!currentbrand ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-500 font-medium' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 border border-transparent'}`}
                     >
                         All Brands
                     </Link>
@@ -100,7 +100,7 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                             key={cat.id}
                             href={route('public.store.category', { category_slug: cat.slug })}
                             onClick={() => onClose?.()}
-                            className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${currentbrand?.id === cat.id ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-stone-50 dark:text-zinc-400 dark:hover:bg-zinc-700'}`}
+                            className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors ${currentbrand?.id === cat.id ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-500 font-medium' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 border border-transparent'}`}
                         >
                             {cat.name}
                         </Link>
@@ -310,15 +310,15 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                                             className={`block group bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md hover:shadow-sm transition-shadow overflow-hidden flex flex-col h-full ${outOfStock ? 'opacity-70' : ''}`}
                                         >
                                             {/* Image */}
-                                            <div className="aspect-square bg-stone-50 dark:bg-zinc-700 p-4 flex items-center justify-center relative rounded-t-md">
+                                            <div className="aspect-square w-full overflow-hidden bg-stone-50 dark:bg-zinc-700 rounded-t-md relative">
                                                 {product.primary_image && product.primary_image.length > 0 ? (
                                                     <img
                                                         src={`/storage/${product.primary_image[0].path}`}
                                                         alt={product.name}
-                                                        className="max-h-full max-w-full object-contain mix-blend-multiply dark:mix-blend-normal"
+                                                        className="w-full h-full object-contain p-4 mix-blend-multiply dark:mix-blend-normal"
                                                     />
                                                 ) : (
-                                                    <div className="w-16 h-16 bg-stone-200 dark:bg-zinc-600 rounded-sm" />
+                                                    <div className="aspect-square w-full bg-stone-100 dark:bg-zinc-600 flex items-center justify-center" />
                                                 )}
                                                 {outOfStock && (
                                                     <div className="absolute top-3 right-3 bg-stone-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400 rounded-sm text-xs px-2 py-1 uppercase tracking-wide font-medium">

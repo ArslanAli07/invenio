@@ -40,7 +40,7 @@ const BrandLogo = ({ name, className = "" }) => {
     if (iconName) {
         // Use default brand colors. 
         // In dark mode, we use brightness-0 and invert to turn the colored logos into pure white.
-        const localLogos = ['sony', 'motorola', 'nokia', 'oppo', 'vivo', 'realme', 'infinix', 'tecno'];
+        const localLogos = ['infinix', 'tecno'];
         const url = localLogos.includes(iconName) 
             ? `/images/logos/${iconName}.svg` 
             : `https://cdn.simpleicons.org/${iconName}`;
