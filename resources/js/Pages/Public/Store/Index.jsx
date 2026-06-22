@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
-import { Search, SlidersHorizontal, Smartphone, ChevronRight, X, ShoppingCart, ArrowUpDown } from 'lucide-react';
+import { Search, SlidersHorizontal, Smartphone, ChevronRight, X, ArrowUpDown } from 'lucide-react';
 import BrandLogo from '@/Components/BrandLogo';
 import { useCart } from '@/Contexts/CartContext';
 
@@ -60,26 +60,25 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
     };
 
     const getStockBadge = (stock) => {
-        if (stock > 10) return <span className="text-[10px] font-semibold px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">In Stock</span>;
-        if (stock > 0)  return <span className="text-[10px] font-semibold px-2 py-1 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Only {stock} Left</span>;
-        return <span className="text-[10px] font-semibold px-2 py-1 rounded-full bg-slate-100 text-slate-500 dark:bg-ink-700 dark:text-slate-400">Out of Stock</span>;
+        if (stock > 10) return <span className="text-xs bg-stone-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400 rounded-sm px-2 py-1 uppercase tracking-wide">In Stock</span>;
+        if (stock > 0)  return <span className="text-xs bg-stone-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400 rounded-sm px-2 py-1 uppercase tracking-wide">Only {stock} Left</span>;
+        return <span className="text-xs bg-stone-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400 rounded-sm px-2 py-1 uppercase tracking-wide">Out of Stock</span>;
     };
 
-    // ── Reusable Sidebar Content ───────────────────────────────────────────────
     const SidebarContent = ({ onClose }) => (
         <div className="flex flex-col gap-6">
             {/* Search */}
             <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Search</p>
+                <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-2">Search</p>
                 <form onSubmit={(e) => { handleSearch(e); onClose?.(); }}>
                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
                         <input
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search products…"
-                            className="w-full pl-9 pr-3 py-2 text-sm bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-ink-600 rounded-xl focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10 dark:text-white transition-all"
+                            className="w-full pl-9 pr-3 py-2 text-sm bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 dark:text-white transition-all"
                         />
                     </div>
                 </form>
@@ -87,12 +86,12 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
 
             {/* Brands */}
             <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Brands</p>
+                <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-2">Brands</p>
                 <div className="space-y-0.5">
                     <Link
                         href={route('public.store.index')}
                         onClick={() => onClose?.()}
-                        className={`flex items-center px-3 py-2 rounded-xl text-sm font-medium transition-colors ${!currentbrand ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-ink-700'}`}
+                        className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${!currentbrand ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-stone-50 dark:text-zinc-400 dark:hover:bg-zinc-700'}`}
                     >
                         All Brands
                     </Link>
@@ -101,9 +100,8 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                             key={cat.id}
                             href={route('public.store.category', { category_slug: cat.slug })}
                             onClick={() => onClose?.()}
-                            className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${currentbrand?.id === cat.id ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400' : 'text-slate-600 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-ink-700'}`}
+                            className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${currentbrand?.id === cat.id ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:bg-stone-50 dark:text-zinc-400 dark:hover:bg-zinc-700'}`}
                         >
-                            <BrandLogo name={cat.name} className="h-4 w-auto" />
                             {cat.name}
                         </Link>
                     ))}
@@ -112,22 +110,22 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
 
             {/* Price Range */}
             <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Price Range</p>
+                <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-2">Price Range</p>
                 <form onSubmit={(e) => { handlePriceFilter(e); onClose?.(); }} className="space-y-2">
                     <div className="flex items-center gap-2">
                         <div className="relative flex-1">
-                            <span className="absolute left-2.5 top-2.5 text-xs text-slate-400">Rs</span>
+                            <span className="absolute left-2.5 top-2 text-xs text-zinc-400">Rs</span>
                             <input type="number" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)}
-                                className="w-full pl-8 pr-2 py-2 text-sm bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-ink-600 rounded-xl focus:outline-none focus:border-blue-400 dark:text-white" />
+                                className="w-full pl-8 pr-2 py-2 text-sm bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 dark:text-white" />
                         </div>
-                        <span className="text-slate-300 dark:text-slate-600">—</span>
+                        <span className="text-stone-300 dark:text-zinc-600">—</span>
                         <div className="relative flex-1">
-                            <span className="absolute left-2.5 top-2.5 text-xs text-slate-400">Rs</span>
+                            <span className="absolute left-2.5 top-2 text-xs text-zinc-400">Rs</span>
                             <input type="number" placeholder="Max" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)}
-                                className="w-full pl-8 pr-2 py-2 text-sm bg-slate-50 dark:bg-ink-900 border border-slate-200 dark:border-ink-600 rounded-xl focus:outline-none focus:border-blue-400 dark:text-white" />
+                                className="w-full pl-8 pr-2 py-2 text-sm bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 dark:text-white" />
                         </div>
                     </div>
-                    <button type="submit" className="w-full py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 rounded-xl transition-all">
+                    <button type="submit" className="w-full py-2 text-sm font-medium text-white bg-[#6b7c5c] hover:bg-[#5a6b4c] rounded-md transition-colors">
                         Apply
                     </button>
                 </form>
@@ -135,11 +133,11 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
 
             {/* Storage */}
             <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Storage</p>
+                <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-2">Storage</p>
                 <div className="flex flex-wrap gap-1.5">
                     {storageOptions.map(opt => (
                         <button key={opt} onClick={() => { handleFilterChange('storage', opt); }}
-                            className={`px-3 py-2 rounded-xl text-sm font-medium transition-all focus:outline-none ${storage === opt ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 dark:bg-ink-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-ink-600 hover:border-indigo-300 hover:text-indigo-600'}`}
+                            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all focus:outline-none ${storage === opt ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 border-transparent' : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-stone-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500'}`}
                         >{opt}</button>
                     ))}
                 </div>
@@ -147,18 +145,18 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
 
             {/* RAM */}
             <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">RAM</p>
+                <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-2">RAM</p>
                 <div className="flex flex-wrap gap-1.5">
                     {ramOptions.map(opt => (
                         <button key={opt} onClick={() => { handleFilterChange('ram', opt); }}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${ram === opt ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 dark:bg-ink-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-ink-600 hover:border-indigo-300 hover:text-indigo-600'}`}
+                            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${ram === opt ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 border-transparent' : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-stone-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500'}`}
                         >{opt}</button>
                     ))}
                 </div>
             </div>
 
             {hasActiveFilters && (
-                <button onClick={() => { clearAll(); onClose?.(); }} className="text-xs text-slate-400 hover:text-red-500 transition-colors underline underline-offset-2">
+                <button onClick={() => { clearAll(); onClose?.(); }} className="text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">
                     Clear all filters
                 </button>
             )}
@@ -170,23 +168,23 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
             <Head title={currentbrand ? `${currentbrand.name} | Invenio` : 'All Products | Invenio'} />
 
             {/* Page Header */}
-            <div className="bg-slate-900 dark:bg-ink-950 border-b border-slate-800 dark:border-ink-800 py-10">
+            <div className="bg-[#faf9f6] dark:bg-zinc-900 border-b border-stone-200 dark:border-zinc-700 py-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center text-xs text-slate-500 gap-1.5 mb-3">
-                        <Link href={route('public.home')} className="hover:text-slate-300 transition-colors">Home</Link>
-                        <ChevronRight className="h-3 w-3" />
-                        <Link href={route('public.store.index')} className={!currentbrand ? 'text-white' : 'hover:text-slate-300 transition-colors'}>Store</Link>
+                    <div className="flex items-center text-sm font-medium text-zinc-500 gap-1.5 mb-3">
+                        <Link href={route('public.home')} className="hover:text-zinc-900 dark:hover:text-white transition-colors">Home</Link>
+                        <ChevronRight className="h-4 w-4" />
+                        <Link href={route('public.store.index')} className={!currentbrand ? 'text-zinc-900 dark:text-zinc-100' : 'hover:text-zinc-900 dark:hover:text-white transition-colors'}>Store</Link>
                         {currentbrand && (
                             <>
-                                <ChevronRight className="h-3 w-3" />
-                                <span className="text-white">{currentbrand.name}</span>
+                                <ChevronRight className="h-4 w-4" />
+                                <span className="text-zinc-900 dark:text-zinc-100">{currentbrand.name}</span>
                             </>
                         )}
                     </div>
-                    <h1 className="text-2xl md:text-4xl font-extrabold text-white">
+                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
                         {currentbrand ? currentbrand.name : 'All Products'}
                     </h1>
-                    <p className="text-slate-500 text-sm mt-1">
+                    <p className="text-zinc-500 text-sm mt-1">
                         {products.total} product{products.total !== 1 ? 's' : ''} found
                     </p>
                 </div>
@@ -195,29 +193,28 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Mobile Filter Toggle */}
                 <div className="md:hidden flex items-center justify-between mb-5">
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400">
                         {products.total} products
                     </p>
                     <button
                         onClick={() => setIsMobileFiltersOpen(true)}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-600 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:border-indigo-300 transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md text-sm font-medium text-zinc-700 dark:text-zinc-300 transition-colors"
                     >
                         <SlidersHorizontal className="h-4 w-4" />
                         Filters
-                        {hasActiveFilters && <span className="w-2 h-2 rounded-full bg-blue-600 ml-0.5" />}
                     </button>
                 </div>
 
-                <div className="flex gap-7">
+                <div className="flex gap-8">
                     {/* Desktop Sidebar */}
-                    <aside className="hidden md:block w-60 flex-shrink-0">
-                        <div className="bg-white dark:bg-ink-800 rounded-2xl border border-slate-100 dark:border-ink-700 p-5 sticky top-24">
-                            <div className="flex items-center justify-between mb-5">
-                                <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                    <SlidersHorizontal className="h-4 w-4 text-blue-600" /> Filters
+                    <aside className="hidden md:block w-64 flex-shrink-0">
+                        <div className="bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md p-6 sticky top-24">
+                            <div className="flex items-center justify-between mb-6">
+                                <span className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                                    Filters
                                 </span>
                                 {hasActiveFilters && (
-                                    <button onClick={clearAll} className="text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors">Reset</button>
+                                    <button onClick={clearAll} className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-white font-medium transition-colors">Reset</button>
                                 )}
                             </div>
                             <SidebarContent />
@@ -227,14 +224,14 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                     {/* Mobile Drawer */}
                     {isMobileFiltersOpen && (
                         <div className="fixed inset-0 z-[100] md:hidden flex">
-                            <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={() => setIsMobileFiltersOpen(false)} />
-                            <div className="relative w-80 max-w-[90vw] bg-white dark:bg-ink-900 h-full shadow-2xl p-5 overflow-y-auto ml-auto flex flex-col">
-                                <div className="flex items-center justify-between mb-5">
-                                    <span className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                        <SlidersHorizontal className="h-4 w-4 text-blue-600" /> Filters
+                            <div className="fixed inset-0 bg-zinc-900/50 backdrop-blur-sm" onClick={() => setIsMobileFiltersOpen(false)} />
+                            <div className="relative w-80 max-w-[90vw] bg-white dark:bg-zinc-900 h-full p-6 overflow-y-auto ml-auto flex flex-col border-l border-stone-200 dark:border-zinc-700">
+                                <div className="flex items-center justify-between mb-6">
+                                    <span className="font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                                        Filters
                                     </span>
-                                    <button onClick={() => setIsMobileFiltersOpen(false)} className="p-1.5 rounded-lg bg-slate-100 dark:bg-ink-800 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">
-                                        <X className="h-4 w-4" />
+                                    <button onClick={() => setIsMobileFiltersOpen(false)} className="p-1.5 rounded-md text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                                        <X className="h-5 w-5" />
                                     </button>
                                 </div>
                                 <SidebarContent onClose={() => setIsMobileFiltersOpen(false)} />
@@ -249,27 +246,27 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                             {/* Active filter pills */}
                             <div className="flex flex-wrap items-center gap-2">
                                 {currentbrand && (
-                                    <button onClick={() => clearFilter('brand')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/20 border border-indigo-200/60 dark:border-indigo-500/20 transition-colors">
+                                    <button onClick={() => clearFilter('brand')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-stone-100 text-zinc-700 hover:bg-stone-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-stone-200 dark:border-zinc-700 transition-colors">
                                         Brand: {currentbrand.name} <X className="h-3 w-3" />
                                     </button>
                                 )}
                                 {search && (
-                                    <button onClick={() => clearFilter('search')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 border border-blue-200/60 dark:border-blue-500/20 transition-colors">
+                                    <button onClick={() => clearFilter('search')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-stone-100 text-zinc-700 hover:bg-stone-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-stone-200 dark:border-zinc-700 transition-colors">
                                         "{search}" <X className="h-3 w-3" />
                                     </button>
                                 )}
                                 {storage && (
-                                    <button onClick={() => clearFilter('storage')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 border border-blue-200/60 dark:border-blue-500/20 transition-colors">
+                                    <button onClick={() => clearFilter('storage')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-stone-100 text-zinc-700 hover:bg-stone-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-stone-200 dark:border-zinc-700 transition-colors">
                                         {storage} <X className="h-3 w-3" />
                                     </button>
                                 )}
                                 {ram && (
-                                    <button onClick={() => clearFilter('ram')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 border border-blue-200/60 dark:border-blue-500/20 transition-colors">
+                                    <button onClick={() => clearFilter('ram')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-stone-100 text-zinc-700 hover:bg-stone-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-stone-200 dark:border-zinc-700 transition-colors">
                                         RAM: {ram} <X className="h-3 w-3" />
                                     </button>
                                 )}
                                 {(minPrice || maxPrice) && (
-                                    <button onClick={() => clearFilter('price')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 border border-blue-200/60 dark:border-blue-500/20 transition-colors">
+                                    <button onClick={() => clearFilter('price')} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-stone-100 text-zinc-700 hover:bg-stone-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 border border-stone-200 dark:border-zinc-700 transition-colors">
                                         Rs {minPrice || '0'} – {maxPrice || '∞'} <X className="h-3 w-3" />
                                     </button>
                                 )}
@@ -277,11 +274,11 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
 
                             {/* Sort */}
                             <div className="flex items-center gap-2 flex-shrink-0">
-                                <ArrowUpDown className="h-3.5 w-3.5 text-slate-400" />
+                                <ArrowUpDown className="h-4 w-4 text-zinc-400" />
                                 <select
                                     value={sort}
                                     onChange={handleSort}
-                                    className="text-sm border border-slate-200 dark:border-ink-600 dark:bg-ink-800 dark:text-white rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10 transition-all"
+                                    className="text-sm bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 dark:text-white rounded-md px-3 py-2 focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-100 transition-all"
                                 >
                                     <option value="">Newest First</option>
                                     <option value="price_asc">Price: Low to High</option>
@@ -292,16 +289,16 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
 
                         {/* Product Grid */}
                         {products.data.length === 0 ? (
-                            <div className="bg-white dark:bg-ink-800 rounded-2xl border border-slate-100 dark:border-ink-700 p-14 text-center">
-                                <Smartphone className="h-14 w-14 text-slate-200 dark:text-ink-600 mx-auto mb-4" />
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">No products found</h3>
-                                <p className="text-slate-500 dark:text-slate-400 text-sm mb-5">Try adjusting your search or filters.</p>
-                                <button onClick={clearAll} className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors">
+                            <div className="bg-white dark:bg-zinc-800 rounded-md border border-stone-200 dark:border-zinc-700 p-14 text-center">
+                                <Smartphone className="h-14 w-14 text-zinc-300 dark:text-zinc-600 mx-auto mb-4" />
+                                <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">No products found</h3>
+                                <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-5">Try adjusting your search or filters.</p>
+                                <button onClick={clearAll} className="px-5 py-2 rounded-md bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white text-sm font-medium transition-colors">
                                     Clear All Filters
                                 </button>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {products.data.map((product) => {
                                     const outOfStock   = product.global_stock <= 0;
                                     const defaultVariant = product.variants && product.variants.length > 0 ? product.variants[0] : null;
@@ -310,74 +307,51 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                                         <Link
                                             key={product.id}
                                             href={route('public.store.product', { category_slug: product.category?.slug || 'all', product_slug: product.slug })}
-                                            className={`block group ${outOfStock ? 'opacity-70' : ''}`}
+                                            className={`block group bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md hover:shadow-sm transition-shadow overflow-hidden flex flex-col h-full ${outOfStock ? 'opacity-70' : ''}`}
                                         >
-                                            <div className="bg-white dark:bg-ink-800 rounded-2xl border border-slate-100 dark:border-ink-700 overflow-hidden hover:border-indigo-200 dark:hover:border-indigo-700/50 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
-
-                                                {/* Image */}
-                                                <div className="relative bg-slate-50 dark:bg-ink-900 flex items-center justify-center p-5 min-h-[180px]">
-                                                    {product.primary_image && product.primary_image.length > 0 ? (
-                                                        <img
-                                                            src={`/storage/${product.primary_image[0].path}`}
-                                                            alt={product.name}
-                                                            className="max-h-36 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
-                                                        />
-                                                    ) : (
-                                                        <Smartphone className="h-14 w-14 text-slate-200 dark:text-ink-700" />
-                                                    )}
-                                                    {outOfStock && (
-                                                        <div className="absolute inset-0 bg-white/50 dark:bg-ink-800/60 flex items-center justify-center">
-                                                            <span className="text-[10px] font-bold bg-white dark:bg-ink-800 text-slate-500 px-2.5 py-1 rounded-full border border-slate-200 dark:border-ink-600">Out of Stock</span>
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                {/* Body */}
-                                                <div className="p-4 flex flex-col flex-1">
-                                                    {product.category && (
-                                                        <p className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-1">{product.category.name}</p>
-                                                    )}
-                                                    <h3 className="text-sm font-semibold text-slate-900 dark:text-white line-clamp-2 leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-2 flex-1">
-                                                        {product.name}
-                                                    </h3>
-
-                                                    {/* Variant chips */}
-                                                    {defaultVariant && (
-                                                        <div className="flex flex-wrap gap-1 mb-3">
-                                                            <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-slate-100 dark:bg-ink-700 text-slate-600 dark:text-slate-300">
-                                                                {defaultVariant.name}
-                                                            </span>
-                                                            {product.variants.length > 1 && (
-                                                                <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400">
-                                                                    +{product.variants.length - 1} more
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                    )}
-
-                                                    {product.short_description && (
-                                                        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mb-3">{product.short_description}</p>
-                                                    )}
-
-                                                    {/* Price row */}
-                                                    <div className="flex items-center justify-between mt-auto mb-3">
-                                                        <span className="text-base font-extrabold text-slate-900 dark:text-white">
-                                                            Rs {parseFloat(product.price).toLocaleString()}
-                                                        </span>
-                                                        {getStockBadge(product.global_stock)}
+                                            {/* Image */}
+                                            <div className="aspect-square bg-stone-50 dark:bg-zinc-700 p-4 flex items-center justify-center relative rounded-t-md">
+                                                {product.primary_image && product.primary_image.length > 0 ? (
+                                                    <img
+                                                        src={`/storage/${product.primary_image[0].path}`}
+                                                        alt={product.name}
+                                                        className="max-h-full max-w-full object-contain mix-blend-multiply dark:mix-blend-normal"
+                                                    />
+                                                ) : (
+                                                    <div className="w-16 h-16 bg-stone-200 dark:bg-zinc-600 rounded-sm" />
+                                                )}
+                                                {outOfStock && (
+                                                    <div className="absolute top-3 right-3 bg-stone-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400 rounded-sm text-xs px-2 py-1 uppercase tracking-wide font-medium">
+                                                        Out of Stock
                                                     </div>
+                                                )}
+                                            </div>
+
+                                            {/* Body */}
+                                            <div className="p-4 flex flex-col flex-1">
+                                                <span className="text-xs text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-1">
+                                                    {product.category?.name || 'Product'}
+                                                </span>
+                                                <h3 className="font-medium text-zinc-900 dark:text-zinc-100 leading-snug mb-2 flex-1">
+                                                    {product.name}
+                                                </h3>
+
+                                                {/* Price row */}
+                                                <div className="flex items-center justify-between mt-auto mb-4">
+                                                    <span className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+                                                        Rs {parseFloat(product.price).toLocaleString()}
+                                                    </span>
+                                                    {!outOfStock && getStockBadge(product.global_stock)}
                                                 </div>
 
-                                                {/* Footer */}
-                                                <div className="px-4 pb-4">
-                                                    <button
-                                                        onClick={(e) => handleAddToCart(e, product, defaultVariant)}
-                                                        disabled={outOfStock}
-                                                        className="w-full h-9 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-100 disabled:text-slate-400 dark:disabled:bg-ink-700 dark:disabled:text-ink-500 text-white text-xs font-semibold transition-all"
-                                                    >
-                                                        {outOfStock ? 'Out of Stock' : 'Add to Cart'}
-                                                    </button>
-                                                </div>
+                                                {/* Add to Cart */}
+                                                <button
+                                                    onClick={(e) => handleAddToCart(e, product, defaultVariant)}
+                                                    disabled={outOfStock}
+                                                    className="w-full py-2 bg-[#6b7c5c] hover:bg-[#5a6b4c] disabled:bg-stone-100 disabled:text-zinc-400 dark:disabled:bg-zinc-700 dark:disabled:text-zinc-500 text-white rounded-md font-medium text-sm transition-colors"
+                                                >
+                                                    {outOfStock ? 'Out of Stock' : 'Add to Cart'}
+                                                </button>
                                             </div>
                                         </Link>
                                     );
@@ -393,12 +367,12 @@ export default function StoreIndex({ products, brands, currentbrand, filters }) 
                                         <Link
                                             key={i}
                                             href={link.url || '#'}
-                                            className={`min-w-[38px] h-9 px-3 flex items-center justify-center rounded-xl text-sm font-medium transition-all ${
+                                            className={`min-w-[36px] h-9 px-3 flex items-center justify-center rounded-md text-sm font-medium transition-colors ${
                                                 link.active
-                                                    ? 'bg-indigo-600 text-white'
+                                                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
                                                     : !link.url
-                                                        ? 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
-                                                        : 'bg-white dark:bg-ink-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-ink-600 hover:border-indigo-300 hover:text-indigo-600 dark:hover:text-indigo-400'
+                                                        ? 'text-zinc-300 dark:text-zinc-600 cursor-not-allowed'
+                                                        : 'bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-stone-200 dark:border-zinc-700 hover:bg-stone-50 dark:hover:bg-zinc-700'
                                             }`}
                                             dangerouslySetInnerHTML={{ __html: link.label }}
                                         />
