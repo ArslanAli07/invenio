@@ -19,7 +19,8 @@ export default function Home({ featuredProducts, brands }) {
     ].filter(eb => !dbBrands.some(db => db.name.toLowerCase() === eb.name.toLowerCase()));
     
     const uniqueBrands = [...dbBrands, ...extraBrands];
-    const marqueeItems = [...uniqueBrands, ...uniqueBrands];
+    // Repeat the brands multiple times to ensure they fill even ultra-wide 4K screens
+    const repeatedBrands = [...Array(6)].flatMap(() => uniqueBrands);
 
     const testimonials = [
         {
@@ -157,7 +158,7 @@ export default function Home({ featuredProducts, brands }) {
             </section>
 
             {/* 4. WHY BUY FROM US */}
-            <section className="bg-white dark:bg-zinc-800 border-b border-stone-200 dark:border-zinc-700 py-16">
+            <section className="bg-white dark:bg-zinc-900 border-y border-stone-200 dark:border-zinc-700 py-16 no-underline-content">
                 <div className="max-w-7xl mx-auto px-4 md:px-8">
                     <div className="text-xs uppercase tracking-widest text-[#6b7c5c] font-medium">Why Invenio</div>
                     <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 mt-2">Built for Pakistani Tech Buyers.</h2>
@@ -187,19 +188,36 @@ export default function Home({ featuredProducts, brands }) {
 
             {/* 5. BRAND MARQUEE */}
             {uniqueBrands && uniqueBrands.length > 0 && (
-                <section className="py-12 bg-[#faf9f6] dark:bg-zinc-900">
+                <section className="py-12 bg-[#faf9f6] dark:bg-zinc-800">
                     <div className="overflow-hidden relative w-full group">
-                        <div className="flex gap-8 animate-marquee w-max group-hover:[animation-play-state:paused]" style={{ willChange: 'transform' }}>
-                            {marqueeItems.map((brand, i) => (
-                                <Link
-                                    key={`${brand.id}-${i}`}
-                                    href={route('public.store.category', { category_slug: brand.slug })}
-                                    className="flex flex-col items-center justify-center gap-2 min-w-[140px] bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md px-8 py-6 shrink-0 hover:border-zinc-400 transition-colors"
-                                >
-                                    {brand.name && <BrandLogo name={brand.name} className="w-10 h-10 object-contain filter grayscale dark:invert" />}
-                                    <span className="text-sm text-zinc-600 dark:text-zinc-400">{brand.name}</span>
-                                </Link>
-                            ))}
+                        <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused]" style={{ willChange: 'transform' }}>
+                            {/* First Set */}
+                            <div className="flex gap-8 pr-8">
+                                {repeatedBrands.map((brand, i) => (
+                                    <Link
+                                        key={`set1-${brand.id}-${i}`}
+                                        href={route('public.store.category', { category_slug: brand.slug })}
+                                        className="flex flex-col items-center justify-center gap-2 min-w-[140px] bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md px-8 py-6 shrink-0 hover:border-zinc-400 transition-colors"
+                                    >
+                                        {brand.name && <BrandLogo name={brand.name} className="w-10 h-10 object-contain filter grayscale dark:invert" />}
+                                        <span className="text-sm text-zinc-600 dark:text-zinc-400">{brand.name}</span>
+                                    </Link>
+                                ))}
+                            </div>
+                            {/* Second Set (Duplicate for smooth infinite scroll) */}
+                            <div className="flex gap-8 pr-8" aria-hidden="true">
+                                {repeatedBrands.map((brand, i) => (
+                                    <Link
+                                        key={`set2-${brand.id}-${i}`}
+                                        href={route('public.store.category', { category_slug: brand.slug })}
+                                        className="flex flex-col items-center justify-center gap-2 min-w-[140px] bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md px-8 py-6 shrink-0 hover:border-zinc-400 transition-colors"
+                                        tabIndex="-1"
+                                    >
+                                        {brand.name && <BrandLogo name={brand.name} className="w-10 h-10 object-contain filter grayscale dark:invert" />}
+                                        <span className="text-sm text-zinc-600 dark:text-zinc-400">{brand.name}</span>
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -224,15 +242,15 @@ export default function Home({ featuredProducts, brands }) {
             </section>
 
             {/* 7. TESTIMONIALS */}
-            <section className="px-4 md:px-8 py-16 bg-[#faf9f6] dark:bg-zinc-900">
+            <section className="px-4 md:px-8 py-16 bg-[#faf9f6] dark:bg-zinc-900 no-underline-content">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">What Our Customers Say</h2>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Real buyers, real experiences.</p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                         {testimonials.map((t, i) => (
-                            <div key={i} className="bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md p-6 flex flex-col">
-                                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed" spellCheck={false}>
+                            <div key={i} className="bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-600 rounded-md p-6 flex flex-col">
+                                <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed" spellCheck={false}>
                                     {t.text}
                                 </p>
                                 <div className="mt-4">
@@ -246,7 +264,7 @@ export default function Home({ featuredProducts, brands }) {
             </section>
 
             {/* 8. CTA SECTION */}
-            <section className="py-24 bg-zinc-900 dark:bg-zinc-950 text-zinc-100 dark:text-zinc-200 border-t border-zinc-800">
+            <section className="py-24 bg-zinc-900 dark:bg-zinc-900 text-zinc-100 dark:text-zinc-200 border-t border-zinc-700">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-3xl md:text-4xl font-bold mb-6 tracking-tight">
                         Experience the Invenio Difference

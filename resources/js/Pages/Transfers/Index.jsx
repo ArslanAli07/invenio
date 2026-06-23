@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router } from '@inertiajs/react';
 import { Button } from '@/Components/ui/button';
 import {
@@ -19,20 +19,20 @@ export default function Index({ transfers }) {
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <div className="flex items-center gap-3 mb-1">
-                        <div className="p-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl border border-indigo-100 dark:border-indigo-500/20">
+                        <div className="p-2 bg-zinc-100 dark:bg-zinc-700 rounded-md border border-zinc-200 dark:border-zinc-600">
                             <ArrowRightLeft className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                         </div>
-                        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-ink-100">
+                        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
                             Stock Transfers
                         </h1>
                     </div>
-                    <p className="text-sm text-slate-500 dark:text-ink-400 ml-12">
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 ml-12">
                         View the audit log of all internal inventory transfers between locations.
                     </p>
                 </div>
 
                 <Link href={route('transfers.create')}>
-                    <Button className="bg-[#1B4FD8] hover:bg-blue-700 text-white rounded-xl shadow-md flex items-center gap-2 self-start sm:self-auto font-semibold">
+                    <Button className="bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white rounded-xl shadow-md flex items-center gap-2 self-start sm:self-auto font-semibold">
                         <Plus className="h-4.5 w-4.5" />
                         <span>New Transfer</span>
                     </Button>
@@ -40,11 +40,11 @@ export default function Index({ transfers }) {
             </div>
 
             {/* Transfers Table Card */}
-            <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex-1 flex flex-col">
+            <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm overflow-hidden flex-1 flex flex-col">
                 <div className="overflow-x-auto flex-1">
                     <table className="w-full text-left border-collapse min-w-[900px]">
                         <thead>
-                            <tr className="bg-slate-50/75 dark:bg-ink-800/50 border-b border-slate-200 dark:border-ink-700 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-ink-400 sticky top-0 z-10">
+                            <tr className="bg-slate-50/75 dark:bg-zinc-700/50 border-b border-zinc-200 dark:border-zinc-700 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sticky top-0 z-10">
                                 <th className="px-6 py-4">Timestamp</th>
                                 <th className="px-6 py-4">Product</th>
                                 <th className="px-6 py-4 text-right">Quantity</th>
@@ -54,13 +54,13 @@ export default function Index({ transfers }) {
                                 <th className="px-6 py-4">By</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-ink-750">
+                        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
                             {transfers.data.length > 0 ? (
                                 transfers.data.map((t) => (
-                                    <tr key={t.id} className="hover:bg-slate-50/50 dark:hover:bg-ink-800/40 transition-colors">
+                                    <tr key={t.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-700/40 transition-colors">
                                         
                                         {/* Timestamp */}
-                                        <td className="px-6 py-4 text-xs text-slate-500 dark:text-ink-400 font-medium whitespace-nowrap">
+                                        <td className="px-6 py-4 text-xs text-zinc-500 dark:text-zinc-400 font-medium whitespace-nowrap">
                                             <span className="flex items-center gap-1.5">
                                                 <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
                                                 {new Date(t.created_at).toLocaleString()}
@@ -73,10 +73,10 @@ export default function Index({ transfers }) {
                                                 href={route('products.show', t.product?.id)}
                                                 className="group/link"
                                             >
-                                                <span className="block text-sm font-semibold text-slate-800 dark:text-ink-100 group-hover/link:text-blue-600 dark:group-hover/link:text-blue-400 transition-colors">
+                                                <span className="block text-sm font-semibold text-zinc-800 dark:text-zinc-100 group-hover/link:text-blue-600 dark:group-hover/link:text-blue-400 transition-colors">
                                                     {t.product?.name ?? '—'}
                                                 </span>
-                                                <span className="font-mono text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 mt-0.5 inline-block">
+                                                <span className="font-mono text-[10px] font-bold text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-700 px-1.5 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-600 mt-0.5 inline-block">
                                                     {t.product?.sku}
                                                 </span>
                                             </Link>
@@ -84,10 +84,10 @@ export default function Index({ transfers }) {
 
                                         {/* Qty */}
                                         <td className="px-6 py-4 text-right">
-                                            <span className="font-bold text-sm text-slate-800 dark:text-ink-200 tabular-nums">
+                                            <span className="font-bold text-sm text-slate-800 dark:text-zinc-200 tabular-nums">
                                                 {parseFloat(t.quantity).toLocaleString()}
                                             </span>
-                                            <span className="block text-[10px] text-slate-400 dark:text-ink-500 font-semibold uppercase mt-0.5">
+                                            <span className="block text-[10px] text-zinc-400 dark:text-zinc-500 font-semibold uppercase mt-0.5">
                                                 {t.product?.unit}
                                             </span>
                                         </td>
@@ -110,15 +110,15 @@ export default function Index({ transfers }) {
 
                                         {/* Notes */}
                                         <td className="px-6 py-4 max-w-[200px]">
-                                            <span className="text-xs text-slate-500 dark:text-ink-400 line-clamp-1" title={t.notes}>
+                                            <span className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1" title={t.notes}>
                                                 {t.notes || <span className="italic text-slate-300 dark:text-ink-600">—</span>}
                                             </span>
                                         </td>
 
                                         {/* By */}
                                         <td className="px-6 py-4">
-                                            <span className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-ink-400">
-                                                <div className="h-5 w-5 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold flex items-center justify-center text-[9px] shrink-0 uppercase">
+                                            <span className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-zinc-400">
+                                                <div className="h-5 w-5 rounded-full  text-white font-bold flex items-center justify-center text-[9px] shrink-0 uppercase">
                                                     {(t.created_by_user?.name || t.created_by?.name || t.user?.name || '?').charAt(0)}
                                                 </div>
                                                 {t.created_by_user?.name || t.created_by?.name || t.user?.name || 'Unknown'}
@@ -131,11 +131,11 @@ export default function Index({ transfers }) {
                                 <tr>
                                     <td colSpan="7" className="px-6 py-16 text-center">
                                         <div className="flex flex-col items-center justify-center max-w-sm mx-auto">
-                                            <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-slate-500 mb-4">
+                                            <div className="p-3 bg-zinc-100 dark:bg-zinc-700 rounded-md text-slate-400 dark:text-slate-500 mb-4">
                                                 <ArrowRightLeft className="h-8 w-8" />
                                             </div>
-                                            <h3 className="text-base font-bold text-slate-900 dark:text-ink-100">No transfers found</h3>
-                                            <p className="text-xs text-slate-500 dark:text-ink-400 mt-1 text-center leading-relaxed">
+                                            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">No transfers found</h3>
+                                            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 text-center leading-relaxed">
                                                 Stock transfers will appear here once inventory items are moved between warehouses.
                                             </p>
                                         </div>
@@ -148,11 +148,11 @@ export default function Index({ transfers }) {
 
                 {/* Table Pagination */}
                 {transfers.links && transfers.data.length > 0 && (
-                    <div className="px-6 py-4 border-t border-slate-200 dark:border-ink-700 flex items-center justify-between bg-slate-50/50 dark:bg-ink-800/30">
-                        <span className="text-xs text-slate-500 dark:text-ink-400">
-                            Showing <span className="font-semibold text-slate-800 dark:text-ink-200">{transfers.from}</span> to{' '}
-                            <span className="font-semibold text-slate-800 dark:text-ink-200">{transfers.to}</span> of{' '}
-                            <span className="font-semibold text-slate-800 dark:text-ink-200">{transfers.total}</span> entries
+                    <div className="px-6 py-4 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between bg-zinc-50 dark:bg-zinc-700">
+                        <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                            Showing <span className="font-semibold text-slate-800 dark:text-zinc-200">{transfers.from}</span> to{' '}
+                            <span className="font-semibold text-slate-800 dark:text-zinc-200">{transfers.to}</span> of{' '}
+                            <span className="font-semibold text-slate-800 dark:text-zinc-200">{transfers.total}</span> entries
                         </span>
                         <div className="flex gap-1.5">
                             {transfers.links.map((link, idx) => {
@@ -165,7 +165,7 @@ export default function Index({ transfers }) {
                                             key={idx}
                                             variant="outline"
                                             size="sm"
-                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200"
+                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-200"
                                             onClick={() => router.get(link.url, {}, { preserveState: true })}
                                         >
                                             <ChevronLeft className="h-4 w-4" />
@@ -179,7 +179,7 @@ export default function Index({ transfers }) {
                                             key={idx}
                                             variant="outline"
                                             size="sm"
-                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200"
+                                            className="rounded-xl flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-200"
                                             onClick={() => router.get(link.url, {}, { preserveState: true })}
                                         >
                                             <span>Next</span>
@@ -194,7 +194,7 @@ export default function Index({ transfers }) {
                                         variant={link.active ? 'default' : 'outline'}
                                         size="sm"
                                         className={`rounded-xl h-9 w-9 p-0 ${
-                                            link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200'
+                                            link.active ? 'bg-[#6b7c5c] text-white' : 'hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-200'
                                         }`}
                                         onClick={() => router.get(link.url, {}, { preserveState: true })}
                                     >

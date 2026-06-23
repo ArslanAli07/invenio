@@ -52,6 +52,10 @@ export function GeneralManager({ product, brands }) {
                     ignore_id: product.id
                 })
             });
+            if (!response.ok) {
+                console.warn('SKU check request failed with status:', response.status);
+                return;
+            }
             const result = await response.json();
             if (!result.available) {
                 setError('sku', 'This SKU is already assigned to another product.');
@@ -67,12 +71,12 @@ export function GeneralManager({ product, brands }) {
         <form onSubmit={handleFormSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <InputLabel htmlFor="sku" value="Product SKU" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                    <InputLabel htmlFor="sku" value="Product SKU" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                     <TextInput
                         id="sku"
                         type="text"
                         value={data.sku}
-                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 rounded-xl px-4 py-2.5 text-sm font-mono uppercase"
+                        className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded-xl px-4 py-2.5 text-sm font-mono uppercase"
                         onChange={(e) => setData('sku', e.target.value.toUpperCase())}
                         onBlur={checkSkuUniqueness}
                         placeholder="e.g. ELEC-010"
@@ -81,12 +85,12 @@ export function GeneralManager({ product, brands }) {
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="name" value="Product Name" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                    <InputLabel htmlFor="name" value="Product Name" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                     <TextInput
                         id="name"
                         type="text"
                         value={data.name}
-                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 rounded-xl px-4 py-2.5 text-sm"
+                        className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded-xl px-4 py-2.5 text-sm"
                         onChange={(e) => setData('name', e.target.value)}
                         placeholder="e.g. iPhone 17 Pro"
                     />
@@ -96,23 +100,23 @@ export function GeneralManager({ product, brands }) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <InputLabel htmlFor="price" value="Base Price (PKR)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                    <InputLabel htmlFor="price" value="Base Price (PKR)" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                     <TextInput
                         id="price"
                         type="number"
                         value={data.price}
-                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 rounded-xl px-4 py-2.5 text-sm"
+                        className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded-xl px-4 py-2.5 text-sm"
                         onChange={(e) => setData('price', e.target.value)}
                         placeholder="0.00"
                     />
                     <InputError message={errors.price} className="mt-1.5 text-xs" />
                 </div>
                 <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-ink-300 uppercase tracking-wider mb-2">Brand / Category</label>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-zinc-300 uppercase tracking-wider mb-2">Brand / Category</label>
                     <select
                         value={data.category_id}
                         onChange={e => setData('category_id', e.target.value)}
-                        className={`w-full px-4 py-3 bg-slate-50 dark:bg-ink-800/50 border ${errors.category_id ? 'border-rose-300 dark:border-rose-500/50 ring-4 ring-rose-50 dark:ring-rose-500/10' : 'border-slate-200 dark:border-ink-700 hover:border-slate-300 dark:hover:border-ink-600'} rounded-xl text-sm focus:ring-4 focus:ring-blue-50 dark:focus:border-blue-500 transition-all text-slate-900 dark:text-ink-100 font-medium`}
+                        className={`w-full px-4 py-3 bg-slate-50 dark:bg-zinc-700/50 border ${errors.category_id ? 'border-rose-300 dark:border-rose-500/50 ring-4 ring-rose-50 dark:ring-rose-500/10' : 'border-zinc-200 dark:border-zinc-700 hover:border-slate-300 dark:hover:border-ink-600'} rounded-xl text-sm focus:ring-4 focus:ring-blue-50 dark:focus:border-blue-500 transition-all text-zinc-900 dark:text-zinc-100 font-medium`}
                     >
                         <option value="" disabled>Select Brand</option>
                         {brands.map((cat) => (
@@ -125,23 +129,23 @@ export function GeneralManager({ product, brands }) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <InputLabel htmlFor="unit" value="Unit" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                    <InputLabel htmlFor="unit" value="Unit" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                     <TextInput
                         id="unit"
                         type="text"
                         value={data.unit}
-                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 rounded-xl px-4 py-2.5 text-sm"
+                        className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded-xl px-4 py-2.5 text-sm"
                         onChange={(e) => setData('unit', e.target.value)}
                     />
                     <InputError message={errors.unit} className="mt-1.5 text-xs" />
                 </div>
                 <div>
-                    <InputLabel htmlFor="reorder_level" value="Reorder Level" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                    <InputLabel htmlFor="reorder_level" value="Reorder Level" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                     <TextInput
                         id="reorder_level"
                         type="number"
                         value={data.reorder_level}
-                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 rounded-xl px-4 py-2.5 text-sm"
+                        className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded-xl px-4 py-2.5 text-sm"
                         onChange={(e) => setData('reorder_level', parseInt(e.target.value) || 0)}
                     />
                     <InputError message={errors.reorder_level} className="mt-1.5 text-xs" />
@@ -149,12 +153,12 @@ export function GeneralManager({ product, brands }) {
             </div>
 
             <div>
-                <InputLabel htmlFor="short_description" value="Short Description" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                <InputLabel htmlFor="short_description" value="Short Description" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                 <textarea
                     id="short_description"
                     value={data.short_description}
                     rows="2"
-                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 rounded-xl px-4 py-2.5 text-sm"
+                    className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded-xl px-4 py-2.5 text-sm"
                     onChange={(e) => setData('short_description', e.target.value)}
                     placeholder="Brief overview for product cards..."
                 />
@@ -162,12 +166,12 @@ export function GeneralManager({ product, brands }) {
             </div>
 
             <div>
-                <InputLabel htmlFor="description" value="Full Description" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                <InputLabel htmlFor="description" value="Full Description" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                 <textarea
                     id="description"
                     value={data.description}
                     rows="5"
-                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 rounded-xl px-4 py-2.5 text-sm"
+                    className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 rounded-xl px-4 py-2.5 text-sm"
                     onChange={(e) => setData('description', e.target.value)}
                     placeholder="Detailed description..."
                 />
@@ -175,49 +179,49 @@ export function GeneralManager({ product, brands }) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-slate-50/50 dark:bg-ink-800/30 rounded-xl p-4 border border-slate-200 dark:border-ink-700">
+                <div className="bg-zinc-50 dark:bg-zinc-700 rounded-xl p-4 border border-zinc-200 dark:border-zinc-700">
                     <label className="flex items-center cursor-pointer select-none">
                         <Checkbox
                             checked={data.is_active}
                             onChange={(e) => setData('is_active', e.target.checked)}
-                            className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
+                            className="bg-white border-slate-300 text-blue-600 focus:ring-zinc-400 rounded"
                         />
                         <div className="ms-3">
-                            <span className="text-sm font-semibold text-slate-900 dark:text-ink-100 block">Active Status</span>
+                            <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 block">Active Status</span>
                         </div>
                     </label>
                 </div>
-                <div className="bg-slate-50/50 dark:bg-ink-800/30 rounded-xl p-4 border border-slate-200 dark:border-ink-700">
+                <div className="bg-zinc-50 dark:bg-zinc-700 rounded-xl p-4 border border-zinc-200 dark:border-zinc-700">
                     <label className="flex items-center cursor-pointer select-none">
                         <Checkbox
                             checked={data.show_on_store}
                             onChange={(e) => setData('show_on_store', e.target.checked)}
-                            className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
+                            className="bg-white border-slate-300 text-blue-600 focus:ring-zinc-400 rounded"
                         />
                         <div className="ms-3">
-                            <span className="text-sm font-semibold text-slate-900 dark:text-ink-100 block">Show on Storefront</span>
+                            <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 block">Show on Storefront</span>
                         </div>
                     </label>
                 </div>
-                <div className="bg-slate-50/50 dark:bg-ink-800/30 rounded-xl p-4 border border-slate-200 dark:border-ink-700">
+                <div className="bg-zinc-50 dark:bg-zinc-700 rounded-xl p-4 border border-zinc-200 dark:border-zinc-700">
                     <label className="flex items-center cursor-pointer select-none">
                         <Checkbox
                             checked={data.is_featured}
                             onChange={(e) => setData('is_featured', e.target.checked)}
-                            className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
+                            className="bg-white border-slate-300 text-blue-600 focus:ring-zinc-400 rounded"
                         />
                         <div className="ms-3">
-                            <span className="text-sm font-semibold text-slate-900 dark:text-ink-100 block">Featured Product</span>
+                            <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 block">Featured Product</span>
                         </div>
                     </label>
                 </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-200 dark:border-ink-700 flex justify-end">
+            <div className="pt-4 border-t border-zinc-200 dark:border-zinc-700 flex justify-end">
                 <Button
                     type="submit"
                     disabled={processing}
-                    className="bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl py-2.5 px-6"
+                    className="bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white font-semibold rounded-xl py-2.5 px-6"
                 >
                     {processing ? 'Saving...' : 'Save Changes'}
                 </Button>
@@ -264,14 +268,14 @@ export function ImageManager({ product }) {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between bg-slate-50 dark:bg-ink-800/50 p-4 rounded-xl border border-slate-200 dark:border-ink-700">
+            <div className="flex items-center justify-between bg-slate-50 dark:bg-zinc-700/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700">
                 <div>
-                    <h3 className="font-semibold text-slate-900 dark:text-ink-100">Product Images</h3>
+                    <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">Product Images</h3>
                     <p className="text-sm text-slate-500">Upload high-quality images. You can assign specific images to variants.</p>
                 </div>
                 <div>
                     <input type="file" id="imageUpload" className="hidden" accept="image/*" onChange={handleUpload} />
-                    <Button className="rounded-lg bg-[#1B4FD8] hover:bg-blue-700 text-white" onClick={() => document.getElementById('imageUpload').click()}>
+                    <Button className="rounded-lg bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white" onClick={() => document.getElementById('imageUpload').click()}>
                         <ImagePlus className="w-4 h-4 mr-2" /> Upload Image
                     </Button>
                 </div>
@@ -279,16 +283,16 @@ export function ImageManager({ product }) {
 
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {product.images?.length === 0 && (
-                    <div className="col-span-full text-center py-12 text-sm text-slate-500 border-2 border-dashed border-slate-200 dark:border-ink-700 rounded-xl">
+                    <div className="col-span-full text-center py-12 text-sm text-slate-500 border-2 border-dashed border-zinc-200 dark:border-zinc-700 rounded-xl">
                         No images uploaded yet.
                     </div>
                 )}
                 {product.images?.map(img => (
-                    <div key={img.id} className={`relative group rounded-xl border-2 overflow-hidden bg-slate-50 dark:bg-ink-800 ${img.is_primary ? 'border-blue-500' : 'border-slate-200 dark:border-ink-700'}`}>
+                    <div key={img.id} className={`relative group rounded-xl border-2 overflow-hidden bg-slate-50 dark:bg-zinc-700 ${img.is_primary ? 'border-blue-500' : 'border-zinc-200 dark:border-zinc-700'}`}>
                         <img src={`/storage/${img.path}`} alt="Product" className="w-full aspect-square object-cover" />
                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                             {!img.is_primary && (
-                                <button onClick={() => setPrimary(img)} className="p-2 bg-white rounded-full text-slate-700 hover:text-blue-600" title="Set Primary">
+                                <button onClick={() => setPrimary(img)} className="p-2 bg-white rounded-full text-slate-700 hover:text-[#6b7c5c]" title="Set Primary">
                                     <Star className="w-4 h-4" />
                                 </button>
                             )}
@@ -301,7 +305,7 @@ export function ImageManager({ product }) {
                                 PRIMARY
                             </div>
                         )}
-                        <div className="absolute bottom-0 inset-x-0 bg-white/95 dark:bg-ink-900/95 border-t border-slate-200 dark:border-ink-700 p-2">
+                        <div className="absolute bottom-0 inset-x-0 bg-white/95 dark:bg-zinc-800/95 border-t border-zinc-200 dark:border-zinc-700 p-2">
                             <select 
                                 value={img.variant_id || ""} 
                                 onChange={(e) => setVariant(img, e.target.value)}
@@ -345,8 +349,8 @@ export function VariantManager({ product }) {
 
     return (
         <div className="space-y-6">
-            <div className="bg-slate-50 dark:bg-ink-800/50 p-6 rounded-xl border border-slate-200 dark:border-ink-700">
-                <h3 className="font-semibold text-slate-900 dark:text-ink-100 mb-4">Add New Variant</h3>
+            <div className="bg-slate-50 dark:bg-zinc-700/50 p-6 rounded-xl border border-zinc-200 dark:border-zinc-700">
+                <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-4">Add New Variant</h3>
                 <form onSubmit={addVariant} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                     <div className="col-span-1 md:col-span-4">
                         <InputLabel value="Variant Name (e.g. 256GB Gold)" />
@@ -361,16 +365,16 @@ export function VariantManager({ product }) {
                         <TextInput value={data.price} onChange={e => setData('price', e.target.value)} className="w-full mt-1" type="number" step="0.01" />
                     </div>
                     <div className="col-span-1 md:col-span-1">
-                        <Button type="submit" disabled={processing} className="w-full bg-[#1B4FD8] hover:bg-blue-700 text-white h-[42px] mb-[2px]">
+                        <Button type="submit" disabled={processing} className="w-full bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white h-[42px] mb-[2px]">
                             <Plus className="w-5 h-5" />
                         </Button>
                     </div>
                 </form>
             </div>
 
-            <div className="bg-white dark:bg-ink-900 border border-slate-200 dark:border-ink-700 rounded-xl overflow-hidden shadow-sm">
+            <div className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl overflow-hidden shadow-sm">
                 <table className="min-w-full divide-y divide-slate-200 dark:divide-ink-700">
-                    <thead className="bg-slate-50 dark:bg-ink-800/50">
+                    <thead className="bg-slate-50 dark:bg-zinc-700/50">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider w-24">Image</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Variant</th>
@@ -388,13 +392,13 @@ export function VariantManager({ product }) {
                         {product.variants?.map(v => {
                             const variantImage = product.images?.find(img => img.variant_id === v.id);
                             return (
-                                <tr key={v.id} className="hover:bg-slate-50 dark:hover:bg-ink-800/30">
+                                <tr key={v.id} className="hover:bg-slate-50 dark:hover:bg-zinc-700/30">
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <VariantImageSelector product={product} variant={v} currentImage={variantImage} />
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 dark:text-ink-100">{v.name}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-zinc-900 dark:text-zinc-100">{v.name}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-500">{v.sku}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-slate-900 dark:text-ink-100">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-zinc-900 dark:text-zinc-100">
                                         {v.price ? `Rs ${v.price}` : <span className="text-slate-400">Base Price</span>}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -446,7 +450,7 @@ function VariantImageSelector({ product, variant, currentImage }) {
         <>
             <button 
                 onClick={() => setOpen(true)}
-                className="w-12 h-12 rounded-lg border border-slate-200 dark:border-ink-700 overflow-hidden bg-slate-100 dark:bg-ink-800 flex items-center justify-center hover:ring-2 ring-blue-500 transition-all shrink-0"
+                className="w-12 h-12 rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden bg-slate-100 dark:bg-zinc-700 flex items-center justify-center hover:ring-2 ring-blue-500 transition-all shrink-0"
                 title="Select Image"
             >
                 {currentImage ? (
@@ -457,9 +461,9 @@ function VariantImageSelector({ product, variant, currentImage }) {
             </button>
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="sm:max-w-xl bg-white dark:bg-ink-900 border-slate-200 dark:border-ink-700">
+                <DialogContent className="sm:max-w-xl bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700">
                     <DialogHeader>
-                        <DialogTitle className="text-slate-900 dark:text-ink-100">Select Image for {variant.name}</DialogTitle>
+                        <DialogTitle className="text-zinc-900 dark:text-zinc-100">Select Image for {variant.name}</DialogTitle>
                         <DialogDescription className="text-slate-500">
                             Choose an existing image from the gallery or upload a new one directly for this variant.
                         </DialogDescription>
@@ -488,8 +492,8 @@ function VariantImageSelector({ product, variant, currentImage }) {
                             ))}
                         </div>
 
-                        <div className="border-t border-slate-200 dark:border-ink-700 pt-4 flex justify-between items-center">
-                            <span className="text-sm font-semibold text-slate-700 dark:text-ink-300">Or upload a new image</span>
+                        <div className="border-t border-zinc-200 dark:border-zinc-700 pt-4 flex justify-between items-center">
+                            <span className="text-sm font-semibold text-slate-700 dark:text-zinc-300">Or upload a new image</span>
                             <div>
                                 <input type="file" id={`variantImageUpload-${variant.id}`} className="hidden" accept="image/*" onChange={handleUpload} />
                                 <Button 
@@ -575,13 +579,13 @@ export function SpecManager({ product }) {
 
     return (
         <form onSubmit={saveSpecs} className="space-y-6">
-            <div className="flex items-center justify-between bg-slate-50 dark:bg-ink-800/50 p-6 rounded-xl border border-slate-200 dark:border-ink-700">
+            <div className="flex items-center justify-between bg-slate-50 dark:bg-zinc-700/50 p-6 rounded-xl border border-zinc-200 dark:border-zinc-700">
                 <div>
-                    <h3 className="font-semibold text-slate-900 dark:text-ink-100 mb-1">Technical Specifications</h3>
+                    <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">Technical Specifications</h3>
                     <p className="text-sm text-slate-500">Add detailed specs. Use groups like "Display" or "Memory" to categorize them.</p>
                 </div>
                 <div className="flex gap-3">
-                    <Button type="button" variant="outline" onClick={loadMobileTemplate} className="border-slate-300 dark:border-ink-600 bg-white dark:bg-ink-900 text-slate-700 dark:text-ink-200 hover:bg-slate-50 dark:hover:bg-ink-800">
+                    <Button type="button" variant="outline" onClick={loadMobileTemplate} className="border-slate-300 dark:border-ink-600 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-slate-50 dark:hover:bg-zinc-700">
                         <ImagePlus className="w-4 h-4 mr-2" /> Load Mobile Template
                     </Button>
                     <Button type="button" onClick={addSpec} className="bg-slate-900 hover:bg-slate-800 dark:bg-ink-100 dark:hover:bg-white dark:text-slate-900">
@@ -590,9 +594,9 @@ export function SpecManager({ product }) {
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-ink-900 border border-slate-200 dark:border-ink-700 rounded-xl overflow-hidden shadow-sm">
+            <div className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl overflow-hidden shadow-sm">
                 <table className="min-w-full divide-y divide-slate-200 dark:divide-ink-700">
-                    <thead className="bg-slate-50 dark:bg-ink-800/50">
+                    <thead className="bg-slate-50 dark:bg-zinc-700/50">
                         <tr>
                             <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase w-1/4">Group (Optional)</th>
                             <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase w-1/4">Key (e.g. RAM)</th>
@@ -605,14 +609,14 @@ export function SpecManager({ product }) {
                             <tr>
                                 <td colSpan="4" className="px-6 py-12 text-center">
                                     <div className="text-sm text-slate-500 mb-4">No specifications added yet.</div>
-                                    <Button type="button" onClick={loadMobileTemplate} className="bg-[#1B4FD8] hover:bg-blue-700 text-white">
+                                    <Button type="button" onClick={loadMobileTemplate} className="bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white">
                                         Start with Mobile Template
                                     </Button>
                                 </td>
                             </tr>
                         )}
                         {data.specs.map((spec, i) => (
-                            <tr key={i} className="hover:bg-slate-50 dark:hover:bg-ink-800/30 group">
+                            <tr key={i} className="hover:bg-slate-50 dark:hover:bg-zinc-700/30 group">
                                 <td className="px-4 py-2">
                                     <TextInput 
                                         value={spec.spec_group || ''} 
@@ -621,7 +625,7 @@ export function SpecManager({ product }) {
                                         className="w-full text-sm border-transparent focus:border-blue-500 hover:border-slate-300 dark:hover:border-ink-600 bg-transparent py-1.5" 
                                     />
                                 </td>
-                                <td className="px-4 py-2 border-l border-slate-100 dark:border-ink-750">
+                                <td className="px-4 py-2 border-l border-zinc-100 dark:border-zinc-700">
                                     <TextInput 
                                         value={spec.spec_key} 
                                         onChange={e => updateSpec(i, 'spec_key', e.target.value)} 
@@ -630,7 +634,7 @@ export function SpecManager({ product }) {
                                         required
                                     />
                                 </td>
-                                <td className="px-4 py-2 border-l border-slate-100 dark:border-ink-750">
+                                <td className="px-4 py-2 border-l border-zinc-100 dark:border-zinc-700">
                                     <TextInput 
                                         value={spec.spec_value} 
                                         onChange={e => updateSpec(i, 'spec_value', e.target.value)} 
@@ -650,8 +654,8 @@ export function SpecManager({ product }) {
             </div>
 
             {data.specs.length > 0 && (
-                <div className="flex justify-end pt-4 border-t border-slate-200 dark:border-ink-700">
-                    <Button type="submit" disabled={processing} className="bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold py-2.5 px-8 rounded-xl shadow-lg shadow-blue-500/20">
+                <div className="flex justify-end pt-4 border-t border-zinc-200 dark:border-zinc-700">
+                    <Button type="submit" disabled={processing} className="bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white font-semibold py-2.5 px-8 rounded-xl shadow-lg ">
                         {processing ? 'Saving...' : 'Save Specifications'}
                     </Button>
                 </div>

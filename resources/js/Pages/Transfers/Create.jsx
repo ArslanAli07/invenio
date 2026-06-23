@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { Button } from '@/Components/ui/button';
@@ -96,17 +96,17 @@ export default function Create({ products, locations }) {
             <div className="mb-6">
                 <Link
                     href={route('transfers.index')}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 dark:text-ink-400 dark:hover:text-ink-200 transition-colors mb-3"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 dark:text-zinc-400 dark:hover:text-ink-200 transition-colors mb-3"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     Back to transfers log
                 </Link>
                 
-                <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-ink-100 flex items-center gap-2">
+                <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                     <ArrowRightLeft className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                     New Stock Transfer
                 </h1>
-                <p className="text-sm text-slate-500 dark:text-ink-400 mt-1">
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
                     Relocate inventory from one location to another. Validates stock availability on submission.
                 </p>
             </div>
@@ -115,16 +115,16 @@ export default function Create({ products, locations }) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     
                     {/* General details card */}
-                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm p-6 space-y-4">
+                    <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm p-6 space-y-4">
                         
                         {/* 1. Product select */}
                         <div>
-                            <InputLabel htmlFor="product_id" value="Select Product to Transfer" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                            <InputLabel htmlFor="product_id" value="Select Product to Transfer" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                             <select
                                 id="product_id"
                                 value={data.product_id}
                                 onChange={(e) => setData('product_id', e.target.value)}
-                                className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-3 text-sm cursor-pointer"
+                                className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 focus:ring-zinc-400 rounded-xl px-4 py-3 text-sm cursor-pointer"
                             >
                                 <option value="">Select a product...</option>
                                 {products.map((p) => (
@@ -139,12 +139,12 @@ export default function Create({ products, locations }) {
                         {/* Variant select (only if product has variants) */}
                         {selectedProduct && selectedProduct.has_variants && (
                             <div>
-                                <InputLabel htmlFor="variant_id" value="Select Variant" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="variant_id" value="Select Variant" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                                 <select
                                     id="variant_id"
                                     value={data.variant_id}
                                     onChange={(e) => setData('variant_id', e.target.value)}
-                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-3 text-sm cursor-pointer"
+                                    className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 focus:ring-zinc-400 rounded-xl px-4 py-3 text-sm cursor-pointer"
                                 >
                                     <option value="">Select a variant...</option>
                                     {selectedProduct.variants.map((v) => (
@@ -160,18 +160,18 @@ export default function Create({ products, locations }) {
                         {/* If product (and optionally variant) is selected, show location and qty inputs */}
                         {selectedProduct && (!selectedProduct.has_variants || data.variant_id) && (
                             <>
-                                <hr className="border-slate-100 dark:border-ink-750 my-4" />
+                                <hr className="border-zinc-100 dark:border-zinc-700 my-4" />
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {/* 2. Source Location */}
                                     <div>
-                                        <InputLabel htmlFor="from_location_id" value="Source Location (From)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                        <InputLabel htmlFor="from_location_id" value="Source Location (From)" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                                         {sourceLocations.length > 0 ? (
                                             <select
                                                 id="from_location_id"
                                                 value={data.from_location_id}
                                                 onChange={(e) => setData('from_location_id', e.target.value)}
-                                                className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-3 text-sm cursor-pointer"
+                                                className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 focus:ring-zinc-400 rounded-xl px-4 py-3 text-sm cursor-pointer"
                                             >
                                                 <option value="">Select source...</option>
                                                 {sourceLocations.map((l) => {
@@ -193,13 +193,13 @@ export default function Create({ products, locations }) {
 
                                     {/* 3. Destination Location */}
                                     <div>
-                                        <InputLabel htmlFor="to_location_id" value="Destination Location (To)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                        <InputLabel htmlFor="to_location_id" value="Destination Location (To)" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                                         <select
                                             id="to_location_id"
                                             value={data.to_location_id}
                                             onChange={(e) => setData('to_location_id', e.target.value)}
                                             disabled={!data.from_location_id}
-                                            className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-3 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 focus:ring-zinc-400 rounded-xl px-4 py-3 text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             <option value="">Select destination...</option>
                                             {availableLocations.map((l) => (
@@ -217,7 +217,7 @@ export default function Create({ products, locations }) {
                                         
                                         {/* 4. Quantity */}
                                         <div>
-                                            <InputLabel htmlFor="quantity" value={`Quantity to Move (Max: ${availableStock.toLocaleString()} ${selectedProduct.unit})`} className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                            <InputLabel htmlFor="quantity" value={`Quantity to Move (Max: ${availableStock.toLocaleString()} ${selectedProduct.unit})`} className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                                             <div className="relative">
                                                 <TextInput
                                                     id="quantity"
@@ -227,11 +227,11 @@ export default function Create({ products, locations }) {
                                                     step="0.001"
                                                     min="0.001"
                                                     max={availableStock}
-                                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
+                                                    className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 focus:ring-zinc-400 rounded-xl px-4 py-2.5 text-sm"
                                                     onChange={(e) => setData('quantity', e.target.value)}
                                                     placeholder="Enter transfer quantity..."
                                                 />
-                                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 dark:text-ink-500 uppercase select-none">
+                                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase select-none">
                                                     {selectedProduct.unit}
                                                 </span>
                                             </div>
@@ -240,11 +240,11 @@ export default function Create({ products, locations }) {
 
                                         {/* Stock availability indicator */}
                                         <div className="flex items-center">
-                                            <div className="bg-slate-50 dark:bg-ink-800/30 rounded-xl p-3 border border-slate-200 dark:border-ink-700 flex items-start gap-2.5 w-full mt-5">
-                                                <Package className="h-4.5 w-4.5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                                            <div className="bg-slate-50 dark:bg-zinc-700/30 rounded-xl p-3 border border-zinc-200 dark:border-zinc-700 flex items-start gap-2.5 w-full mt-5">
+                                                <Package className="h-4.5 w-4.5 text-[#6b7c5c] dark:text-[#8fa67a] shrink-0 mt-0.5" />
                                                 <div>
-                                                    <span className="text-[11px] font-bold text-slate-500 dark:text-ink-400 uppercase tracking-wider block">Source Stock</span>
-                                                    <span className="text-sm font-extrabold text-slate-800 dark:text-ink-200 block mt-0.5 tabular-nums">
+                                                    <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">Source Stock</span>
+                                                    <span className="text-sm font-extrabold text-slate-800 dark:text-zinc-200 block mt-0.5 tabular-nums">
                                                         {availableStock.toLocaleString()} {selectedProduct.unit} available
                                                     </span>
                                                 </div>
@@ -259,15 +259,15 @@ export default function Create({ products, locations }) {
 
                     {/* Notes card */}
                     {selectedProduct && (!selectedProduct.has_variants || data.variant_id) && data.from_location_id && (
-                        <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm p-6 space-y-4">
+                        <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm p-6 space-y-4">
                             <div>
-                                <InputLabel htmlFor="notes" value="Transfer Notes / Description (Optional)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                <InputLabel htmlFor="notes" value="Transfer Notes / Description (Optional)" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                                 <textarea
                                     id="notes"
                                     name="notes"
                                     value={data.notes}
                                     rows="3"
-                                    className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
+                                    className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 focus:ring-zinc-400 rounded-xl px-4 py-2.5 text-sm"
                                     onChange={(e) => setData('notes', e.target.value)}
                                     placeholder="Provide notes or reasons for this transfer (e.g. store restocking)..."
                                 />
@@ -282,7 +282,7 @@ export default function Create({ products, locations }) {
                             <Button
                                 type="button"
                                 variant="outline"
-                                className="w-full rounded-xl py-5 hover:bg-slate-50 dark:hover:bg-ink-800 dark:border-ink-650 dark:text-ink-200 font-semibold text-sm"
+                                className="w-full rounded-xl py-5 hover:bg-slate-50 dark:hover:bg-zinc-700 dark:border-zinc-600 dark:text-zinc-200 font-semibold text-sm"
                             >
                                 Cancel
                             </Button>
@@ -290,7 +290,7 @@ export default function Create({ products, locations }) {
                         <Button
                             type="submit"
                             disabled={processing || !data.product_id || !data.from_location_id || !data.to_location_id || !data.quantity}
-                            className="flex-1 bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl py-5 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex-1 bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white font-semibold rounded-xl py-5 flex items-center justify-center gap-1.5 shadow-md  disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {processing ? (
                                 <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />

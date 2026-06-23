@@ -9,27 +9,31 @@ export default function PublicLayout({ children }) {
     const { url } = usePage();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { cartCount, setIsCartOpen } = useCart();
-    const [isDark, setIsDark] = useState(false);
+    const [isDark, setIsDark] = useState(
+        document.documentElement.classList.contains('dark')
+    );
 
     useEffect(() => {
-        const isDarkMode = localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        setIsDark(isDarkMode);
-        if (isDarkMode) {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') {
             document.documentElement.classList.add('dark');
+            setIsDark(true);
         } else {
             document.documentElement.classList.remove('dark');
+            setIsDark(false);
         }
     }, []);
 
     const toggleDark = () => {
-        const next = !isDark;
-        setIsDark(next);
-        if (next) {
-            document.documentElement.classList.add('dark');
-            localStorage.theme = 'dark';
+        const html = document.documentElement;
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+            setIsDark(false);
         } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.theme = 'light';
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+            setIsDark(true);
         }
     };
 
@@ -82,10 +86,10 @@ export default function PublicLayout({ children }) {
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={toggleDark}
-                                className="text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors focus:outline-none"
-                                aria-label="Toggle Dark Mode"
+                                className="p-2 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+                                aria-label="Toggle dark mode"
                             >
-                                {isDark ? <Sun className="h-5 w-5" strokeWidth={1.5} /> : <Moon className="h-5 w-5" strokeWidth={1.5} />}
+                                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                             </button>
 
                             <button
@@ -142,9 +146,9 @@ export default function PublicLayout({ children }) {
             <footer className="bg-zinc-900 dark:bg-zinc-950 text-zinc-400 dark:text-zinc-500 pt-16 pb-8">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                        <div className="md:col-span-1">
+                        <div className="md:col-span-1 no-underline-content">
                             <span className="text-xl font-bold tracking-tight text-white block mb-4">Invenio.</span>
-                            <p className="text-sm leading-relaxed mb-6">
+                            <p className="text-sm text-zinc-400 dark:text-zinc-500 mt-2">
                                 Premium tech destination. Genuine products, fast delivery, expert support.
                             </p>
                         </div>
@@ -152,25 +156,25 @@ export default function PublicLayout({ children }) {
                         <div>
                             <h3 className="text-xs font-bold text-white tracking-wider uppercase mb-4">Shop</h3>
                             <ul className="space-y-3">
-                                <li><Link href={route('public.store.index')} className="text-sm hover:text-white transition-colors">All Products</Link></li>
-                                <li><Link href={route('public.store.index')} className="text-sm hover:text-white transition-colors">New Arrivals</Link></li>
+                                <li><Link href={route('public.store.index')} className="text-zinc-400 dark:text-zinc-500 hover:text-zinc-100 dark:hover:text-zinc-300 text-sm transition-colors">All Products</Link></li>
+                                <li><Link href={route('public.store.index')} className="text-zinc-400 dark:text-zinc-500 hover:text-zinc-100 dark:hover:text-zinc-300 text-sm transition-colors">New Arrivals</Link></li>
                             </ul>
                         </div>
 
                         <div>
                             <h3 className="text-xs font-bold text-white tracking-wider uppercase mb-4">Support</h3>
                             <ul className="space-y-3">
-                                <li><Link href={route('public.contact')} className="text-sm hover:text-white transition-colors">Contact Us</Link></li>
-                                <li><span className="text-sm">support@invenio.pk</span></li>
+                                <li><Link href={route('public.contact')} className="text-zinc-400 dark:text-zinc-500 hover:text-zinc-100 dark:hover:text-zinc-300 text-sm transition-colors">Contact Us</Link></li>
+                                <li><span className="text-zinc-400 dark:text-zinc-500 text-sm">support@invenio.pk</span></li>
                             </ul>
                         </div>
 
                         <div>
                             <h3 className="text-xs font-bold text-white tracking-wider uppercase mb-4">Legal</h3>
                             <ul className="space-y-3">
-                                <li><Link href={route('public.about')} className="text-sm hover:text-white transition-colors">About Us</Link></li>
-                                <li><Link href="#" className="text-sm hover:text-white transition-colors">Privacy</Link></li>
-                                <li><Link href="#" className="text-sm hover:text-white transition-colors">Terms</Link></li>
+                                <li><Link href={route('public.about')} className="text-zinc-400 dark:text-zinc-500 hover:text-zinc-100 dark:hover:text-zinc-300 text-sm transition-colors">About Us</Link></li>
+                                <li><Link href="#" className="text-zinc-400 dark:text-zinc-500 hover:text-zinc-100 dark:hover:text-zinc-300 text-sm transition-colors">Privacy</Link></li>
+                                <li><Link href="#" className="text-zinc-400 dark:text-zinc-500 hover:text-zinc-100 dark:hover:text-zinc-300 text-sm transition-colors">Terms</Link></li>
                             </ul>
                         </div>
                     </div>

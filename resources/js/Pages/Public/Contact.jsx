@@ -7,55 +7,48 @@ export default function Contact() {
         <PublicLayout>
             <Head title="Contact Us | Invenio" />
             
-            <div className="bg-slate-50 dark:bg-ink-900 py-12">
+            <div className="min-h-screen bg-[#faf9f6] dark:bg-zinc-900 py-16 px-4">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h1 className="text-4xl font-extrabold text-slate-900 dark:text-white mb-4">Get in Touch</h1>
-                        <p className="text-lg text-slate-500 dark:text-slate-400">We'd love to hear from you. Our friendly team is always here to chat.</p>
+                    <div className="mb-12">
+                        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 text-center">Get in Touch</h1>
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400 text-center mt-2 mb-12">We'd love to hear from you. Our friendly team is always here to chat.</p>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         {/* Contact Info */}
                         <div>
-                            <div className="bg-white dark:bg-ink-800 rounded-3xl p-8 shadow-sm border border-slate-100 dark:border-ink-700">
-                                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">Contact Information</h2>
+                            <div className="bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md p-8">
+                                <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-6">Contact Information</h2>
                                 
-                                <div className="space-y-6">
-                                    <div className="flex items-start">
-                                        <div className="bg-blue-50 dark:bg-ink-700 p-3 rounded-full text-blue-600 dark:text-blue-400 mr-4">
-                                            <Mail className="h-6 w-6" />
-                                        </div>
+                                <div>
+                                    <div className="flex items-start gap-3 mb-4">
+                                        <Mail className="w-4 h-4 text-zinc-400 dark:text-zinc-500 shrink-0" />
                                         <div>
-                                            <h3 className="font-semibold text-slate-900 dark:text-white">Email Us</h3>
-                                            <p className="text-slate-500 dark:text-slate-400 mt-1">support@invenio.pk</p>
+                                            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Email Us</h3>
+                                            <p className="text-sm text-zinc-500 dark:text-zinc-400">support@invenio.pk</p>
                                         </div>
                                     </div>
                                     
-                                    <div className="flex items-start">
-                                        <div className="bg-blue-50 dark:bg-ink-700 p-3 rounded-full text-blue-600 dark:text-blue-400 mr-4">
-                                            <Phone className="h-6 w-6" />
-                                        </div>
+                                    <div className="flex items-start gap-3 mb-4">
+                                        <Phone className="w-4 h-4 text-zinc-400 dark:text-zinc-500 shrink-0" />
                                         <div>
-                                            <h3 className="font-semibold text-slate-900 dark:text-white">Call Us</h3>
-                                            <p className="text-slate-500 dark:text-slate-400 mt-1">+92 300 0000000</p>
+                                            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Call Us</h3>
+                                            <p className="text-sm text-zinc-500 dark:text-zinc-400">+92 300 0000000</p>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-start">
-                                        <div className="bg-blue-50 dark:bg-ink-700 p-3 rounded-full text-blue-600 dark:text-blue-400 mr-4">
-                                            <MapPin className="h-6 w-6" />
-                                        </div>
+                                    <div className="flex items-start gap-3 mb-4">
+                                        <MapPin className="w-4 h-4 text-zinc-400 dark:text-zinc-500 shrink-0" />
                                         <div>
-                                            <h3 className="font-semibold text-slate-900 dark:text-white">Visit Us</h3>
-                                            <p className="text-slate-500 dark:text-slate-400 mt-1">123 Tech Avenue, Block 4<br/>Gulshan-e-Iqbal, Karachi</p>
+                                            <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Visit Us</h3>
+                                            <p className="text-sm text-zinc-500 dark:text-zinc-400">123 Tech Avenue, Block 4<br/>Gulshan-e-Iqbal, Karachi</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="mt-10 pt-8 border-t border-slate-100 dark:border-ink-700">
-                                    <h3 className="font-bold text-slate-900 dark:text-white mb-4">Fastest Support</h3>
-                                    <a href="https://wa.me/923000000000?text=Hi%20Invenio" target="_blank" rel="noreferrer" className="w-full inline-flex justify-center items-center px-6 py-4 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-green-600 hover:bg-green-700 transition-colors">
-                                        <MessageCircle className="h-5 w-5 mr-2" />
+                                <div className="mt-6 pt-6 border-t border-stone-200 dark:border-zinc-700">
+                                    <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mt-6 mb-3">Fastest Support</h3>
+                                    <a href="https://wa.me/923000000000?text=Hi%20Invenio" target="_blank" rel="noreferrer" className="w-full block bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white rounded-md py-2.5 text-sm font-medium transition-colors text-center">
                                         Chat on WhatsApp
                                     </a>
                                 </div>
@@ -64,22 +57,22 @@ export default function Contact() {
 
                         {/* Contact Form Placeholder */}
                         <div>
-                            <div className="bg-white dark:bg-ink-800 rounded-3xl p-8 shadow-sm border border-slate-100 dark:border-ink-700">
-                                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">Send us a message</h2>
+                            <div className="bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md p-8">
+                                <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-6">Send us a message</h2>
                                 <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); alert("Thanks for your message! We'll get back to you soon."); }}>
                                     <div>
-                                        <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Full Name</label>
-                                        <input type="text" id="name" className="mt-1 block w-full border-slate-300 dark:border-ink-600 dark:bg-ink-900 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required />
+                                        <label htmlFor="name" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Full Name</label>
+                                        <input type="text" id="name" className="w-full border border-stone-200 dark:border-zinc-600 rounded-md px-3 py-2.5 text-sm bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-400" required />
                                     </div>
                                     <div>
-                                        <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
-                                        <input type="email" id="email" className="mt-1 block w-full border-slate-300 dark:border-ink-600 dark:bg-ink-900 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required />
+                                        <label htmlFor="email" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Email Address</label>
+                                        <input type="email" id="email" className="w-full border border-stone-200 dark:border-zinc-600 rounded-md px-3 py-2.5 text-sm bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-400" required />
                                     </div>
                                     <div>
-                                        <label htmlFor="message" className="block text-sm font-medium text-slate-700 dark:text-slate-300">Message</label>
-                                        <textarea id="message" rows={4} className="mt-1 block w-full border-slate-300 dark:border-ink-600 dark:bg-ink-900 dark:text-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required></textarea>
+                                        <label htmlFor="message" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Message</label>
+                                        <textarea id="message" rows={5} className="w-full border border-stone-200 dark:border-zinc-600 rounded-md px-3 py-2.5 text-sm bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-400" required></textarea>
                                     </div>
-                                    <button type="submit" className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <button type="submit" className="w-full bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white rounded-md py-2.5 text-sm font-medium transition-colors mt-2">
                                         Send Message
                                     </button>
                                 </form>

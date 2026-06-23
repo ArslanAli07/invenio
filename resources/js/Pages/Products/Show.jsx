@@ -146,15 +146,15 @@ export default function Show({ product, categories, stockLevels, movements, move
             <div className="mb-6">
                 <Link
                     href={route('products.index')}
-                    className="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-ink-400 hover:text-slate-900 dark:hover:text-ink-100 transition-colors font-medium mb-4"
+                    className="inline-flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-ink-100 transition-colors font-medium mb-4"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     <span>Back to Products</span>
                 </Link>
                 
-                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 bg-white dark:bg-ink-900 p-6 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm">
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 bg-white dark:bg-zinc-800 p-6 rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm">
                     <div className="flex gap-6">
-                        <div className="hidden sm:flex h-24 w-24 bg-slate-100 dark:bg-ink-800 rounded-xl items-center justify-center border border-slate-200 dark:border-ink-700 overflow-hidden flex-shrink-0">
+                        <div className="hidden sm:flex h-24 w-24 bg-slate-100 dark:bg-zinc-700 rounded-xl items-center justify-center border border-zinc-200 dark:border-zinc-700 overflow-hidden flex-shrink-0">
                             {product.images?.length > 0 ? (
                                 <img src={getImageUrl(product.images[0].path)} alt={product.name} className="h-full w-full object-cover" />
                             ) : (
@@ -163,15 +163,15 @@ export default function Show({ product, categories, stockLevels, movements, move
                         </div>
                         <div>
                             <div className="flex items-center gap-3 mb-2">
-                                <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
+                                <span className="font-mono text-xs font-bold text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-700 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-600 whitespace-nowrap">
                                     {product.sku}
                                 </span>
-                                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-ink-800 text-slate-700 dark:text-ink-200 uppercase tracking-wide">
+                                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-200 uppercase tracking-wide">
                                     {product.category?.name || 'Uncategorized'}
                                 </span>
                             </div>
-                            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-ink-100 mb-1">{product.name}</h1>
-                            <p className="text-sm text-slate-500 dark:text-ink-400 max-w-xl line-clamp-2">
+                            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 mb-1">{product.name}</h1>
+                            <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-xl line-clamp-2">
                                 {product.description || 'No description provided.'}
                             </p>
                         </div>
@@ -180,22 +180,22 @@ export default function Show({ product, categories, stockLevels, movements, move
             </div>
 
             {/* Tabs Navigation */}
-            <div className="flex space-x-1 border-b border-slate-200 dark:border-ink-700 mb-6 overflow-x-auto">
+            <div className="flex space-x-1 border-b border-zinc-200 dark:border-zinc-700 mb-6 overflow-x-auto">
                 <button 
                     onClick={() => setActiveTab('inventory')}
-                    className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'inventory' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
+                    className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'inventory' ? 'border-zinc-900 dark:border-zinc-100 text-zinc-900 dark:text-zinc-100' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
                 >
                     Inventory & Ledger
                 </button>
                 <button 
                     onClick={() => setActiveTab('general')}
-                    className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'general' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
+                    className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'general' ? 'border-zinc-900 dark:border-zinc-100 text-zinc-900 dark:text-zinc-100' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
                 >
                     General Info
                 </button>
                 <button 
                     onClick={() => setActiveTab('media_variants')}
-                    className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'media_variants' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
+                    className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'media_variants' ? 'border-zinc-900 dark:border-zinc-100 text-zinc-900 dark:text-zinc-100' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
                 >
                     Media & Variants
                 </button>
@@ -206,8 +206,8 @@ export default function Show({ product, categories, stockLevels, movements, move
                 {/* Variants Grid */}
                 {product.variants && product.variants.length > 0 && (
                 <div className="mb-8">
-                    <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-ink-100 flex items-center gap-2 mb-4">
-                        <Layers className="h-5 w-5 text-blue-600 dark:text-blue-500" />
+                    <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
+                        <Layers className="h-5 w-5 text-zinc-500 dark:text-zinc-400" />
                         Select Variant
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -219,18 +219,18 @@ export default function Show({ product, categories, stockLevels, movements, move
                                 <button
                                     key={v.id}
                                     onClick={() => handleVariantSelect(v.id)}
-                                    className={`relative text-left flex items-start gap-4 p-4 rounded-2xl border transition-all duration-200 ${
+                                    className={`relative text-left flex items-start gap-4 p-4 rounded-lg border transition-all duration-200 ${
                                         isSelected 
                                             ? 'bg-blue-50/50 dark:bg-blue-900/20 border-blue-500 ring-1 ring-blue-500 shadow-md' 
-                                            : 'bg-white dark:bg-ink-900 border-slate-200 dark:border-ink-700 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-sm'
+                                            : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-sm'
                                     }`}
                                 >
                                     {isSelected && (
-                                        <div className="absolute top-3 right-3 text-blue-600 dark:text-blue-400">
+                                        <div className="absolute top-3 right-3 text-[#6b7c5c] dark:text-[#8fa67a]">
                                             <CheckCircle2 className="h-5 w-5" />
                                         </div>
                                     )}
-                                    <div className="h-16 w-16 bg-slate-100 dark:bg-ink-800 rounded-lg flex items-center justify-center border border-slate-200/50 dark:border-ink-700 overflow-hidden flex-shrink-0">
+                                    <div className="h-16 w-16 bg-slate-100 dark:bg-zinc-700 rounded-lg flex items-center justify-center border border-slate-200/50 dark:border-zinc-700 overflow-hidden flex-shrink-0">
                                         {variantImage ? (
                                             <img src={getImageUrl(variantImage.path)} alt={v.name} className="h-full w-full object-cover" />
                                         ) : (
@@ -238,17 +238,17 @@ export default function Show({ product, categories, stockLevels, movements, move
                                         )}
                                     </div>
                                     <div className="flex-1 min-w-0 pr-6">
-                                        <h3 className={`font-bold text-sm truncate ${isSelected ? 'text-blue-900 dark:text-blue-100' : 'text-slate-900 dark:text-ink-100'}`}>
+                                        <h3 className={`font-bold text-sm truncate ${isSelected ? 'text-blue-900 dark:text-blue-100' : 'text-zinc-900 dark:text-zinc-100'}`}>
                                             {v.name}
                                         </h3>
-                                        <div className="font-mono text-[10px] text-slate-500 dark:text-ink-400 mt-0.5 mb-2 truncate uppercase">
+                                        <div className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400 mt-0.5 mb-2 truncate uppercase">
                                             {v.sku}
                                         </div>
                                         <div className="flex items-end justify-between mt-auto">
-                                            <span className="font-bold text-sm text-slate-900 dark:text-ink-100">
+                                            <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
                                                 Rs {parseFloat(v.price || product.price).toFixed(2)}
                                             </span>
-                                            <span className="text-[10px] font-semibold text-slate-500 dark:text-ink-400 bg-slate-100 dark:bg-ink-800 px-2 py-0.5 rounded-full">
+                                            <span className="text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 bg-slate-100 dark:bg-zinc-700 px-2 py-0.5 rounded-full">
                                                 {v.global_stock || 0} {product.unit || 'pcs'}
                                             </span>
                                         </div>
@@ -264,22 +264,22 @@ export default function Show({ product, categories, stockLevels, movements, move
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 {/* Variant Info / Stock Card */}
                 <div className="lg:col-span-1 flex flex-col gap-6">
-                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
-                        <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-ink-750">
-                            <h3 className="text-sm font-bold text-slate-900 dark:text-ink-100 flex items-center gap-2">
-                                <MapPin className="h-4.5 w-4.5 text-blue-600" />
+                    <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
+                        <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-100 dark:border-zinc-700">
+                            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                                <MapPin className="h-4.5 w-4.5 text-[#6b7c5c]" />
                                 <span>Storage Locations</span>
                             </h3>
-                            <span className="text-xs font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 px-2.5 py-1 rounded-lg">
+                            <span className="text-xs font-bold bg-blue-50 dark:bg-blue-500/10 text-[#6b7c5c] dark:text-[#8fa67a] px-2.5 py-1 rounded-lg">
                                 Total: {currentGlobalStock || 0}
                             </span>
                         </div>
-                        <div className="divide-y divide-slate-100 dark:divide-ink-750 max-h-[300px] overflow-y-auto pr-2">
+                        <div className="divide-y divide-zinc-100 dark:divide-zinc-700 max-h-[300px] overflow-y-auto pr-2">
                             {filteredStockLevels.length > 0 ? filteredStockLevels.map((level) => (
                                 <div key={level.location_id} className="flex items-center justify-between py-3.5">
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-semibold text-slate-900 dark:text-ink-100">{level.location_name}</span>
-                                        <span className="font-mono text-[10px] text-slate-400 dark:text-ink-400 mt-0.5 uppercase">code: {level.location_code}</span>
+                                        <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{level.location_name}</span>
+                                        <span className="font-mono text-[10px] text-slate-400 dark:text-zinc-400 mt-0.5 uppercase">code: {level.location_code}</span>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         {level.is_low && (
@@ -287,13 +287,13 @@ export default function Show({ product, categories, stockLevels, movements, move
                                                 Low
                                             </span>
                                         )}
-                                        <span className="font-bold text-sm text-slate-900 dark:text-ink-100 bg-slate-50 dark:bg-ink-800 border border-slate-200/50 dark:border-ink-700 px-3 py-1 rounded-xl min-w-[3rem] text-center">
+                                        <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100 bg-slate-50 dark:bg-zinc-700 border border-slate-200/50 dark:border-zinc-700 px-3 py-1 rounded-xl min-w-[3rem] text-center">
                                             {level.current_stock}
                                         </span>
                                     </div>
                                 </div>
                             )) : (
-                                <div className="text-center py-6 text-sm text-slate-500 dark:text-ink-400 italic">
+                                <div className="text-center py-6 text-sm text-zinc-500 dark:text-zinc-400 italic">
                                     No storage locations setup.
                                 </div>
                             )}
@@ -303,17 +303,17 @@ export default function Show({ product, categories, stockLevels, movements, move
 
                 {/* Ledger Movement History */}
                 <div className="lg:col-span-2">
-                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col h-full">
-                        <div className="px-6 py-4 border-b border-slate-100 dark:border-ink-700 bg-slate-50/50 dark:bg-ink-800/30">
+                    <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm overflow-hidden flex flex-col h-full">
+                        <div className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-700">
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                                <h3 className="text-sm font-bold text-slate-900 dark:text-ink-100 flex items-center gap-2">
-                                    <TrendingUp className="h-4.5 w-4.5 text-blue-600" />
+                                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                                    <TrendingUp className="h-4.5 w-4.5 text-[#6b7c5c]" />
                                     <span>
                                         Ledger History
                                         {selectedVariant && ` — ${selectedVariant.name}`}
                                     </span>
                                     {movements.total > 0 && (
-                                        <span className="ml-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-ink-700 text-slate-600 dark:text-ink-300">
+                                        <span className="ml-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-zinc-600 text-zinc-600 dark:text-zinc-300">
                                             {movements.total}
                                         </span>
                                     )}
@@ -323,7 +323,7 @@ export default function Show({ product, categories, stockLevels, movements, move
                                     {can?.recordMovement && (
                                         <Button
                                             onClick={handleOpen}
-                                            className="bg-[#1B4FD8] hover:bg-blue-700 text-white text-xs font-semibold rounded-xl px-4 py-2 flex items-center gap-1.5 shadow-md shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-95"
+                                            className="bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white text-xs font-semibold rounded-xl px-4 py-2 flex items-center gap-1.5 shadow-md  transition-all hover:scale-[1.02] active:scale-95"
                                         >
                                             <Plus className="h-3.5 w-3.5" />
                                             Record Movement
@@ -336,7 +336,7 @@ export default function Show({ product, categories, stockLevels, movements, move
                         <div className="overflow-x-auto flex-1">
                             <table className="w-full text-left border-collapse min-w-[700px]">
                                 <thead>
-                                    <tr className="bg-slate-50/75 dark:bg-ink-800/50 border-b border-slate-200 dark:border-ink-700 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-ink-400">
+                                    <tr className="bg-slate-50/75 dark:bg-zinc-700/50 border-b border-zinc-200 dark:border-zinc-700 text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                                         <th className="px-5 py-3">Date</th>
                                         <th className="px-5 py-3">Type & Location</th>
                                         <th className="px-5 py-3">Qty</th>
@@ -344,11 +344,11 @@ export default function Show({ product, categories, stockLevels, movements, move
                                         <th className="px-5 py-3">User</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100 dark:divide-ink-750">
+                                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
                                     {movements.data.length > 0 ? (
                                         movements.data.map((movement) => (
-                                            <tr key={movement.id} className="hover:bg-slate-50/30 dark:hover:bg-ink-800/40 transition-colors">
-                                                <td className="px-5 py-3.5 text-xs text-slate-500 dark:text-ink-400 font-medium">
+                                            <tr key={movement.id} className="hover:bg-slate-50/30 dark:hover:bg-zinc-700/40 transition-colors">
+                                                <td className="px-5 py-3.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
                                                     {new Date(movement.created_at).toLocaleDateString()}
                                                     <div className="text-[10px] text-slate-400 mt-0.5">{new Date(movement.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
                                                 </td>
@@ -370,7 +370,7 @@ export default function Show({ product, categories, stockLevels, movements, move
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <div className="text-xs font-semibold text-slate-700 dark:text-ink-300">
+                                                    <div className="text-xs font-semibold text-slate-700 dark:text-zinc-300">
                                                         {movement.location?.name || '—'}
                                                     </div>
                                                 </td>
@@ -398,23 +398,23 @@ export default function Show({ product, categories, stockLevels, movements, move
                                                         return isPo && movement.reference_id ? (
                                                             <Link
                                                                 href={route('po.show', movement.reference_id)}
-                                                                className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-mono text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/20"
+                                                                className="inline-flex items-center gap-1 text-[#6b7c5c] dark:text-[#8fa67a] font-mono text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/20"
                                                             >
                                                                 {refLabel}
                                                             </Link>
                                                         ) : (
-                                                            <span className="inline-flex items-center gap-1 text-slate-600 dark:text-ink-400 font-mono text-[10px] bg-slate-100 dark:bg-ink-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-ink-700">
+                                                            <span className="inline-flex items-center gap-1 text-slate-600 dark:text-zinc-400 font-mono text-[10px] bg-slate-100 dark:bg-zinc-700 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">
                                                                 {refLabel}
                                                             </span>
                                                         );
                                                     })() : null}
                                                     {movement.note && (
-                                                        <div className="text-[11px] text-slate-500 dark:text-ink-400 mt-1 line-clamp-2" title={movement.note}>
+                                                        <div className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1 line-clamp-2" title={movement.note}>
                                                             {movement.note}
                                                         </div>
                                                     )}
                                                 </td>
-                                                <td className="px-5 py-3.5 text-xs text-slate-600 dark:text-ink-400 font-medium">
+                                                <td className="px-5 py-3.5 text-xs text-slate-600 dark:text-zinc-400 font-medium">
                                                     <span className="flex items-center gap-1.5">
                                                         <User className="h-3 w-3 text-slate-400" />
                                                         {movement.user?.name || 'Unknown'}
@@ -435,10 +435,10 @@ export default function Show({ product, categories, stockLevels, movements, move
 
                         {/* Pagination */}
                         {movements.links && movements.data.length > 0 && (
-                            <div className="px-5 py-3 border-t border-slate-200 dark:border-ink-700 flex flex-wrap items-center justify-between gap-4 bg-slate-50/50 dark:bg-ink-800/30">
-                                <span className="text-[11px] text-slate-500 dark:text-ink-400">
-                                    Showing <span className="font-semibold text-slate-800 dark:text-ink-200">{movements.from}</span> to{' '}
-                                    <span className="font-semibold text-slate-800 dark:text-ink-200">{movements.to}</span>
+                            <div className="px-5 py-3 border-t border-zinc-200 dark:border-zinc-700 flex flex-wrap items-center justify-between gap-4 bg-zinc-50 dark:bg-zinc-700">
+                                <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                                    Showing <span className="font-semibold text-slate-800 dark:text-zinc-200">{movements.from}</span> to{' '}
+                                    <span className="font-semibold text-slate-800 dark:text-zinc-200">{movements.to}</span>
                                 </span>
                                 <div className="flex gap-1">
                                     {movements.links.map((link, idx) => {
@@ -447,7 +447,7 @@ export default function Show({ product, categories, stockLevels, movements, move
                                         if (label.includes('Previous')) {
                                             return (
                                                 <Button key={idx} variant="outline" size="sm"
-                                                    className="h-7 px-2 flex items-center bg-white dark:bg-ink-800 text-slate-600 dark:text-ink-300"
+                                                    className="h-7 px-2 flex items-center bg-white dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300"
                                                     onClick={() => router.get(link.url, {}, { preserveState: true })}>
                                                     <ChevronLeft className="h-3.5 w-3.5" />
                                                 </Button>
@@ -456,7 +456,7 @@ export default function Show({ product, categories, stockLevels, movements, move
                                         if (label.includes('Next')) {
                                             return (
                                                 <Button key={idx} variant="outline" size="sm"
-                                                    className="h-7 px-2 flex items-center bg-white dark:bg-ink-800 text-slate-600 dark:text-ink-300"
+                                                    className="h-7 px-2 flex items-center bg-white dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300"
                                                     onClick={() => router.get(link.url, {}, { preserveState: true })}>
                                                     <ChevronRight className="h-3.5 w-3.5" />
                                                 </Button>
@@ -465,7 +465,7 @@ export default function Show({ product, categories, stockLevels, movements, move
                                         return (
                                             <Button key={idx}
                                                 variant={link.active ? 'default' : 'outline'} size="sm"
-                                                className={`h-7 min-w-[1.75rem] px-1 text-xs ${link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'bg-white dark:bg-ink-800 text-slate-600 dark:text-ink-300'}`}
+                                                className={`h-7 min-w-[1.75rem] px-1 text-xs ${link.active ? 'bg-[#6b7c5c] hover:bg-[#5a6b4c]' : 'bg-white dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300'}`}
                                                 onClick={() => router.get(link.url, {}, { preserveState: true })}>
                                                 {label}
                                             </Button>
@@ -482,21 +482,21 @@ export default function Show({ product, categories, stockLevels, movements, move
 
             {/* Other Tabs */}
             {activeTab === 'general' && (
-                <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+                <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
                     <GeneralManager product={product} brands={categories} />
                 </div>
             )}
             {activeTab === 'media_variants' && (
                 <div className="space-y-6">
-                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+                    <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
                         <ImageManager product={product} />
                     </div>
-                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
-                        <h2 className="text-xl font-bold text-slate-900 dark:text-ink-100 mb-6">Manage Variants</h2>
+                    <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
+                        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">Manage Variants</h2>
                         <VariantManager product={product} />
                     </div>
-                    <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
-                        <h2 className="text-xl font-bold text-slate-900 dark:text-ink-100 mb-6">Technical Specifications</h2>
+                    <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
+                        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">Technical Specifications</h2>
                         <SpecManager product={product} />
                     </div>
                 </div>
@@ -505,13 +505,13 @@ export default function Show({ product, categories, stockLevels, movements, move
             {/* ── Record Movement Slide-over ──────────────────────────────────── */}
             {can?.recordMovement && (
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                    <SheetContent side="right" className="w-full sm:max-w-md bg-white dark:bg-ink-900 p-6 border-l border-slate-200 dark:border-ink-700 shadow-2xl flex flex-col h-full overflow-hidden z-50">
+                    <SheetContent side="right" className="w-full sm:max-w-md bg-white dark:bg-zinc-800 p-6 border-l border-zinc-200 dark:border-zinc-700 shadow-2xl flex flex-col h-full overflow-hidden z-[210]">
                         <SheetHeader className="mb-5">
-                            <SheetTitle className="text-lg font-bold text-slate-900 dark:text-ink-100">
+                            <SheetTitle className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
                                 Record Stock Movement
                             </SheetTitle>
-                            <SheetDescription className="text-xs text-slate-500 dark:text-ink-400">
-                                <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">
+                            <SheetDescription className="text-xs text-zinc-500 dark:text-zinc-400">
+                                <span className="font-mono font-semibold text-[#6b7c5c] dark:text-[#8fa67a]">
                                     {selectedVariant ? selectedVariant.sku : product.sku}
                                 </span>
                                 {' — '}{product.name} {selectedVariant ? ` (${selectedVariant.name})` : ''}
@@ -522,7 +522,7 @@ export default function Show({ product, categories, stockLevels, movements, move
                             <div className="flex-1 overflow-y-auto pr-1 min-h-0 space-y-5">
                                 {/* Movement Type Selector */}
                                 <div>
-                                    <InputLabel value="Movement Type" className="text-slate-700 dark:text-ink-200 font-semibold mb-2" />
+                                    <InputLabel value="Movement Type" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-2" />
                                     <div className="grid grid-cols-3 gap-2">
                                         {Object.entries(typeConfig).map(([key, cfg]) => {
                                             const Icon = cfg.icon;
@@ -535,7 +535,7 @@ export default function Show({ product, categories, stockLevels, movements, move
                                                     className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border text-xs font-semibold transition-all duration-150 ${
                                                         isActive
                                                             ? cfg.activeClass
-                                                            : 'border-slate-200 dark:border-ink-700 text-slate-500 dark:text-ink-400 hover:bg-slate-50 dark:hover:bg-ink-800 hover:border-slate-300 dark:hover:border-ink-650'
+                                                            : 'border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-zinc-700 hover:border-slate-300 dark:hover:border-ink-650'
                                                     }`}
                                                 >
                                                     <Icon className="h-4 w-4" />
@@ -549,12 +549,12 @@ export default function Show({ product, categories, stockLevels, movements, move
 
                                 {/* Location */}
                                 <div>
-                                    <InputLabel htmlFor="location_id" value="Location" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                    <InputLabel htmlFor="location_id" value="Location" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                                     <select
                                         id="location_id"
                                         value={data.location_id}
                                         onChange={(e) => setData('location_id', e.target.value)}
-                                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
+                                        className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:border-zinc-400 focus:ring-zinc-400 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
                                     >
                                         <option value="">Select a location…</option>
                                         {Array.from(new Map(stockLevels.map(l => [l.location_id, {id: l.location_id, name: l.location_name, code: l.location_code}])).values()).map(loc => (
@@ -568,7 +568,7 @@ export default function Show({ product, categories, stockLevels, movements, move
 
                                 {/* Quantity */}
                                 <div>
-                                    <InputLabel htmlFor="quantity" value={activeType.qtyLabel} className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                    <InputLabel htmlFor="quantity" value={activeType.qtyLabel} className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                                     <TextInput
                                         id="quantity"
                                         type="number"
@@ -577,12 +577,12 @@ export default function Show({ product, categories, stockLevels, movements, move
                                         value={data.quantity}
                                         onChange={(e) => setData('quantity', e.target.value)}
                                         placeholder={data.type === 'adjust' ? 'e.g. 5 or -3' : 'e.g. 50'}
-                                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
+                                        className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border-zinc-200 dark:border-zinc-700 dark:text-zinc-100 text-slate-900 focus:border-zinc-400 focus:ring-zinc-400 rounded-xl px-4 py-2.5 text-sm"
                                     />
                                     {activeType.qtyHint && (
                                         <p className={`text-[11px] mt-1.5 leading-snug ${
                                             data.type === 'out'
-                                                ? 'text-slate-500 dark:text-ink-400'
+                                                ? 'text-zinc-500 dark:text-zinc-400'
                                                 : 'text-amber-600 dark:text-amber-400'
                                         }`}>
                                             {activeType.qtyHint}
@@ -593,40 +593,40 @@ export default function Show({ product, categories, stockLevels, movements, move
 
                                 {/* Reference Source */}
                                 <div>
-                                    <InputLabel htmlFor="reference_source" value="Reference Source (optional)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                    <InputLabel htmlFor="reference_source" value="Reference Source (optional)" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                                     <TextInput
                                         id="reference_source"
                                         type="text"
                                         value={data.reference_source}
                                         onChange={(e) => setData('reference_source', e.target.value)}
                                         placeholder="e.g. Delivery note #42, RMA-001"
-                                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm"
+                                        className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border-zinc-200 dark:border-zinc-700 dark:text-zinc-100 text-slate-900 focus:border-zinc-400 focus:ring-zinc-400 rounded-xl px-4 py-2.5 text-sm"
                                     />
                                     <InputError message={errors.reference_source} className="mt-1.5 text-xs text-rose-500" />
                                 </div>
 
                                 {/* Notes */}
                                 <div>
-                                    <InputLabel htmlFor="note" value="Notes (optional)" className="text-slate-700 dark:text-ink-200 font-semibold mb-1.5" />
+                                    <InputLabel htmlFor="note" value="Notes (optional)" className="text-zinc-700 dark:text-zinc-200 font-semibold mb-1.5" />
                                     <textarea
                                         id="note"
                                         value={data.note}
                                         rows="3"
                                         onChange={(e) => setData('note', e.target.value)}
                                         placeholder="Any additional context about this movement…"
-                                        className="block w-full bg-slate-50/50 dark:bg-ink-800/50 border border-slate-200 dark:border-ink-700 dark:text-ink-100 text-slate-900 focus:border-blue-500 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
+                                        className="block w-full bg-slate-50/50 dark:bg-zinc-700/50 border border-zinc-200 dark:border-zinc-700 dark:text-zinc-100 text-slate-900 focus:border-zinc-400 focus:ring-zinc-400 rounded-xl px-4 py-2.5 text-sm shadow-sm transition"
                                     />
                                     <InputError message={errors.note} className="mt-1.5 text-xs text-rose-500" />
                                 </div>
                             </div>
 
                             {/* Footer */}
-                            <div className="border-t border-slate-100 dark:border-ink-700/50 pt-4 mt-4 flex gap-3">
+                            <div className="border-t border-zinc-100 dark:border-zinc-700/50 pt-4 mt-4 flex gap-3">
                                 <Button
                                     type="button"
                                     variant="outline"
                                     onClick={() => setIsOpen(false)}
-                                    className="flex-1 rounded-xl py-5 hover:bg-slate-50 dark:hover:bg-ink-800 dark:border-ink-700 dark:text-ink-200 font-semibold text-sm"
+                                    className="flex-1 rounded-xl py-5 hover:bg-slate-50 dark:hover:bg-zinc-700 dark:border-zinc-700 dark:text-zinc-200 font-semibold text-sm"
                                 >
                                     Cancel
                                 </Button>

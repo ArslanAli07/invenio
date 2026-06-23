@@ -11,140 +11,170 @@ export default function Invoice({ order }) {
         return () => clearTimeout(timer);
     }, []);
 
-    const calculateSubtotal = () => {
-        return order.items.reduce((sum, item) => sum + (parseFloat(item.unit_price) * item.quantity), 0);
+    const subtotal = order.items.reduce((sum, item) => {
+        return sum + (Number(item.quantity) * Number(item.price || item.unit_price || 0));
+    }, 0);
+
+    const shipping = Number(order.shipping_cost || order.shipping_fee || 0);
+    const total = subtotal + shipping;
+
+    const getStatusColor = (status) => {
+        const s = String(status).toLowerCase();
+        if (s === 'cancelled') return 'text-red-600 font-medium text-xs text-right';
+        if (s === 'completed') return 'text-emerald-600 font-medium text-xs text-right';
+        if (s === 'pending') return 'text-amber-600 font-medium text-xs text-right';
+        return 'text-zinc-600 font-medium text-xs text-right';
     };
 
-    const subtotal = calculateSubtotal();
-
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white flex flex-col items-center justify-start py-10 px-4 print:py-0 print:px-0">
             <Head title={`Invoice - ${order.order_number}`} />
 
-            {/* Print Area Container */}
-            <div className="max-w-4xl mx-auto p-8 sm:p-12 text-slate-900 bg-white">
+            <style>{`
+                @media print {
+                    body { background: white; }
+                    .print\\:hidden { display: none !important; }
+                    .print\\:shadow-none { box-shadow: none !important; }
+                    .print\\:border-none { border: none !important; }
+                    .print\\:p-8 { padding: 2rem !important; }
+                }
+            `}</style>
+
+            {/* Invoice Document */}
+            <div className="w-full max-w-3xl bg-white border border-zinc-200 rounded-lg shadow-sm p-10 print:shadow-none print:border-none print:rounded-none print:p-8">
                 
-                {/* Header Section */}
-                <div className="flex justify-between items-start border-b border-slate-200 pb-8 mb-8">
+                {/* SECTION 1: Header */}
+                <div className="flex justify-between items-start">
+                    
+                    {/* LEFT — Company info */}
                     <div>
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-xl">I</span>
-                            </div>
-                            <h1 className="text-2xl font-black tracking-tight text-slate-900">INVENIO</h1>
+                        <div className="flex items-center mb-4">
+                            <div className="w-9 h-9 rounded-md bg-[#6b7c5c] flex items-center justify-center text-white text-sm font-bold mr-3">I</div>
+                            <span className="text-xl font-bold tracking-tight text-zinc-900">Invenio.</span>
                         </div>
-                        <p className="text-slate-500 text-sm">
-                            123 Tech Avenue, Silicon Valley<br />
-                            San Francisco, CA 94107<br />
-                            contact@invenio.store<br />
-                            +1 (555) 123-4567
-                        </p>
+                        <div className="text-xs text-zinc-400 mt-3 leading-relaxed">
+                            Lahore, Pakistan<br />
+                            support@invenio.pk<br />
+                            0311-INVENIO
+                        </div>
                     </div>
+
+                    {/* RIGHT — Invoice meta */}
                     <div className="text-right">
-                        <h2 className="text-4xl font-light text-slate-400 mb-4 uppercase tracking-widest">Invoice</h2>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-slate-600">
-                            <span className="font-semibold text-slate-900">Invoice No:</span>
-                            <span>{order.order_number}</span>
-                            <span className="font-semibold text-slate-900">Date:</span>
-                            <span>{new Date(order.created_at).toLocaleDateString()}</span>
-                            <span className="font-semibold text-slate-900">Status:</span>
-                            <span className="capitalize font-medium text-emerald-600">{order.status}</span>
+                        <h2 className="text-3xl font-bold tracking-widest text-zinc-200 text-right uppercase">INVOICE</h2>
+                        <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-right mt-3">
+                            <span className="text-xs text-zinc-400 text-right">Invoice No:</span>
+                            <span className="text-xs font-mono text-zinc-600 text-right">{order.order_number}</span>
+                            
+                            <span className="text-xs text-zinc-400 text-right">Date:</span>
+                            <span className="text-xs text-zinc-600 text-right">{new Date(order.created_at).toLocaleDateString()}</span>
+                            
+                            <span className="text-xs text-zinc-400 text-right">Status:</span>
+                            <span className={getStatusColor(order.status)}>{order.status}</span>
                         </div>
                     </div>
+
                 </div>
 
-                {/* Customer Info Section */}
-                <div className="grid grid-cols-2 gap-12 mb-12">
+                {/* Divider below header */}
+                <div className="border-t border-zinc-200 my-8"></div>
+
+                {/* SECTION 2: Bill To / Ship To */}
+                <div className="grid grid-cols-2 gap-8 mb-8">
                     <div>
-                        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Bill To</h3>
-                        <p className="font-semibold text-slate-900 mb-1">{order.customer_name}</p>
-                        <p className="text-slate-600 text-sm">{order.customer_email}</p>
-                        <p className="text-slate-600 text-sm">{order.customer_phone}</p>
+                        <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2">BILL TO</h3>
+                        <p className="text-sm font-semibold text-zinc-900">{order.customer_name}</p>
+                        <p className="text-sm text-zinc-500 mt-0.5">{order.customer_email}</p>
+                        <p className="text-sm text-zinc-500 mt-0.5">{order.customer_phone}</p>
                     </div>
                     <div>
-                        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Ship To</h3>
-                        <p className="font-semibold text-slate-900 mb-1">{order.customer_name}</p>
-                        <p className="text-slate-600 text-sm whitespace-pre-line">{order.shipping_address}</p>
+                        <h3 className="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2">SHIP TO</h3>
+                        <p className="text-sm font-semibold text-zinc-900">{order.customer_name}</p>
+                        <p className="text-sm text-zinc-500 mt-0.5 whitespace-pre-line">{order.shipping_address}</p>
                     </div>
                 </div>
 
-                {/* Order Items Table */}
-                <div className="mb-8">
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr className="border-b-2 border-slate-900">
-                                <th className="py-3 px-2 font-bold text-sm uppercase tracking-wider text-slate-900 w-1/2">Item Description</th>
-                                <th className="py-3 px-2 font-bold text-sm uppercase tracking-wider text-slate-900 text-center">Qty</th>
-                                <th className="py-3 px-2 font-bold text-sm uppercase tracking-wider text-slate-900 text-right">Price</th>
-                                <th className="py-3 px-2 font-bold text-sm uppercase tracking-wider text-slate-900 text-right">Total</th>
+                {/* SECTION 3: Items table */}
+                <table className="w-full mb-8">
+                    <thead>
+                        <tr className="border-b-2 border-zinc-900">
+                            <th className="text-xs font-semibold uppercase tracking-wider text-zinc-900 py-3 text-left w-1/2">ITEM DESCRIPTION</th>
+                            <th className="text-xs font-semibold uppercase tracking-wider text-zinc-900 py-3 text-right">QTY</th>
+                            <th className="text-xs font-semibold uppercase tracking-wider text-zinc-900 py-3 text-right">UNIT PRICE</th>
+                            <th className="text-xs font-semibold uppercase tracking-wider text-zinc-900 py-3 text-right">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-100">
+                        {order.items.map((item, index) => (
+                            <tr key={index} className="border-b border-zinc-100 py-4">
+                                <td className="py-4 text-left">
+                                    <p className="text-sm font-medium text-zinc-900">
+                                        {item.product?.name || item.product_name || item.name || '—'}
+                                    </p>
+                                    {(item.variant_label || item.variant_name || item.variant?.label) && (
+                                        <p className="text-xs text-zinc-400 mt-0.5">
+                                            {item.variant_label || item.variant_name || item.variant?.label || ''}
+                                        </p>
+                                    )}
+                                </td>
+                                <td className="py-4 text-sm text-zinc-600 text-right">{item.quantity}</td>
+                                <td className="py-4 text-sm text-zinc-600 text-right">
+                                    Rs {Number(item.price || item.unit_price || 0).toLocaleString()}
+                                </td>
+                                <td className="py-4 text-sm font-semibold text-zinc-900 text-right">
+                                    Rs {(Number(item.quantity) * Number(item.price || item.unit_price || 0)).toLocaleString()}
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-200">
-                            {order.items.map((item, index) => (
-                                <tr key={index}>
-                                    <td className="py-4 px-2">
-                                        <p className="font-semibold text-slate-900">{item.product_name}</p>
-                                        {item.variant_name && (
-                                            <p className="text-xs text-slate-500 mt-1">Variant: {item.variant_name}</p>
-                                        )}
-                                    </td>
-                                    <td className="py-4 px-2 text-center text-slate-700">{item.quantity}</td>
-                                    <td className="py-4 px-2 text-right text-slate-700">Rs {parseFloat(item.unit_price).toLocaleString()}</td>
-                                    <td className="py-4 px-2 text-right font-medium text-slate-900">
-                                        Rs {(parseFloat(item.unit_price) * item.quantity).toLocaleString()}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                        ))}
+                    </tbody>
+                </table>
 
-                {/* Totals Section */}
-                <div className="flex justify-end mb-16">
-                    <div className="w-1/2 sm:w-1/3">
-                        <div className="flex justify-between py-2 border-b border-slate-200 text-sm">
-                            <span className="text-slate-600">Subtotal</span>
-                            <span className="font-medium">Rs {subtotal.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between py-2 border-b border-slate-200 text-sm">
-                            <span className="text-slate-600">Shipping</span>
-                            <span className="font-medium">Rs {parseFloat(order.total_amount) > subtotal ? (parseFloat(order.total_amount) - subtotal).toLocaleString() : '0'}</span>
-                        </div>
-                        <div className="flex justify-between py-3 text-lg font-bold">
-                            <span className="text-slate-900">Total</span>
-                            <span className="text-slate-900">Rs {parseFloat(order.total_amount).toLocaleString()}</span>
-                        </div>
+                {/* SECTION 4: Totals */}
+                <div className="flex flex-col items-end gap-1">
+                    <div className="flex justify-between w-64">
+                        <span className="text-sm text-zinc-500">Subtotal</span>
+                        <span className="text-sm text-zinc-700">Rs {subtotal.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between w-64">
+                        <span className="text-sm text-zinc-500">Shipping</span>
+                        <span className="text-sm text-zinc-700">Rs {shipping.toLocaleString()}</span>
+                    </div>
+                    <div className="border-t border-zinc-200 w-64 my-2"></div>
+                    <div className="flex justify-between w-64">
+                        <span className="text-base font-bold text-zinc-900">Total</span>
+                        <span className="text-base font-bold text-zinc-900">Rs {total.toLocaleString()}</span>
                     </div>
                 </div>
 
-                {/* Footer Section */}
-                <div className="border-t border-slate-200 pt-8 text-center sm:text-left grid sm:grid-cols-2 gap-8">
-                    <div>
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Payment Notes</h4>
-                        <p className="text-xs text-slate-500">
-                            Payment is due within 15 days of invoice date. Please include the invoice number on your check.
-                        </p>
+                {/* SECTION 5: Footer */}
+                <div className="border-t border-zinc-200 mt-10 pt-6">
+                    <div className="grid grid-cols-2 gap-8">
+                        <div>
+                            <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2">PAYMENT NOTES</h4>
+                            <p className="text-xs text-zinc-500 leading-relaxed">
+                                Payment is due within 15 days of invoice date. For queries, contact us on WhatsApp at 0311-INVENIO.
+                            </p>
+                        </div>
+                        <div className="text-right">
+                            <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2 text-right">THANK YOU FOR YOUR BUSINESS</h4>
+                            <p className="text-xs text-zinc-500 leading-relaxed text-right">
+                                Thank you for choosing Invenio. For any questions regarding this invoice, reach us at support@invenio.pk.
+                            </p>
+                        </div>
                     </div>
-                    <div className="sm:text-right">
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Thank you for your business</h4>
-                        <p className="text-xs text-slate-500">
-                            If you have any questions concerning this invoice, contact our support at contact@invenio.store.
-                        </p>
-                    </div>
-                </div>
-                
-                {/* Print action (only visible on screen) */}
-                <div className="mt-12 text-center print:hidden">
-                    <button 
-                        onClick={() => window.print()}
-                        className="bg-slate-900 text-white px-6 py-2 rounded-full font-medium hover:bg-slate-800 transition-colors"
-                    >
-                        Print Invoice Again
-                    </button>
-                    <p className="text-xs text-slate-400 mt-3">This dialog should open automatically.</p>
                 </div>
 
             </div>
+
+            {/* PRINT BUTTON */}
+            <button 
+                onClick={() => window.print()}
+                className="mt-6 bg-[#6b7c5c] hover:bg-[#5a6b4c] text-white rounded-md px-6 py-2.5 text-sm font-medium transition-colors print:hidden"
+            >
+                Print Invoice
+            </button>
+            <p className="text-xs text-zinc-400 mt-2 print:hidden">This dialog should open automatically.</p>
+
         </div>
     );
 }

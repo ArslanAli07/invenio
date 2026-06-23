@@ -1,0 +1,291 @@
+﻿FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Dashboard.jsx
+  41: sent:               { label: 'Sent',     icon: Send,        class: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-500/20' },
+  57: <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border ${cfg.class}`}>
+  83: <div className={`bg-white dark:bg-ink-900 rounded-2xl border shadow-sm p-5 flex items-start gap-4 transition-all hover:shadow-md ${
+  92: ? 'bg-blue-50 dark:bg-blue-500/10'
+  99: accent === 'blue'  ? 'text-blue-600 dark:text-blue-400'   :
+  126: <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+  130: <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+  146: <p className="text-sm font-extrabold text-[#1B4FD8] dark:text-blue-400 tabular-nums">
+  222: <div className="lg:col-span-2 bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col">
+  279: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col">
+  342: <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
+  388: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col">
+  394: <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400">
+  401: className="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-1"
+  429: <span className={`h-2 w-2 rounded-full shrink-0 ${
+  439: <span className="font-mono text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
+  448: <div className="flex-1 h-1 bg-slate-100 dark:bg-ink-750 rounded-full overflow-hidden">
+  450: className={`h-full rounded-full transition-all ${
+  473: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col">
+  476: <ClipboardList className="h-4 w-4 text-blue-600" />
+  481: className="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-1"
+  506: <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
+  534: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden">
+  542: className="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-1"
+  583: <span className="font-mono text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap mr-1.5">
+  586: <span className="text-xs font-semibold text-slate-800 dark:text-ink-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Welcome.jsx
+  89: <div className="absolute -bottom-16 -left-16 h-40 w-[calc(100%+8rem)] bg-gradient-to-b from-transparent via-white to-white dark:via-zinc-900 dark:to-zinc-900"></div>
+  97: <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
+  153: <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
+  200: <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
+  246: <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Categories\Index.jsx
+  109: className="bg-[#1B4FD8] hover:bg-blue-700 text-white rounded-xl shadow-md flex items-center gap-2 self-start sm:self-auto"
+  118: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 mb-6 shadow-sm dark:shadow-ink-950/20">
+  152: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm dark:shadow-ink-950/20 overflow-hidden flex-1 flex flex-col">
+  171: <span className="inline-flex items-center bg-slate-100 dark:bg-ink-800 text-slate-700 dark:text-ink-200 px-2.5 py-0.5 rounded-full text-xs font-bold">
+  177: <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+  178: <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+  182: <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 text-slate-500 border border-slate-200">
+  183: <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
+  220: <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-slate-500 mb-4">
+  284: link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200'
+  333: className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
+  358: className="flex-1 bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl py-5 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/10"
+  361: <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\CustomerOrders\Index.jsx
+  16: confirmed:  { label: 'Confirmed',  dot: 'bg-blue-500',   class: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-500/20' },
+  17: processing: { label: 'Processing', dot: 'bg-purple-500', class: 'bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-100 dark:border-purple-500/20' },
+  18: shipped:    { label: 'Shipped',    dot: 'bg-indigo-500', class: 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-100 dark:border-indigo-500/20' },
+  26: <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${cfg.class}`}>
+  27: <span className={`h-1.5 w-1.5 rounded-full ${cfg.dot}`} />
+  92: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 mb-6 shadow-sm">
+  148: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col">
+  168: className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-100/50 dark:border-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors whitespace-nowrap"
+  244: className={`rounded-xl h-9 w-9 p-0 ${link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200'}`}
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\CustomerOrders\Invoice.jsx
+  31: <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+  140: className="bg-slate-900 text-white px-6 py-2 rounded-full font-medium hover:bg-slate-800 transition-colors"
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\CustomerOrders\Show.jsx
+  92: <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+  95: 'bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-400'
+  132: className="gap-2 bg-[#1B4FD8] hover:bg-blue-700 text-white"
+  161: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden">
+  213: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm p-6">
+  226: <span className="font-mono text-blue-600 dark:text-blue-400">Rs. {parseFloat(order.total).toLocaleString()}</span>
+  235: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm p-6">
+  264: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm p-6">
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Locations\Index.jsx
+  111: className="bg-[#1B4FD8] hover:bg-blue-700 text-white rounded-xl shadow-md flex items-center gap-2 self-start sm:self-auto"
+  120: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 mb-6 shadow-sm dark:shadow-ink-950/20">
+  154: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm dark:shadow-ink-950/20 overflow-hidden flex-1 flex flex-col">
+  171: <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
+  185: <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+  186: <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+  190: <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 dark:bg-ink-800 text-slate-500 border border-slate-200 dark:border-ink-700">
+  191: <span className="h-1.5 w-1.5 rounded-full bg-slate-400 dark:bg-slate-500" />
+  227: <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-slate-500 mb-4">
+  290: link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200'
+  367: className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
+  392: className="flex-1 bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl py-5 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/10"
+  395: <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Movements\Index.jsx
+  54: <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${cfg.badge}`}>
+  75: className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
+  144: <div className="p-2 bg-violet-50 dark:bg-violet-500/10 rounded-xl border border-violet-100 dark:border-violet-500/20">
+  167: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm p-4 mb-4">
+  185: className="rounded-xl bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold px-4 shrink-0"
+  247: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col">
+  257: <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/20">
+  303: <span className="block text-sm font-semibold text-slate-800 dark:text-ink-100 group-hover/link:text-blue-600 dark:group-hover/link:text-blue-400 transition-colors">
+  306: <span className="font-mono text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 mt-0.5 inline-block">
+  353: <div className="h-5 w-5 rounded-full bg-gradient-to-tr from-[#1B4FD8] to-indigo-500 text-white font-bold flex items-center justify-center text-[9px] shrink-0 uppercase">
+  376: className="mt-1 text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+  421: className={`rounded-xl h-9 w-9 p-0 ${link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200'}`}
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Products\Index.jsx
+  78: className="bg-[#1B4FD8] hover:bg-blue-700 text-white rounded-xl shadow-md flex items-center gap-2 self-start sm:self-auto"
+  86: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 mb-6 shadow-sm">
+  133: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex-1 flex flex-col">
+  166: <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-1 rounded border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
+  185: <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
+  228: <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-slate-500 mb-4">
+  287: link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100'
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Products\Show.jsx
+  155: <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 bg-white dark:bg-ink-900 p-6 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm">
+  166: <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap">
+  169: <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-ink-800 text-slate-700 dark:text-ink-200 uppercase tracking-wide">
+  186: className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'inventory' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
+  192: className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'general' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
+  198: className={`px-4 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'media_variants' ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-ink-300'}`}
+  210: <Layers className="h-5 w-5 text-blue-600 dark:text-blue-500" />
+  222: className={`relative text-left flex items-start gap-4 p-4 rounded-2xl border transition-all duration-200 ${
+  224: ? 'bg-blue-50/50 dark:bg-blue-900/20 border-blue-500 ring-1 ring-blue-500 shadow-md'
+  229: <div className="absolute top-3 right-3 text-blue-600 dark:text-blue-400">
+  241: <h3 className={`font-bold text-sm truncate ${isSelected ? 'text-blue-900 dark:text-blue-100' : 'text-slate-900 dark:text-ink-100'}`}>
+  251: <span className="text-[10px] font-semibold text-slate-500 dark:text-ink-400 bg-slate-100 dark:bg-ink-800 px-2 py-0.5 rounded-full">
+  267: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+  270: <MapPin className="h-4.5 w-4.5 text-blue-600" />
+  273: <span className="text-xs font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 px-2.5 py-1 rounded-lg">
+  286: <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-50 text-rose-600 border border-rose-100 animate-pulse">
+  306: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col h-full">
+  310: <TrendingUp className="h-4.5 w-4.5 text-blue-600" />
+  316: <span className="ml-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-ink-700 text-slate-600 dark:text-ink-300">
+  326: className="bg-[#1B4FD8] hover:bg-blue-700 text-white text-xs font-semibold rounded-xl px-4 py-2 flex items-center gap-1.5 shadow-md shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-95"
+  401: className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-mono text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/20"
+  468: className={`h-7 min-w-[1.75rem] px-1 text-xs ${link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'bg-white dark:bg-ink-800 text-slate-600 dark:text-ink-300'}`}
+  485: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+  491: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+  494: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+  498: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-6 shadow-sm">
+  514: <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">
+  645: <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Products\Partials\ProductForm.jsx
+  132: className="flex-1 bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl py-5"
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Products\Partials\ProductManagers.jsx
+  183: className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
+  195: className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
+  207: className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
+  220: className="bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl py-2.5 px-6"
+  274: <Button className="rounded-lg bg-[#1B4FD8] hover:bg-blue-700 text-white" onClick={() => document.getElementById('imageUpload').click()}>
+  291: <button onClick={() => setPrimary(img)} className="p-2 bg-white rounded-full text-slate-700 hover:text-blue-600" title="Set Primary">
+  295: <button onClick={() => deleteImage(img)} className="p-2 bg-white rounded-full text-slate-700 hover:text-rose-600" title="Delete">
+  300: <div className="absolute top-2 left-2 bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded shadow-md">
+  364: <Button type="submit" disabled={processing} className="w-full bg-[#1B4FD8] hover:bg-blue-700 text-white h-[42px] mb-[2px]">
+  483: <div className="absolute top-1 right-1 bg-blue-500 text-white rounded-full p-0.5">
+  608: <Button type="button" onClick={loadMobileTemplate} className="bg-[#1B4FD8] hover:bg-blue-700 text-white">
+  654: <Button type="submit" disabled={processing} className="bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold py-2.5 px-8 rounded-xl shadow-lg shadow-blue-500/20">
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\PurchaseOrders\Create.jsx
+  77: <div className="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-xl border border-blue-100 dark:border-blue-500/20">
+  78: <ClipboardList className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+  90: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden">
+  93: <Building2 className="h-4 w-4 text-blue-600" />
+  163: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden">
+  166: <Package className="h-4 w-4 text-blue-600" />
+  168: <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-ink-700 text-slate-600 dark:text-ink-300">
+  177: className="rounded-xl text-xs gap-1.5 border-blue-200 dark:border-blue-500/30 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10"
+  331: className="bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl px-8 py-2.5 flex items-center gap-2 shadow-md shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-95"
+  334: <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\PurchaseOrders\Edit.jsx
+  87: <span className="font-mono text-blue-600 dark:text-blue-400">{purchaseOrder.po_number}</span>
+  99: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden">
+  102: <Building2 className="h-4 w-4 text-blue-600" />
+  172: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden">
+  175: <Package className="h-4 w-4 text-blue-600" />
+  177: <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-ink-700 text-slate-600 dark:text-ink-300">
+  186: className="rounded-xl text-xs gap-1.5 border-blue-200 dark:border-blue-500/30 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10"
+  333: <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\PurchaseOrders\Index.jsx
+  26: dot:   'bg-blue-500',
+  27: class: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-500/20',
+  49: <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${cfg.class}`}>
+  50: <span className={`h-1.5 w-1.5 rounded-full ${cfg.dot}`} />
+  117: <Button className="bg-[#1B4FD8] hover:bg-blue-700 text-white rounded-xl shadow-md flex items-center gap-2 self-start sm:self-auto">
+  126: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 mb-6 shadow-sm">
+  183: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col">
+  206: className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-100/50 dark:border-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors whitespace-nowrap"
+  263: className="gap-1.5 rounded-xl text-xs font-semibold hover:bg-blue-50 dark:hover:bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+  276: <div className="p-5 bg-slate-100 dark:bg-ink-800 rounded-2xl text-slate-400 dark:text-ink-500 mb-4">
+  288: <Button className="bg-[#1B4FD8] hover:bg-blue-700 text-white rounded-xl text-sm gap-2">
+  334: className={`rounded-xl h-9 w-9 p-0 ${link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200'}`}
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\PurchaseOrders\Show.jsx
+  39: dot:   'bg-blue-500',
+  40: badge: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-500/20',
+  75: <span className={`inline-flex items-center gap-1.5 border rounded-full font-semibold ${large ? 'px-3 py-1.5 text-sm' : 'px-2.5 py-1 text-xs'} ${cfg.badge}`}>
+  88: <div className="flex-1 h-1.5 bg-slate-100 dark:bg-ink-750 rounded-full overflow-hidden">
+  90: className={`h-full rounded-full transition-all duration-500 ${full ? 'bg-emerald-500' : 'bg-blue-500'}`}
+  133: className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50"
+  139: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-2xl dark:shadow-ink-950/80 w-full max-w-lg max-h-[90vh] flex flex-col animate-in fade-in-0 zoom-in-95 duration-200">
+  149: <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">{purchaseOrder.po_number}</span>
+  178: <span className="font-mono text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20">
+  250: <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+  315: <div className="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-xl border border-blue-100 dark:border-blue-500/20">
+  316: <ClipboardList className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+  346: className="rounded-xl gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md shadow-blue-500/20"
+  391: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 shadow-sm">
+  409: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 shadow-sm">
+  427: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 shadow-sm">
+  439: <Send className="h-3.5 w-3.5 text-blue-400 shrink-0" />
+  455: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 shadow-sm">
+  460: <div className="h-7 w-7 rounded-full bg-gradient-to-tr from-[#1B4FD8] to-indigo-500 text-white font-bold flex items-center justify-center text-xs shadow-inner uppercase shrink-0">
+  477: <div className="bg-amber-50 dark:bg-amber-500/5 border border-amber-200 dark:border-amber-500/20 rounded-2xl px-5 py-4 mb-6 flex gap-3">
+  487: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden">
+  490: <Package className="h-4 w-4 text-blue-600" />
+  492: <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-ink-700 text-slate-600 dark:text-ink-300">
+  535: className="font-mono text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
+  547: <span className="text-sm font-semibold text-slate-800 dark:text-ink-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Suppliers\Index.jsx
+  117: className="bg-[#1B4FD8] hover:bg-blue-700 text-white rounded-xl shadow-md flex items-center gap-2 self-start sm:self-auto"
+  126: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 mb-6 shadow-sm dark:shadow-ink-950/20">
+  160: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm dark:shadow-ink-950/20 overflow-hidden flex-1 flex flex-col">
+  205: <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+  206: <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+  210: <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 dark:bg-ink-800 text-slate-500 border border-slate-200 dark:border-ink-700">
+  211: <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
+  247: <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-slate-500 mb-4">
+  310: link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650'
+  413: className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
+  438: className="flex-1 bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl py-5 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/10"
+  441: <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Transfers\Create.jsx
+  118: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm p-6 space-y-4">
+  244: <Package className="h-4.5 w-4.5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+  262: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm p-6 space-y-4">
+  293: className="flex-1 bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl py-5 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
+  296: <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Transfers\Index.jsx
+  22: <div className="p-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl border border-indigo-100 dark:border-indigo-500/20">
+  35: <Button className="bg-[#1B4FD8] hover:bg-blue-700 text-white rounded-xl shadow-md flex items-center gap-2 self-start sm:self-auto font-semibold">
+  43: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex-1 flex flex-col">
+  76: <span className="block text-sm font-semibold text-slate-800 dark:text-ink-100 group-hover/link:text-blue-600 dark:group-hover/link:text-blue-400 transition-colors">
+  79: <span className="font-mono text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 mt-0.5 inline-block">
+  121: <div className="h-5 w-5 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold flex items-center justify-center text-[9px] shrink-0 uppercase">
+  134: <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-slate-500 mb-4">
+  197: link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200'
+FILE: C:\Users\dell\Herd\invenio\resources\js\Pages\Users\Index.jsx
+  31: admin:    { label: 'Admin',    icon: ShieldCheck, class: 'bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-100 dark:border-purple-500/20' },
+  32: manager:  { label: 'Manager',  icon: Shield,      class: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-500/20' },
+  41: <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${cfg.class}`}>
+  122: className="bg-[#1B4FD8] hover:bg-blue-700 text-white rounded-xl shadow-md flex items-center gap-2 self-start sm:self-auto"
+  131: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 mb-6 shadow-sm">
+  172: <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden flex flex-col">
+  192: <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#1B4FD8] to-indigo-500 text-white font-bold flex items-center justify-center text-sm shadow-inner uppercase shrink-0">
+  212: <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20">
+  213: <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+  217: <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-ink-800 text-slate-500 dark:text-ink-400 border border-slate-200 dark:border-ink-700">
+  218: <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
+  262: <div className="p-4 bg-slate-100 dark:bg-ink-800 rounded-full text-slate-400 dark:text-ink-500 mb-4">
+  304: className={`rounded-xl h-9 w-9 p-0 ${link.active ? 'bg-[#1B4FD8] hover:bg-blue-700' : 'hover:bg-slate-100 dark:hover:bg-ink-750 dark:border-ink-650 dark:text-ink-200'}`}
+  403: <p><span className="font-semibold text-purple-600 dark:text-purple-400">Admin</span> — manage users, delete anything, full system access</p>
+  404: <p><span className="font-semibold text-blue-600 dark:text-blue-400">Manager</span> — create/edit products, POs, suppliers, locations. Cannot manage users.</p>
+  435: className="bg-white border-slate-300 text-blue-600 focus:ring-blue-500 rounded"
+  458: className="flex-1 bg-[#1B4FD8] hover:bg-blue-700 text-white font-semibold rounded-xl py-5 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/10"
+  461: ? <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+FILE: C:\Users\dell\Herd\invenio\resources\js\Layouts\AuthenticatedLayout.jsx
+  91: <div className="p-2 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl shadow-md flex items-center justify-center">
+  133: <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[#1B4FD8] to-indigo-500 text-white font-bold flex items-center justify-center text-sm shadow-inner uppercase">
+  146: <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 rounded-2xl shadow-xl dark:shadow-ink-950/60 z-50 p-2 py-1 animate-in fade-in-50 slide-in-from-top-2 duration-150">
+  187: className={`group flex items-center gap-3 px-4 py-3 text-[15px] font-semibold rounded-2xl transition-all duration-200 ${
+  189: ? 'bg-blue-50 dark:bg-blue-500/10 text-[#1B4FD8] dark:text-blue-400 shadow-sm border-l-4 border-[#1B4FD8] dark:border-blue-400'
+  193: <Icon className={`h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:scale-105 ${item.active ? 'text-[#1B4FD8] dark:text-blue-400' : 'text-slate-400 dark:text-ink-400'}`} />
+  210: className={`group p-3 rounded-2xl transition-all duration-200 flex items-center justify-center hover:scale-105 ${
+  212: ? 'bg-blue-50 dark:bg-blue-500/10 text-[#1B4FD8] dark:text-blue-400 border border-blue-100 dark:border-blue-500/20 shadow-sm'
+  216: <Icon className={`h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${item.active ? 'text-[#1B4FD8] dark:text-blue-400' : 'text-slate-400 dark:text-ink-400'}`} />
+  226: className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 lg:hidden"
+  229: <aside className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-ink-900 z-50 shadow-2xl flex flex-col p-5 animate-in slide-in-from-left duration-200 lg:hidden border-r border-slate-200 dark:border-ink-750 transition-colors duration-200">
+  247: className={`group flex items-center gap-3 px-4 py-3.5 text-[15px] font-semibold rounded-2xl transition-all duration-200 ${
+  249: ? 'bg-blue-50 dark:bg-blue-500/10 text-[#1B4FD8] dark:text-blue-400 shadow-sm border-l-4 border-[#1B4FD8] dark:border-blue-400'
+  253: <Icon className={`h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5 ${item.active ? 'text-[#1B4FD8] dark:text-blue-400' : 'text-slate-400 dark:text-ink-400'}`} />
+  291: item.active ? 'text-[#1B4FD8] dark:text-blue-400' : 'text-slate-400 dark:text-ink-400'
+  314: className={`flex items-start gap-3 p-4 bg-white dark:bg-ink-800 border-l-4 rounded-2xl shadow-xl dark:shadow-ink-950/60 pointer-events-auto transition-all animate-in slide-in-from-right-5 duration-300 ${
+FILE: C:\Users\dell\Herd\invenio\resources\js\Layouts\GuestLayout.jsx
+  8: <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-blue-600/10 blur-[130px] pointer-events-none" />
+  9: <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-sky-500/10 blur-[130px] pointer-events-none" />
+  18: <div className="flex items-center justify-center p-4 rounded-2xl bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-900 border border-slate-800 shadow-xl group-hover:border-blue-500/30 transition-all duration-300">
+  19: <ApplicationLogo className="h-10 w-10 fill-current text-blue-500 group-hover:text-blue-400 transition-colors" />
+  22: <span className="text-3xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-blue-500">
+  33: <div className="w-full overflow-hidden backdrop-blur-md bg-slate-900/60 border border-slate-800/80 shadow-2xl rounded-3xl p-8 hover:border-slate-800 transition-all duration-300">
+FILE: C:\Users\dell\Herd\invenio\resources\js\Layouts\PublicLayout.jsx
+  102: <span className="absolute -top-1.5 -right-2 flex items-center justify-center h-4 w-4 rounded-full bg-[#6b7c5c] text-[10px] text-white font-bold">
+FILE: C:\Users\dell\Herd\invenio\resources\js\Components\CartDrawer.jsx
+  14: <SheetPrimitive.Content className="fixed right-0 top-0 h-full w-[400px] max-w-full bg-white dark:bg-zinc-900 border-l border-stone-200 dark:border-zinc-700 shadow-xl z-[210] flex flex-col focus:outline-none transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right">
+FILE: C:\Users\dell\Herd\invenio\resources\js\Components\ResponsiveNavLink.jsx
+  14: ? 'border-indigo-400 bg-indigo-50 text-indigo-700 focus:border-indigo-700 focus:bg-indigo-100 focus:text-indigo-800 dark:border-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-300 dark:focus:border-indigo-300 dark:focus:bg-indigo-900 dark:focus:text-indigo-200'
+FILE: C:\Users\dell\Herd\invenio\resources\js\Components\ui\dialog.jsx
+  32: "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+FILE: C:\Users\dell\Herd\invenio\resources\js\Components\ui\sheet.jsx
+  32: top: "inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
+  34: "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
+  35: left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+  37: "inset-y-0 right-0 h-full w-3/4  border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",

@@ -1,4 +1,4 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
+﻿import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Link } from '@inertiajs/react';
 
 export default function GuestLayout({ children }) {
@@ -15,7 +15,7 @@ export default function GuestLayout({ children }) {
                 {/* Logo and Wordmark */}
                 <div className="flex flex-col items-center justify-center mb-8">
                     <Link href="/" className="group flex flex-col items-center justify-center gap-3">
-                        <div className="flex items-center justify-center p-4 rounded-2xl bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-900 border border-slate-800 shadow-xl group-hover:border-blue-500/30 transition-all duration-300">
+                        <div className="flex items-center justify-center p-4 rounded-lg bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-900 border border-slate-800 shadow-xl group-hover:border-blue-500/30 transition-all duration-300">
                             <ApplicationLogo className="h-10 w-10 fill-current text-blue-500 group-hover:text-blue-400 transition-colors" />
                         </div>
                         <div className="flex flex-col items-center">
@@ -30,7 +30,7 @@ export default function GuestLayout({ children }) {
                 </div>
 
                 {/* Glassmorphic Card */}
-                <div className="w-full overflow-hidden backdrop-blur-md bg-slate-900/60 border border-slate-800/80 shadow-2xl rounded-3xl p-8 hover:border-slate-800 transition-all duration-300">
+                <div className="w-full overflow-hidden backdrop-blur-md bg-slate-900/60 border border-slate-800/80 shadow-2xl rounded-lg p-8 hover:border-slate-800 transition-all duration-300">
                     {children}
                 </div>
             </div>

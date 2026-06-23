@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+﻿import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import { Button } from '@/Components/ui/button';
@@ -30,35 +30,35 @@ const STATUS_CONFIG = {
         label: 'Draft',
         icon:  FileText,
         dot:   'bg-slate-400',
-        badge: 'bg-slate-100 dark:bg-ink-800 text-slate-600 dark:text-ink-300 border-slate-200 dark:border-ink-700',
+        badge: 'bg-zinc-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-600',
         desc:  'This order has not been sent to the supplier yet.',
     },
     sent: {
         label: 'Sent',
         icon:  Send,
         dot:   'bg-blue-500',
-        badge: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-500/20',
+        badge: 'bg-zinc-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-600',
         desc:  'Order has been sent. Waiting for delivery.',
     },
     partially_received: {
         label: 'Partially Received',
         icon:  Truck,
         dot:   'bg-amber-500',
-        badge: 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-100 dark:border-amber-500/20',
+        badge: 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800',
         desc:  'Some items received. Outstanding items still expected.',
     },
     received: {
         label: 'Fully Received',
         icon:  CheckCircle2,
         dot:   'bg-emerald-500',
-        badge: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-500/20',
+        badge: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
         desc:  'All items received. Order complete.',
     },
     cancelled: {
         label: 'Cancelled',
         icon:  XCircle,
         dot:   'bg-rose-400',
-        badge: 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-100 dark:border-rose-500/20',
+        badge: 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800',
         desc:  'This order was cancelled. No stock reversals applied.',
     },
 };
@@ -85,13 +85,13 @@ function ProgressBar({ received, ordered }) {
     const full = pct >= 100;
     return (
         <div className="flex items-center gap-2 min-w-[80px]">
-            <div className="flex-1 h-1.5 bg-slate-100 dark:bg-ink-750 rounded-full overflow-hidden">
+            <div className="flex-1 h-1.5 bg-slate-100 dark:bg-zinc-700 rounded-full overflow-hidden">
                 <div
                     className={`h-full rounded-full transition-all duration-500 ${full ? 'bg-emerald-500' : 'bg-blue-500'}`}
                     style={{ width: `${pct}%` }}
                 />
             </div>
-            <span className={`text-[10px] font-bold tabular-nums whitespace-nowrap ${full ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-ink-400'}`}>
+            <span className={`text-[10px] font-bold tabular-nums whitespace-nowrap ${full ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-500 dark:text-zinc-400'}`}>
                 {Math.round(pct)}%
             </span>
         </div>
@@ -136,23 +136,23 @@ function ReceiveModal({ purchaseOrder, onClose }) {
 
             {/* Dialog */}
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-2xl dark:shadow-ink-950/80 w-full max-w-lg max-h-[90vh] flex flex-col animate-in fade-in-0 zoom-in-95 duration-200">
+                <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-2xl dark: w-full max-w-lg max-h-[90vh] flex flex-col animate-in fade-in-0 zoom-in-95 duration-200">
 
                     {/* Modal header */}
-                    <div className="flex items-start justify-between px-6 py-5 border-b border-slate-100 dark:border-ink-750">
+                    <div className="flex items-start justify-between px-6 py-5 border-b border-zinc-100 dark:border-zinc-700">
                         <div>
-                            <h2 className="text-base font-bold text-slate-900 dark:text-ink-100 flex items-center gap-2">
+                            <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                                 <PackageCheck className="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-400" />
                                 Record Received Items
                             </h2>
-                            <p className="text-xs text-slate-500 dark:text-ink-400 mt-1">
-                                <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">{purchaseOrder.po_number}</span>
+                            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                                <span className="font-mono font-semibold text-[#6b7c5c] dark:text-[#8fa67a]">{purchaseOrder.po_number}</span>
                                 {' — '}{purchaseOrder.location?.name}
                             </p>
                         </div>
                         <button
                             onClick={onClose}
-                            className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-ink-100 hover:bg-slate-100 dark:hover:bg-ink-750 rounded-lg transition-colors"
+                            className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-ink-100 hover:bg-slate-100 dark:hover:bg-zinc-700 rounded-lg transition-colors"
                         >
                             <X className="h-4 w-4" />
                         </button>
@@ -162,7 +162,7 @@ function ReceiveModal({ purchaseOrder, onClose }) {
                     <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
                         <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3 min-h-0">
                             {outstanding.length === 0 ? (
-                                <p className="text-sm text-slate-500 dark:text-ink-400 text-center py-8">
+                                <p className="text-sm text-zinc-500 dark:text-zinc-400 text-center py-8">
                                     All items have been fully received.
                                 </p>
                             ) : (
@@ -171,17 +171,17 @@ function ReceiveModal({ purchaseOrder, onClose }) {
                                     return (
                                         <div
                                             key={item.id}
-                                            className="bg-slate-50 dark:bg-ink-800/50 rounded-xl border border-slate-200 dark:border-ink-700 p-4"
+                                            className="bg-slate-50 dark:bg-zinc-700/50 rounded-xl border border-zinc-200 dark:border-zinc-700 p-4"
                                         >
                                             <div className="flex items-start justify-between gap-3 mb-3">
                                                 <div>
-                                                    <span className="font-mono text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20">
+                                                    <span className="font-mono text-[11px] font-bold text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-700 px-2 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-600">
                                                         {item.product?.sku}
                                                     </span>
-                                                    <p className="text-sm font-semibold text-slate-800 dark:text-ink-100 mt-1.5">
+                                                    <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 mt-1.5">
                                                         {item.product?.name}
                                                     </p>
-                                                    <p className="text-xs text-slate-500 dark:text-ink-400 mt-0.5">
+                                                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
                                                         Outstanding:{' '}
                                                         <span className="font-semibold text-amber-600 dark:text-amber-400">
                                                             {fmtQty(remainingQty)} {item.product?.unit}
@@ -189,7 +189,7 @@ function ReceiveModal({ purchaseOrder, onClose }) {
                                                     </p>
                                                 </div>
                                                 <div className="w-28 shrink-0">
-                                                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-ink-500 block mb-1">
+                                                    <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block mb-1">
                                                         Qty to Receive
                                                     </label>
                                                     <input
@@ -199,15 +199,15 @@ function ReceiveModal({ purchaseOrder, onClose }) {
                                                         step="any"
                                                         value={data.items[idx]?.qty_received ?? ''}
                                                         onChange={(e) => updateQty(idx, e.target.value)}
-                                                        className="block w-full bg-white dark:bg-ink-800 border border-slate-200 dark:border-ink-700 text-slate-900 dark:text-ink-100 text-sm rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 tabular-nums"
+                                                        className="block w-full bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 text-sm rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 tabular-nums"
                                                     />
                                                 </div>
                                             </div>
 
                                             {/* Progress so far */}
-                                            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-ink-400">
+                                            <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
                                                 <span>Already received:</span>
-                                                <span className="font-semibold text-slate-700 dark:text-ink-200">
+                                                <span className="font-semibold text-zinc-700 dark:text-zinc-200">
                                                     {fmtQty(item.qty_received)} / {fmtQty(item.qty_ordered)} {item.product?.unit}
                                                 </span>
                                                 <div className="flex-1">
@@ -232,12 +232,12 @@ function ReceiveModal({ purchaseOrder, onClose }) {
                         </div>
 
                         {/* Modal footer */}
-                        <div className="px-6 py-4 border-t border-slate-100 dark:border-ink-750 flex gap-3">
+                        <div className="px-6 py-4 border-t border-zinc-100 dark:border-zinc-700 flex gap-3">
                             <Button
                                 type="button"
                                 variant="outline"
                                 onClick={onClose}
-                                className="flex-1 rounded-xl py-5 dark:border-ink-700 dark:text-ink-200 font-semibold"
+                                className="flex-1 rounded-xl py-5 dark:border-zinc-700 dark:text-zinc-200 font-semibold"
                             >
                                 Cancel
                             </Button>
@@ -303,7 +303,7 @@ export default function Show({ purchaseOrder, can }) {
             <div className="mb-6">
                 <Link
                     href={route('po.index')}
-                    className="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-ink-400 hover:text-slate-900 dark:hover:text-ink-100 transition-colors font-medium mb-3"
+                    className="inline-flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-ink-100 transition-colors font-medium mb-3"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     Back to Purchase Orders
@@ -312,17 +312,17 @@ export default function Show({ purchaseOrder, can }) {
                 {/* Title row */}
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-blue-50 dark:bg-blue-500/10 rounded-xl border border-blue-100 dark:border-blue-500/20">
-                            <ClipboardList className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                        <div className="p-2.5 bg-zinc-100 dark:bg-zinc-700 rounded-md border border-zinc-200 dark:border-zinc-600">
+                            <ClipboardList className="h-5 w-5 text-[#6b7c5c] dark:text-[#8fa67a]" />
                         </div>
                         <div>
                             <div className="flex items-center gap-3 flex-wrap">
-                                <h1 className="font-mono text-2xl font-bold tracking-tight text-slate-900 dark:text-ink-100">
+                                <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
                                     {purchaseOrder.po_number}
                                 </h1>
                                 <StatusBadge status={purchaseOrder.status} large />
                             </div>
-                            <p className="text-xs text-slate-500 dark:text-ink-400 mt-1">
+                            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                                 {status.desc}
                             </p>
                         </div>
@@ -333,7 +333,7 @@ export default function Show({ purchaseOrder, can }) {
                         {can.edit && (
                             <Link href={route('po.edit', purchaseOrder.id)}>
                                 <Button variant="outline" size="sm"
-                                    className="rounded-xl gap-1.5 dark:border-ink-700 dark:text-ink-200 font-semibold">
+                                    className="rounded-xl gap-1.5 dark:border-zinc-700 dark:text-zinc-200 font-semibold">
                                     <Edit3 className="h-3.5 w-3.5" />
                                     Edit Draft
                                 </Button>
@@ -343,7 +343,7 @@ export default function Show({ purchaseOrder, can }) {
                             <Button
                                 size="sm"
                                 onClick={handleSend}
-                                className="rounded-xl gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md shadow-blue-500/20"
+                                className="rounded-xl gap-1.5 bg-blue-600 hover:bg-[#5a6b4c] text-white font-semibold shadow-md "
                             >
                                 <Send className="h-3.5 w-3.5" />
                                 Send to Supplier
@@ -388,83 +388,83 @@ export default function Show({ purchaseOrder, can }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 
                 {/* Supplier */}
-                <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 shadow-sm">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-ink-500 block mb-1.5">
+                <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 shadow-sm">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block mb-1.5">
                         Supplier
                     </span>
                     <div className="flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-slate-400 dark:text-ink-500 shrink-0" />
-                        <span className="text-sm font-semibold text-slate-800 dark:text-ink-100 truncate">
+                        <Building2 className="h-4 w-4 text-zinc-400 dark:text-zinc-500 shrink-0" />
+                        <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 truncate">
                             {purchaseOrder.supplier?.name || '—'}
                         </span>
                     </div>
                     {purchaseOrder.supplier?.email && (
-                        <p className="text-xs text-slate-400 dark:text-ink-500 mt-1 truncate">
+                        <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1 truncate">
                             {purchaseOrder.supplier.email}
                         </p>
                     )}
                 </div>
 
                 {/* Location */}
-                <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 shadow-sm">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-ink-500 block mb-1.5">
+                <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 shadow-sm">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block mb-1.5">
                         Receiving Location
                     </span>
                     <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-slate-400 dark:text-ink-500 shrink-0" />
-                        <span className="text-sm font-semibold text-slate-800 dark:text-ink-100 truncate">
+                        <MapPin className="h-4 w-4 text-zinc-400 dark:text-zinc-500 shrink-0" />
+                        <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 truncate">
                             {purchaseOrder.location?.name || '—'}
                         </span>
                     </div>
                     {purchaseOrder.location?.code && (
-                        <span className="font-mono text-xs text-slate-400 dark:text-ink-500 mt-1 block uppercase">
+                        <span className="font-mono text-xs text-zinc-400 dark:text-zinc-500 mt-1 block uppercase">
                             {purchaseOrder.location.code}
                         </span>
                     )}
                 </div>
 
                 {/* Dates */}
-                <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 shadow-sm">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-ink-500 block mb-1.5">
+                <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 shadow-sm">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block mb-1.5">
                         Dates
                     </span>
                     <div className="space-y-1.5">
                         <div className="flex items-center gap-2 text-xs">
-                            <Calendar className="h-3.5 w-3.5 text-slate-400 dark:text-ink-500 shrink-0" />
-                            <span className="text-slate-500 dark:text-ink-400">Created:</span>
-                            <span className="font-semibold text-slate-700 dark:text-ink-200">{fmtDate(purchaseOrder.created_at)}</span>
+                            <Calendar className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500 shrink-0" />
+                            <span className="text-zinc-500 dark:text-zinc-400">Created:</span>
+                            <span className="font-semibold text-zinc-700 dark:text-zinc-200">{fmtDate(purchaseOrder.created_at)}</span>
                         </div>
                         {purchaseOrder.sent_at && (
                             <div className="flex items-center gap-2 text-xs">
                                 <Send className="h-3.5 w-3.5 text-blue-400 shrink-0" />
-                                <span className="text-slate-500 dark:text-ink-400">Sent:</span>
-                                <span className="font-semibold text-slate-700 dark:text-ink-200">{fmtDate(purchaseOrder.sent_at)}</span>
+                                <span className="text-zinc-500 dark:text-zinc-400">Sent:</span>
+                                <span className="font-semibold text-zinc-700 dark:text-zinc-200">{fmtDate(purchaseOrder.sent_at)}</span>
                             </div>
                         )}
                         {purchaseOrder.expected_at && (
                             <div className="flex items-center gap-2 text-xs">
                                 <Clock className="h-3.5 w-3.5 text-amber-400 shrink-0" />
-                                <span className="text-slate-500 dark:text-ink-400">Expected:</span>
-                                <span className="font-semibold text-slate-700 dark:text-ink-200">{fmtDate(purchaseOrder.expected_at)}</span>
+                                <span className="text-zinc-500 dark:text-zinc-400">Expected:</span>
+                                <span className="font-semibold text-zinc-700 dark:text-zinc-200">{fmtDate(purchaseOrder.expected_at)}</span>
                             </div>
                         )}
                     </div>
                 </div>
 
                 {/* Created by */}
-                <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 p-4 shadow-sm">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-ink-500 block mb-1.5">
+                <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 shadow-sm">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 block mb-1.5">
                         Created By
                     </span>
                     <div className="flex items-center gap-2">
-                        <div className="h-7 w-7 rounded-full bg-gradient-to-tr from-[#1B4FD8] to-indigo-500 text-white font-bold flex items-center justify-center text-xs shadow-inner uppercase shrink-0">
+                        <div className="h-7 w-7 rounded-full from-[#1B4FD8] to-indigo-500 text-white font-bold flex items-center justify-center text-xs shadow-inner uppercase shrink-0">
                             {purchaseOrder.created_by?.name?.charAt(0) || '?'}
                         </div>
                         <div>
-                            <span className="text-sm font-semibold text-slate-800 dark:text-ink-100 block">
+                            <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 block">
                                 {purchaseOrder.created_by?.name || '—'}
                             </span>
-                            <span className="text-[10px] text-slate-400 dark:text-ink-500 capitalize">
+                            <span className="text-[10px] text-zinc-400 dark:text-zinc-500 capitalize">
                                 {purchaseOrder.created_by?.role || ''}
                             </span>
                         </div>
@@ -474,7 +474,7 @@ export default function Show({ purchaseOrder, can }) {
 
             {/* ── Notes (if any) ───────────────────────────────────────────── */}
             {purchaseOrder.notes && (
-                <div className="bg-amber-50 dark:bg-amber-500/5 border border-amber-200 dark:border-amber-500/20 rounded-2xl px-5 py-4 mb-6 flex gap-3">
+                <div className="bg-amber-50 dark:bg-amber-500/5 border border-amber-200 dark:border-amber-500/20 rounded-lg px-5 py-4 mb-6 flex gap-3">
                     <AlertTriangle className="h-4 w-4 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
                     <div>
                         <p className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-0.5">Order Notes</p>
@@ -484,12 +484,12 @@ export default function Show({ purchaseOrder, can }) {
             )}
 
             {/* ── Items table ──────────────────────────────────────────────── */}
-            <div className="bg-white dark:bg-ink-900 rounded-2xl border border-slate-200 dark:border-ink-700 shadow-sm overflow-hidden">
-                <div className="px-6 py-4 border-b border-slate-100 dark:border-ink-750 bg-slate-50/50 dark:bg-ink-800/30 flex items-center justify-between">
-                    <h2 className="text-sm font-bold text-slate-900 dark:text-ink-100 flex items-center gap-2">
-                        <Package className="h-4 w-4 text-blue-600" />
+            <div className="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-700 flex items-center justify-between">
+                    <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                        <Package className="h-4 w-4 text-[#6b7c5c]" />
                         Line Items
-                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-ink-700 text-slate-600 dark:text-ink-300">
+                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-zinc-600 text-zinc-600 dark:text-zinc-300">
                             {purchaseOrder.items.length}
                         </span>
                     </h2>
@@ -508,7 +508,7 @@ export default function Show({ purchaseOrder, can }) {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse min-w-[750px]">
                         <thead>
-                            <tr className="border-b border-slate-100 dark:border-ink-750 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-ink-400 bg-slate-50/30 dark:bg-ink-800/20">
+                            <tr className="border-b border-zinc-100 dark:border-zinc-700 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 bg-zinc-50/50 dark:bg-zinc-700">
                                 <th className="px-6 py-3">SKU</th>
                                 <th className="px-6 py-3">Product</th>
                                 <th className="px-6 py-3 text-right">Qty Ordered</th>
@@ -519,7 +519,7 @@ export default function Show({ purchaseOrder, can }) {
                                 <th className="px-6 py-3">Progress</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-ink-750">
+                        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
                             {purchaseOrder.items.map((item) => {
                                 const ordered    = parseFloat(item.qty_ordered);
                                 const received   = parseFloat(item.qty_received);
@@ -527,12 +527,12 @@ export default function Show({ purchaseOrder, can }) {
                                 const fullFill   = outstanding <= 0;
 
                                 return (
-                                    <tr key={item.id} className="hover:bg-slate-50/30 dark:hover:bg-ink-800/30 transition-colors">
+                                    <tr key={item.id} className="hover:bg-slate-50/30 dark:hover:bg-zinc-700/30 transition-colors">
                                         {/* SKU */}
                                         <td className="px-6 py-4">
                                             <Link
                                                 href={route('products.show', item.product?.id)}
-                                                className="font-mono text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded border border-blue-100/50 dark:border-blue-500/20 whitespace-nowrap hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
+                                                className="font-mono text-[11px] font-bold text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-700 px-2 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-600 whitespace-nowrap hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
                                             >
                                                 {item.product?.sku}
                                             </Link>
@@ -544,15 +544,15 @@ export default function Show({ purchaseOrder, can }) {
                                                 href={route('products.show', item.product?.id)}
                                                 className="group"
                                             >
-                                                <span className="text-sm font-semibold text-slate-800 dark:text-ink-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                                <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors">
                                                     {item.product?.name}
                                                 </span>
                                                 {item.variant && (
-                                                    <span className="block text-[11px] text-slate-500 dark:text-ink-400 mt-0.5 font-medium">
+                                                    <span className="block text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5 font-medium">
                                                         {item.variant.name}
                                                     </span>
                                                 )}
-                                                <span className="block text-[10px] text-slate-400 dark:text-ink-500 mt-0.5 uppercase font-semibold">
+                                                <span className="block text-[10px] text-zinc-400 dark:text-zinc-500 mt-0.5 uppercase font-semibold">
                                                     {item.product?.unit}
                                                 </span>
                                             </Link>
@@ -560,7 +560,7 @@ export default function Show({ purchaseOrder, can }) {
 
                                         {/* Qty ordered */}
                                         <td className="px-6 py-4 text-right">
-                                            <span className="text-sm font-semibold text-slate-700 dark:text-ink-200 tabular-nums">
+                                            <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-200 tabular-nums">
                                                 {fmtQty(ordered)}
                                             </span>
                                         </td>
@@ -588,14 +588,14 @@ export default function Show({ purchaseOrder, can }) {
 
                                         {/* Unit cost */}
                                         <td className="px-6 py-4 text-right">
-                                            <span className="text-sm text-slate-600 dark:text-ink-300 tabular-nums">
+                                            <span className="text-sm text-zinc-600 dark:text-zinc-300 tabular-nums">
                                                 {fmt(item.unit_cost)}
                                             </span>
                                         </td>
 
                                         {/* Line total */}
                                         <td className="px-6 py-4 text-right">
-                                            <span className="text-sm font-bold text-slate-800 dark:text-ink-100 tabular-nums">
+                                            <span className="text-sm font-bold text-zinc-800 dark:text-zinc-100 tabular-nums">
                                                 {fmt(ordered * parseFloat(item.unit_cost))}
                                             </span>
                                         </td>
@@ -611,12 +611,12 @@ export default function Show({ purchaseOrder, can }) {
 
                         {/* Grand total footer row */}
                         <tfoot>
-                            <tr className="border-t-2 border-slate-200 dark:border-ink-700 bg-slate-50/50 dark:bg-ink-800/30">
-                                <td colSpan="6" className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-ink-400">
+                            <tr className="border-t-2 border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-700">
+                                <td colSpan="6" className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                                     Grand Total
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    <span className="text-base font-extrabold text-slate-900 dark:text-ink-100 tabular-nums">
+                                    <span className="text-base font-extrabold text-zinc-900 dark:text-zinc-100 tabular-nums">
                                         {fmt(grandTotal)}
                                     </span>
                                 </td>
